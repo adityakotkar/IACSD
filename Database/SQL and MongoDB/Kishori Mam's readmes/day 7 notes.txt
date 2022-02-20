@@ -1,0 +1,304 @@
+-----find 3 rd highest
+select *
+ from emp s
+where 2=(select count(*) from (select distinct sal from emp) e where e.sal>s.sal)
+
+-----find n th highest
+select *
+ from emp s
+where (n-1)=(select count(*) from (select distinct sal from emp) e where e.sal>s.sal)
+
+---------- find all employees who earn 3, 4 and 5 highest salary
+select *
+ from emp s
+where 2<=(select count(*) from (select distinct sal from emp) e where e.sal>s.sal) and 
+5>(select count(*) from (select distinct sal from emp) e where e.sal>s.sal)
+order by sal;
+
+or
+
+select *
+from emp e
+where (select count(distinct(sal)) from emp s  where s.sal>e.sal)
+between 2 and 4
+order by sal desc;
+
+or 
+
+select * from emp e
+where (select count(distinct(sal)) from emp s  where s.sal>e.sal)
+in (2,3,4)
+order by sal desc;
+
+
+------ 
+
+select all departments  in which no employees are there
+select *
+from dept d
+where not exists (select * from emp e where e.deptno=d.deptno);
+
+
+roomno  rname    location
+100      Lotus    1st floor
+200      jasmin   2nd floor
+300      rose     1st floor
+400      Vinca    5th floor
+500      Mogra    2nd floor
+
+course
+cid  cname    roomno  fid
+10   DAC      100     1000
+12   DBDA     200     2000
+13   DTISS   
+
+
+faculty 
+fid     fname         experience
+1000   narendra         12
+2000   Rohit            13
+3000   Sarika           12
+4000   Snehal           3
+
+   
+
+-----find all rooms which are not allocated for any course
+select *
+from room r
+where not exists (select * from course c where c.roomno=r.roomno) 
+
+
+-----find all faculties who are not assigned for any course
+select *
+from faculty f
+where not exists (select * from course c where c.fid=f.fid)
+
+
+
+product
+pid   pname    qty    rate  cid
+11   lays      20      40   1
+12    nachos     30     140  1 
+13    marie      12     20   2
+
+
+category 
+cid  cname       desc
+1    chips       crunchy
+2    biscuits    sweet
+3    snacks      yummy
+
+----which all category products are not in our shops
+select *
+from category c
+where not exists (selct * from product p where p.cid=c.cid);
+
+----which all category products are  in our shops
+select *
+from category c
+where exists (selct * from product p where p.cid=c.cid);
+
+-----select all employees whoes sal is > average salary of dept 10
+select * 
+from emp
+where sal > (select avg(sal) from emp where 
+             deptno=10);
+
+
+-----select all employees whoes sal is > min salary of ALLEN's department
+---maximum level of nesting is 255.
+
+select *
+from emp
+where sal >(select min(sal)
+            from emp
+            where deptno= (select deptno
+                            from  emp
+                            where ename='ALLEN'))
+
+
+----DML statements(delete, update, insert ) using nested query
+
+----delete all employees who are working in ALLEN's department
+
+
+delete 
+from emp
+where deptno=(select deptno
+              from (select deptno from emp
+               where ename='ALLEN') e);
+
+-----update sal of turner with sal of ford
+update emp
+set sal=(select sal from (select sal from emp where ename='FORD') e)
+where ename='TURNER';
+
+
+insert into emp_history 
+(select * from emp)
+
+---create table to create copy of emp table and add all employees in department 10
+crete table emp_history
+as
+(select * from emp where deptno=10)
+
+----create empty table using nested query
+crete table emp_history
+as
+(select * from emp where 1=5)
+
+
+--nested query are used when you want to display data from single table
+
+--but use joins to display data from multiple tables
+cross join --- cartesian join---cartesian product
+inner join ----- natural joins
+  --- equi join   --join condition is based on = to operator
+  ---- non equi join  ---join is based on not !=, >=, <=
+  ---self join---------- join combines a table with itself 
+outer joins
+   -- left outer join   --- to get non matching rows from left hand side table
+   ---rigth outer join  --- to get non matching rows from right hand side table
+   --- full outer join   --- to get non matching rows from both side table
+
+----- cross join
+select *
+from emp,dept
+
+
+-----inner join
+select empno,ename,e.deptno,d.deptno,dname
+from emp e, dept d
+ where e.deptno=d.deptno;
+
+or 
+
+select empno,ename,e.deptno,d.deptno,dname
+from emp e inner join dept d
+on  e.deptno=d.deptno;
+
+
+------ select faculty name, and course name which are taught by 'narendra'
+
+ select fid,fname,faid ,cname
+    -> from faculty f inner join course c
+    -> on f.fid=c.faid
+    -> where fname='narendra;
+
+ select fid,fname,faid ,cname
+    -> from faculty f , course c
+    -> where f.fid=c.faid and  fname='narendra ;
+
+
+product
+pid   pname    qty    rate  cid
+11   lays      20      40   1
+12    nachos     30     140  1 
+13    marie      12     20   2
+
+
+category 
+cid  cname       desc
+1    chips       crunchy
+2    biscuits    sweet
+3    snacks      yummy
+
+---display all product along with category name
+
+select pid,pname,p.cid,c.cid,cname
+from product p,course c
+where p.cid=c.cid;
+
+
+-----display all employees along with their grade
+select e.empno,e.ename,e.sal,s.grade,s.losal,s.hisal
+    -> from emp e,salgrade s
+    -> where e.sal between s.losal and s.hisal;
+
+
+---display all employees alongwith manager name
+select e.empno,e.ename,m.empno mgrno,m.ename mname
+ from emp e,emp m
+ where e.mgr=m.empno;
+
+select e.empno eno,e.ename name,m.empno mgrno ,m.ename mname
+ from emp e inner join emp m
+on e.mgr=m.empno;
+
+
+
+----display all enmplyees empno,ename,dname,grade,sal,losal,hisal
+select empno,ename,dname,sal,grade,losal,hisal
+from emp e,dept d,salgrade s
+where e.deptno=d.deptno and sal between lowsal and hisal;
+
+---inner join will always give matching rows;
+---not matching rows will be in the o/p for outer join
+
+if you want non matching rows from right hand side table then use right outer join
+
+if you want non matching rows from left hand side table then use left outer join
+
+if you want non matching rows from both  table then use full outer join
+
+
+----to find courses along with faculty name, also display courses for which no faculty is assigned;
+select cid,cname,fid,fname
+from course c left join faculty f on c.faid=f.fid;
+
+
+----to find courses along with faculty name, also display faculties who are not assigned to any course;
+select cid,cname,fid,fname
+    from course c right join faculty f on c.faid=f.fid
+
+
+----to find courses along with faculty name, also display faculties who are not assigned to any course 
+and also display courses for which no faculty is assigned;
+
+ select cid,cname,fid,fname
+    -> from course c left join faculty f on c.faid=f.fid
+    -> union
+    -> select cid,cname,fid,fname
+    -> from course c right join faculty f on c.faid=f.fid;
+
+
+product
+pid   pname    qty    rate      cid
+11   lays      20      40        1
+12    nachos     30     140      1 
+13    marie      12     20       2
+14   cashew      29     250.00
+
+
+category 
+cid  cname       desc
+1    chips       crunchy
+2    biscuits    sweet
+3    snacks      yummy
+
+------display all products along with category name
+select pid,pname,cid,cname
+frpm product p inner join category c
+on p.cid=c.cid
+
+------display all products along with category name and also display all categories for which no products are there
+select pid,pname,cid,cname
+frpm product p right join category c
+on p.cid=c.cid
+
+
+------display all products along with category name and also display all product for which no category is assigned
+select pid,pname,cid,cname
+frpm product p left join category c
+on p.cid=c.cid
+
+-----display all products along with category name and also display all product for which no category is assigned
+all categories for which no products are there
+
+select pid,pname,cid,cname
+frpm product p right join category c
+on p.cid=c.cid
+union
+select pid,pname,cid,cname
+frpm product p left join category c
+on p.cid=c.cid

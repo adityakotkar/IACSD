@@ -1,0 +1,15 @@
+#!/bin/bash
+
+read -p "enter marks= " m
+if [ $m -ge 60 ]
+then
+    	echo "First class"
+elif [[ $m -ge 50 && $m -lt 60 ]]
+then
+    	echo "second class"
+elif [[ $m -ge 40 && $m -lt 50 ]]
+then
+    	echo "Third class"
+else
+    	echo "Fail"
+fi

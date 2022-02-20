@@ -1,0 +1,17 @@
+How to change mysql prompt- command as follows
+
+prompt 1001 ANAND_GIRIDHAR \D >
+
+it will look like
+1001 ANAND_GIRIDHAR Sat Dec  4 12:22:34 2021 >
+====
+
+How to change Mongodb prompt
+(in mongo client run following command)
+
+var prompt=function(){ return ISODate().toLocaleTimeString()+" 1000_ANAND_GIRI >"; } 
+
+it will look like
+15:05:35 1000_ANAND_GIRI >
+
+

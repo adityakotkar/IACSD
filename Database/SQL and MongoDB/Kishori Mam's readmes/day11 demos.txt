@@ -1,0 +1,1170 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 82
+Server version: 8.0.22 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use iacsd2111
+Database changed
+mysql> create procedure deptwiseDetails()
+    -> begin
+    ->    select deptno,count(*),min(sal),max(sal),avg(sal)
+    ->    from emp
+    ->    group by deptno;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 5
+mysql> delimiter //
+mysql> create procedure deptwiseDetails()
+    -> begin
+    ->    select deptno,count(*),min(sal),max(sal),avg(sal)
+    ->    from emp
+    ->    group by deptno;
+    -> end//
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> call deptwiseDetails();
+    -> //
++--------+----------+----------+----------+-------------+
+| deptno | count(*) | min(sal) | max(sal) | avg(sal)    |
++--------+----------+----------+----------+-------------+
+|     20 |        6 |   800.00 |  3456.00 | 2388.500000 |
+|     30 |        6 |   950.00 |  2850.00 | 1566.666667 |
+|     10 |        5 |  1300.00 |  5000.00 | 3132.400000 |
++--------+----------+----------+----------+-------------+
+3 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> replace procedure deptwiseDetails()
+    -> begin
+    ->  select 'aaa';
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'procedure deptwiseDetails()
+begin
+ select 'aaa';
+end' at line 1
+mysql> alter procedure deptwiseDetails()
+    -> begin
+    ->     select 'aaa';
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '()
+begin
+    select 'aaa';
+end' at line 1
+mysql> delimiter //
+mysql> create procedure chekPattern(pattern varchar(20))
+    -> begin
+    -> select ename
+    -> from emp
+    -> where ename like pattern
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end' at line 6
+mysql> create procedure chekPattern(pattern varchar(20))
+    -> begin
+    -> select ename
+    -> from emp
+    -> where ename like pattern;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call chekPattern('J%');
+    -> //
++-------+
+| ename |
++-------+
+| JAMES |
+| JONES |
++-------+
+2 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> drop procedure chekPattern;
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter //
+mysql> create procedure checkPattern(pattern varchar(20))
+    -> begin
+    ->         declare str varchar(20);
+    ->         set str=concat(pattern,'%');
+    -> select ename
+    -> from emp
+    -> where ename like str;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call checkPattern('J');
++-------+
+| ename |
++-------+
+| JAMES |
+| JONES |
++-------+
+2 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> drop procedure checkPatteren;
+ERROR 1305 (42000): PROCEDURE iacsd2111.checkPatteren does not exist
+mysql> drop procedure checkPattern;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter //
+mysql> create procedure checkPattern(columnnm varchar(30),pattern varchar(20))
+    -> begin
+    ->         declare str varchar(20);
+    ->         set str=concat(pattern,'%');
+    -> select ename
+    -> from emp
+    -> where columnnm like str;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call checkPattern('ename','J');
+Empty set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql> drop procedure checkPattern//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create procedure checkPattern(columnnm varchar(30),pattern varchar(20))
+    -> begin
+    ->         declare str varchar(20);
+    ->         set str=concat(pattern,'%');
+    -> select ename
+    -> from emp
+    -> where ename like str;
+    -> end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> call checkPattern('J')
+    -> ;
+ERROR 1318 (42000): Incorrect number of arguments for PROCEDURE iacsd2111.checkPattern; expected 2, got 1
+mysql> delimiter //
+mysql> drop procedure checkPattern//
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create procedure checkPattern(pattern varchar(20))
+    -> begin
+    ->         declare str varchar(20);
+    ->         set str=concat(pattern,'%');
+    -> select ename
+    -> from emp
+    -> where ename like str;
+    -> end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> call checkPattern('J');
++-------+
+| ename |
++-------+
+| JAMES |
+| JONES |
++-------+
+2 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delemiter //
+    -> create procedure getEmpLevel(p_empno int(11),out p_emplevel varchar(20))
+    -> begin
+    ->   declare v_sal int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delemiter //
+create procedure getEmpLevel(p_empno int(11),out p_emplevel varchar' at line 1
+mysql>   -- retrieve salary for p_empno
+mysql>   select sal into v_sal
+    ->   from emp
+    ->   where empno=p_empno;
+ERROR 1327 (42000): Undeclared variable: v_sal
+mysql>
+mysql>   if v_sal>2500 then
+    ->      set p_emplevel='platinum';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'if v_sal>2500 then
+     set p_emplevel='platinum'' at line 1
+mysql>   elseif (v_sal <=2500 and v_sal>2000) then
+    ->      set p_emplevel='Gold';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elseif (v_sal <=2500 and v_sal>2000) then
+     set p_emplevel='Gold'' at line 1
+mysql>   elseif v_sal<=2000 then
+    ->      set p_emplevel='silver';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elseif v_sal<=2000 then
+     set p_emplevel='silver'' at line 1
+mysql>   end if;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end if' at line 1
+mysql> end//
+    -> delimiter ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end//
+delimiter' at line 1
+mysql> delimiter //
+mysql> create procedure getEmpLevel(p_empno int(11),out p_emplevel varchar(20))
+    -> begin
+    ->   declare v_sal int;    -- select sal into v_sal
+    ->   select sal into v_sal
+    ->   from emp
+    ->   where empno=p_empno;
+    ->
+    ->   if v_sal>2500 then
+    ->      set p_emplevel='platinum';
+    ->   elseif (v_sal <=2500 and v_sal>2000) then
+    ->      set p_emplevel='Gold';
+    ->   elseif v_sal<=2000 then
+    ->      set p_emplevel='silver';
+    ->   end if;
+    -> end//
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+mysql> delimiter ;
+mysql> call getEmpLevel(7902,@emplevel);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @emplevel;
++-----------+
+| @emplevel |
++-----------+
+| platinum  |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select sal
+    -> from emp
+    -> where empno=7902;
++---------+
+| sal     |
++---------+
+| 3000.00 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> delimiter //
+mysql>
+mysql> create procedure getcomm(c_empno int, out c_remark varchar(30))                                                                              begin                                                                                            declare c_com int;                                                                                select ifnull(comm,0) into c_com  from emp where empno=c_empno;                                                                      if c_com < 300 'need improvemnt'                                                         elseif c_com>=300 and c_com<500 'ok'                                            elseif c_com>=500 and c_com<1000 'good'                         else 'excellent'; end if; end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''need improvemnt'                                                         elseif' at line 1
+mysql> begin
+    ->     declare c_com int;
+    ->     select ifnull(comm,0) into c_com
+    ->     from emp
+    ->     where empno=c_empno;
+    ->     if c_com < 300 then
+    ->          set c_remark='need improvement';
+    ->     elseif c_com>=300 and c_com<500 then
+    ->          set c_remark='ok';
+    ->     elseif c_com>=500 and c_com<1000 then
+    ->         set c_remark='good';
+    ->     else
+    ->         set c_remark='excellent';
+    ->     end if;
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'declare c_com int;
+    select ifnull(comm,0) into c_com
+    from emp
+    whe' at line 2
+mysql>
+mysql> delimiter ;
+mysql> call getcomm(7902,@remark);
+ERROR 1305 (42000): PROCEDURE iacsd2111.getcomm does not exist
+mysql> delimiter //
+mysql>
+mysql> create procedure getcomm(c_empno int, out c_remark varchar(30))                                                                              begin                                                                                            declare c_com int;                                                                                select ifnull(comm,0) into c_com  from emp where empno=c_empno;                                                                      if c_com < 300 'need improvemnt'                                                         elseif c_com>=300 and c_com<500 'ok'                                            elseif c_com>=500 and c_com<1000 'good'                         else 'excellent'; end if; end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''need improvemnt'                                                         elseif' at line 1
+mysql> begin
+    ->     declare c_com decimal(12,2);
+    ->     select ifnull(comm,0) into c_com
+    ->     from emp
+    ->     where empno=c_empno;
+    ->     set c_remark='ssss';
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'declare c_com decimal(12,2);
+    select ifnull(comm,0) into c_com
+    from em' at line 2
+mysql> create procedure getcomm(c_empno int, out c_remark varchar(30))                                                                              begin                                                                                            declare c_com int;                                                                                select ifnull(comm,0) into c_com  from emp where empno=c_empno;
+    -> ^C
+mysql>
+mysql>
+mysql> delimiter //
+mysql>
+mysql> create procedure getcomm(c_empno int, out c_remark varchar(30))
+    -> begin
+    ->     declare c_com decimal(12,2);
+    ->     select ifnull(comm,0) into c_com
+    ->     from emp
+    ->     where empno=c_empno;
+    ->     set c_remark='ssss';
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>     if c_com < 300 then
+    ->          set c_remark='need improvement';
+    ->     elseif c_com>=300 and c_com<500 then
+    ->          set c_remark='ok';
+    ->     elseif c_com>=500 and c_com<1000 then
+    ->         set c_remark='good';
+    ->     else
+    ->         set c_remark='excellent';
+    ->     end if;
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'if c_com < 300 then
+         set c_remark='need improvement';
+    elseif c_com>' at line 1
+mysql>
+mysql> delimiter ;
+mysql> call getcomm(7902,@remark);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create procedure getcomm(c_empno int, out c_remark varchar(30))
+    -> begin
+    ->     declare c_com decimal(12,2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql>     select ifnull(comm,0) into c_com
+    ->     from emp
+    ->     where empno=c_empno;
+ERROR 1327 (42000): Undeclared variable: c_com
+mysql>     if c_com < 300 then
+    ->          set c_remark='need improvement';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'if c_com < 300 then
+         set c_remark='need improvement'' at line 1
+mysql>     elseif c_com>=300 and c_com<500 then
+    ->          set c_remark='ok';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elseif c_com>=300 and c_com<500 then
+         set c_remark='ok'' at line 1
+mysql>     elseif c_com>=500 and c_com<1000 then
+    ->         set c_remark='good';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'elseif c_com>=500 and c_com<1000 then
+        set c_remark='good'' at line 1
+mysql>     else
+    ->         set c_remark='excellent';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'else
+        set c_remark='excellent'' at line 1
+mysql>     end if;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end if' at line 1
+mysql> end//
+    ->
+    -> delimiter ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end//
+
+delimiter' at line 1
+mysql> call getcomm(7902,@remark);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> drop procedure getcomm;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create procedure getcomm(c_empno int, out c_remark varchar(30))
+    -> begin
+    ->     declare c_com decimal(12,2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> delimiter //
+mysql> create procedure getcomm(c_empno int, out c_remark varchar(30))
+    -> begin
+    ->     declare c_com decimal(12,2);
+    ->     select ifnull(comm,0) into c_com
+    ->     from emp
+    ->     where empno=c_empno;
+    ->     if c_com < 300 then
+    ->          set c_remark='need improvement';
+    ->     elseif c_com>=300 and c_com<500 then
+    ->          set c_remark='ok';
+    ->     elseif c_com>=500 and c_com<1000 then
+    ->         set c_remark='good';
+    ->     else
+    ->         set c_remark='excellent';
+    ->     end if;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delemiter ;
+    -> ^C
+mysql> delimiter ;
+mysql> call getcomm(7902,@remark);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @remark;
++------------------+
+| @remark          |
++------------------+
+| need improvement |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where empno=7902;
++-------+-------+---------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB     | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+---------+------+------------+---------+------+--------+
+|  7902 | FORD  | ANALYST | 7566 | 1981-12-03 | 3000.00 | NULL |     20 |
++-------+-------+---------+------+------------+---------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure checkRemark()
+    -> begin
+    ->    call getcomm(7902,@remark);
+    ->    select @remark;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call checkRemark();
+    -> //
++------------------+
+| @remark          |
++------------------+
+| need improvement |
++------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>
+mysql> delimiter //
+mysql> create procedure test_while(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     while cnt<=5 do
+    ->        str=concat(str,v_num,',')
+    ->        set cnt=cnt+1;
+    ->        set v_num=v_num+5;
+    ->     end while;
+    ->     select str;
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=concat(str,v_num,',')
+       set cnt=cnt+1;
+       set v_num=v_num+5;
+    end ' at line 7
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure test_while(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     while cnt<=5 do
+    ->        str=concat(str,v_num,',');
+    ->        set cnt=cnt+1;
+    ->        set v_num=v_num+5;
+    ->     end while;
+    ->     select str;
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=concat(str,v_num,',');
+       set cnt=cnt+1;
+       set v_num=v_num+5;
+    end' at line 7
+mysql> delimiter ;
+mysql> delimiter //
+mysql> create procedure test_while(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     while cnt<=5 do
+    ->        set str=concat(str,v_num,',');
+    ->        set cnt=cnt+1;
+    ->        set v_num=v_num+5;
+    ->     end while;
+    ->     select str;
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call test_while(1000);
+ERROR 1414 (42000): OUT or INOUT argument 1 for routine iacsd2111.test_while is not a variable or NEW pseudo-variable in BEFORE trigger
+mysql> set @cnt=1000
+    -> ;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call test_while(@cnt);
+ERROR 1406 (22001): Data too long for column 'str' at row 1
+mysql> set @cnt=1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call test_while(@cnt);
++---------------+
+| str           |
++---------------+
+| 1,6,11,16,21, |
++---------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set @cnt=10
+    -> ;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call test_while(@cnt);
++-----------------+
+| str             |
++-----------------+
+| 10,15,20,25,30, |
++-----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>
+mysql> delimiter //
+mysql> create procedure test_repeat(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     Repeat
+    ->        set str=concat_ws(',',str,v_num);
+    ->        set cnt=cnt+1;
+    ->        set v_num=v_num+5;
+    ->        until cnt>5
+    ->     end repeat;
+    ->     select str;
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> set @cnt=10
+    -> call test_repeat(@cnt);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'call test_repeat(@cnt)' at line 2
+mysql> set @cnt=10;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call test_repeat(@cnt);
++-----------------+
+| str             |
++-----------------+
+| ,10,15,20,25,30 |
++-----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure test_loop(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     label1:loop
+    ->        if cnt > 6 then
+    ->            leave label1;
+    ->        end if
+    ->        set str=concat_ws(',',str,v_num);
+    ->        set cnt=cnt+1;
+    ->        set v_num=v_num+5;
+    ->     end loop;
+    ->     select str;
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'set str=concat_ws(',',str,v_num);
+       set cnt=cnt+1;
+     ' at line 10
+mysql> delimiter ;
+mysql> set @cnt=10
+    -> ^C
+mysql> delimiter //
+mysql> create procedure test_loop(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     label1:loop
+    ->        if cnt > 6 then
+    ->            leave label1;
+    ->        end if;
+    ->        set str=concat_ws(',',str,v_num);
+    ->        set cnt=cnt+1;
+    ->        set v_num=v_num+5;
+    ->     end loop;
+    ->     select str;
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> set @cnt=10;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call test_repeat(@cnt);
++-----------------+
+| str             |
++-----------------+
+| ,10,15,20,25,30 |
++-----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call test_loop(@cnt);
++--------------------+
+| str                |
++--------------------+
+| ,35,40,45,50,55,60 |
++--------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set @cnt=10;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call test_loop(@cnt);
++--------------------+
+| str                |
++--------------------+
+| ,10,15,20,25,30,35 |
++--------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure test_loop1(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     label1:loop
+    ->        if cnt > 5 then
+    ->            leave label1;
+    ->        end if;
+    ->        if v_num mod 3 ==0 then
+    ->            set v_num=v_num+7;
+    ->            iterate label1
+    ->        else
+    ->            set str=concat_ws(',',str,v_num);
+    ->            set cnt=cnt+1;
+    ->            set v_num=v_num+7;
+    ->     end loop;
+    ->     select str;
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '==0 then
+           set v_num=v_num+7;
+           iterate label1
+       else
+  ' at line 10
+mysql> delimiter ;
+mysql> set @cnt=10;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>
+mysql> delimiter //
+mysql> create procedure test_loop1(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     label1:loop
+    ->        if cnt > 5 then
+    ->            leave label1;
+    ->        end if;
+    ->        if v_num mod 3 ==0 then
+    ->            set v_num=v_num+7;
+    ->            iterate label1;
+    ->        else
+    ->            set str=concat_ws(',',str,v_num);
+    ->            set cnt=cnt+1;
+    ->            set v_num=v_num+7;
+    ->     end loop;
+    ->     select str;
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '==0 then
+           set v_num=v_num+7;
+           iterate label1;
+       else
+ ' at line 10
+mysql> delimiter ;
+mysql> set @cnt=10;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure test_loop1(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     label1:loop
+    ->        if cnt > 5 then
+    ->            leave label1;
+    ->        end if;
+    ->        if v_num mod 3 ==0 then
+    ->            set v_num=v_num+7;
+    ->            iterate label1;
+    ->        else
+    ->            set str=concat_ws(',',str,v_num);
+    ->            set cnt=cnt+1;
+    ->            set v_num=v_num+7;
+    ->        end if;
+    ->     end loop;
+    ->     select str;
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '==0 then
+           set v_num=v_num+7;
+           iterate label1;
+       else
+ ' at line 10
+mysql> delimiter ;
+mysql> set @cnt=10;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure test_loop1(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     label1:loop
+    ->        if cnt > 5 then
+    ->            leave label1;
+    ->        end if;
+    ->        if (v_num mod 3=0) then
+    ->            leave label1;
+    ->        end if;
+    ->        if (v_num mod 3=0) then
+    ->            leave label1;
+    ->        end if;
+    -> ^C
+mysql> delimiter //
+mysql> create procedure test_loop1(inout v_num int)
+    -> begin
+    ->    declare cnt int default 1;
+    ->    declare str varchar(20);
+    ->    set str='';
+    ->     label1:loop
+    ->        if cnt > 5 then
+    ->            leave label1;
+    ->        end if;
+    ->        if (v_num mod 3=0) then
+    ->            set v_num=v_num+7;
+    ->            iterate label1;
+    ->        else
+    ->            set str=concat_ws(',',str,v_num);
+    ->            set cnt=cnt+1;
+    ->            set v_num=v_num+7;
+    ->        end if;
+    ->     end loop;
+    ->     select str;
+    ->
+    -> end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> set @cnt=10;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call test_loop1(@cnt);
++-----------------+
+| str             |
++-----------------+
+| ,10,17,31,38,52 |
++-----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set @cnt=9;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call test_loop1(@cnt);
++-----------------+
+| str             |
++-----------------+
+| ,16,23,37,44,58 |
++-----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from emp;
++-------+---------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+---------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 3456.00 |  456.00 |     10 |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 3456.00 |  456.00 |     20 |
+| 12342 | xxxx111 | cccc      | 7839 | 2000-04-02 | 3456.00 |  456.00 |     10 |
++-------+---------+-----------+------+------------+---------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select ename,job
+    -> from emp;
++---------+-----------+
+| ename   | job       |
++---------+-----------+
+| SMITH   | CLERK     |
+| ALLEN   | SALESMAN  |
+| WARD    | SALESMAN  |
+| JONES   | MANAGER   |
+| MARTIN  | SALESMAN  |
+| BLAKE   | MANAGER   |
+| CLARK   | MANAGER   |
+| SCOTT   | ANALYST   |
+| KING    | PRESIDENT |
+| TURNER  | SALESMAN  |
+| ADAMS   | CLERK     |
+| JAMES   | CLERK     |
+| FORD    | ANALYST   |
+| MILLER  | CLERK     |
+| xxxx    | cccc      |
+| xxxx    | cccc      |
+| xxxx111 | cccc      |
++---------+-----------+
+17 rows in set (0.00 sec)
+
+mysql>
+mysql> delimiter //
+mysql>
+mysql> create procedure concat_nm_job()
+    -> begin
+    -> declare v_eno int;
+    -> declare v_ename varchar(20);
+    -> declare v_job varchar(20);
+    -> declare v_stop int default 0;
+    -> declare v_str varchar(200) default '';
+    -> declare emp_cur cursor for select empno,ename,job from emp;
+    -> declare continue handler for NOT FOUND set v_stop=1;
+    -> open emp_cur;
+    -> label1: loop
+    -> fetch emp_cur into v_eno,v_ename,v_job;
+    -> if (v_stop=1) then
+    ->            leave label1;
+    ->         end if;
+    ->         ---build the list of ename and job
+    ->            set v_str=concat(v_str,v_ename,'--',v_job,',');
+    -> end loop;
+    -> close emp_cur;
+    -> select v_str;
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '---build the list of ename and job
+           set v_str=concat(v_str,v_ename,'--' at line 16
+mysql> create procedure concat_nm_job()
+    -> begin
+    -> declare v_eno int;
+    -> declare v_ename varchar(20);
+    -> declare v_job varchar(20);
+    -> declare v_stop int default 0;
+    -> declare v_str varchar(200) default '';
+    -> declare emp_cur cursor for select empno,ename,job from emp;
+    -> declare continue handler for NOT FOUND set v_stop=1;
+    -> open emp_cur;
+    -> label1: loop
+    -> fetch emp_cur into v_eno,v_ename,v_job;
+    -> if (v_stop=1) then
+    ->            leave label1;
+    ->         end if;
+    ->         --build the list of ename and job
+    ->            set v_str=concat(v_str,v_ename,'--->',v_job,',');
+    -> end loop;
+    -> close emp_cur;
+    -> select v_str;
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--build the list of ename and job
+           set v_str=concat(v_str,v_ename,'---' at line 16
+mysql>
+mysql> delimiter //
+mysql>
+mysql> create procedure concat_nm_job()
+    -> begin
+    -> declare v_eno int;
+    -> declare v_ename varchar(20);
+    -> declare v_job varchar(20);
+    -> declare v_stop int default 0;
+    -> declare v_str varchar(200) default '';
+    -> declare emp_cur cursor for select empno,ename,job from emp;
+    -> declare continue handler for NOT FOUND set v_stop=1;
+    -> open emp_cur;
+    -> label1: loop
+    -> fetch emp_cur into v_eno,v_ename,v_job;
+    -> if (v_stop=1) then
+    ->            leave label1;
+    ->         end if;
+    ->         set v_str=concat(v_str,v_ename,'|',v_job,',');
+    -> end loop;
+    -> close emp_cur;
+    -> select v_str;
+    ->
+    -> end//
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> call concat_nm_job();
+    -> //
+ERROR 1406 (22001): Data too long for column 'v_str' at row 1
+mysql> drop procedure if exists concat_nm_job;
+    -> delimiter //
+Query OK, 0 rows affected (0.01 sec)
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter' at line 1
+mysql>
+mysql> create procedure concat_nm_job()
+    -> begin
+    -> declare v_eno int;
+    -> declare v_ename varchar(20);
+    -> declare v_job varchar(20);
+    -> declare v_stop int default 0;
+    -> declare v_str varchar(500) default '';
+    -> declare emp_cur cursor for select empno,ename,job from emp;
+    -> declare continue handler for NOT FOUND set v_stop=1;
+    -> open emp_cur;
+    -> label1: loop
+    -> fetch emp_cur into v_eno,v_ename,v_job;
+    -> if (v_stop=1) then
+    ->            leave label1;
+    ->         end if;
+    ->         set v_str=concat(v_str,v_ename,'|',v_job,',');
+    -> end loop;
+    -> close emp_cur;
+    -> select v_str;
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call concat_nm_job();
+    -> //
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| v_str                                                                                                                                                                                                                               |
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| SMITH|CLERK,ALLEN|SALESMAN,WARD|SALESMAN,JONES|MANAGER,MARTIN|SALESMAN,BLAKE|MANAGER,CLARK|MANAGER,SCOTT|ANALYST,KING|PRESIDENT,TURNER|SALESMAN,ADAMS|CLERK,JAMES|CLERK,FORD|ANALYST,MILLER|CLERK,xxxx|cccc,xxxx|cccc,xxxx111|cccc, |
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop procedure if exists concat_nm_job;
+    -> delimiter //
+Query OK, 0 rows affected (0.01 sec)
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter' at line 1
+mysql>
+mysql> create procedure concat_nm_job()
+    -> begin
+    -> declare v_eno int;
+    -> declare v_ename varchar(20);
+    -> declare v_job varchar(20);
+    -> declare v_stop int default 0;
+    -> declare v_str varchar(500) default '';
+    -> declare emp_cur cursor for select empno,ename,job from emp;
+    -> declare continue handler for NOT FOUND set v_stop=1;
+    -> open emp_cur;
+    -> label1: loop
+    -> fetch emp_cur into v_eno,v_ename,v_job;
+    -> if (v_stop=1) then
+    ->            leave label1;
+    ->         end if;
+    ->         set v_str=concat(v_str,v_ename,'-->',v_job,',');
+    -> end loop;
+    -> close emp_cur;
+    -> select v_str;
+    ->
+    -> end//
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call concat_nm_job();
+    -> //
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| v_str                                                                                                                                                                                                                                                                 |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| SMITH-->CLERK,ALLEN-->SALESMAN,WARD-->SALESMAN,JONES-->MANAGER,MARTIN-->SALESMAN,BLAKE-->MANAGER,CLARK-->MANAGER,SCOTT-->ANALYST,KING-->PRESIDENT,TURNER-->SALESMAN,ADAMS-->CLERK,JAMES-->CLERK,FORD-->ANALYST,MILLER-->CLERK,xxxx-->cccc,xxxx-->cccc,xxxx111-->cccc, |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop procedure if exists concat_nm_job;
+    -> delimiter //
+Query OK, 0 rows affected (0.01 sec)
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter' at line 1
+mysql>
+mysql> create procedure concat_nm_job()
+    -> begin
+    -> declare v_eno int;
+    -> declare v_ename varchar(20);
+    -> declare v_job varchar(20);
+    -> declare v_stop int default 0;
+    -> declare v_str varchar(500) default '';
+    -> declare emp_cur cursor for select empno,ename,job from emp;
+    -> declare continue handler for NOT FOUND set v_stop=1;
+    -> open emp_cur;
+    -> label1: loop
+    -> fetch emp_cur into v_eno,v_ename,v_job;
+    -> if (v_stop=1) then
+    ->            leave label1;
+    ->         end if;
+    ->         --build the list of ename and job
+    ->         set v_str=concat(v_str,v_ename,'-->',v_job,',');
+    -> end loop;
+    -> close emp_cur;
+    -> select v_str;
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--build the list of ename and job
+        set v_str=concat(v_str,v_ename,'-->',' at line 16
+mysql>
+mysql> drop procedure if exists concat_nm_job;
+    -> delimiter //
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter' at line 1
+mysql>
+mysql> create procedure concat_nm_job()
+    -> begin
+    -> declare v_eno int;
+    -> declare v_ename varchar(20);
+    -> declare v_job varchar(20);
+    -> declare v_stop int default 0;
+    -> declare v_str varchar(500) default '';
+    -> declare emp_cur cursor for select empno,ename,job from emp;
+    -> declare continue handler for NOT FOUND set v_stop=1;
+    -> open emp_cur;
+    -> label1: loop
+    -> fetch emp_cur into v_eno,v_ename,v_job;
+    -> if (v_stop=1) then
+    ->            leave label1;
+    ->         end if;
+    ->         /*build the list of ename and job*/
+    ->         set v_str=concat(v_str,v_ename,'-->',v_job,',');
+    -> end loop;
+    -> close emp_cur;
+    -> select v_str;
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call concat_nm_job();
+    -> //
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| v_str                                                                                                                                                                                                                                                                 |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| SMITH-->CLERK,ALLEN-->SALESMAN,WARD-->SALESMAN,JONES-->MANAGER,MARTIN-->SALESMAN,BLAKE-->MANAGER,CLARK-->MANAGER,SCOTT-->ANALYST,KING-->PRESIDENT,TURNER-->SALESMAN,ADAMS-->CLERK,JAMES-->CLERK,FORD-->ANALYST,MILLER-->CLERK,xxxx-->cccc,xxxx-->cccc,xxxx111-->cccc, |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop procedure if exists update_sal()
+    -> delimiter //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '()
+delimiter' at line 1
+mysql>
+mysql> create procedure update_sal()
+    -> begin
+    -> declare v_empno int;
+    -> declare v_job varchar(30);
+    -> declare v_sal decimal(12,2);
+    -> declare v_stop int default 0;
+    -> declare emp_cur cursor for select empno,sal,job from emp;
+    -> declare continue handler for NOT Found set v_stop=1;
+    -> open emp_cur;
+    -> label1: loop
+    ->    fetch emp_cur into v_empno,v_sal,v_job;
+    ->    if v_stop=1 then
+    ->        leave label1;
+    ->    end if;
+    ->    if v_job='MANAGER' then
+    ->        update emp
+    ->        set sal=1.10*v_sal
+    ->        where empno=v_empno;
+    ->     elseif v_job='CLERK' then
+    ->        update emp
+    ->        set sal=1.15*v_sal
+    ->        where empno=v_empno;
+    ->     elseif v_job='ANALYST' then
+    ->        update emp
+    ->        set sal=1.20*v_sal
+    ->        where empno=v_empno;
+    ->     else
+    ->         update emp
+    ->         set sal=1.25*v_sal
+    ->        where empno=v_empno;
+    ->     end if;
+    -> end loop;
+    -> close emp_cur;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> delimiter ;
+mysql> select * from emp;
++-------+---------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+---------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 3456.00 |  456.00 |     10 |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 3456.00 |  456.00 |     20 |
+| 12342 | xxxx111 | cccc      | 7839 | 2000-04-02 | 3456.00 |  456.00 |     10 |
++-------+---------+-----------+------+------------+---------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> call update_sal();
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> select * from emp;
++-------+---------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+---------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |  920.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 | 2000.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 | 1562.50 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 | 3272.50 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 | 1562.50 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 | 3135.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 | 2695.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 | 3600.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 | 6250.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 | 1875.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 | 1265.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 | 1092.50 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 | 3600.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 | 1495.00 |    NULL |     10 |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 4320.00 |  456.00 |     10 |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 4320.00 |  456.00 |     20 |
+| 12342 | xxxx111 | cccc      | 7839 | 2000-04-02 | 4320.00 |  456.00 |     10 |
++-------+---------+-----------+------+------------+---------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql>

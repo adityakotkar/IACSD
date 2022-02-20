@@ -1,0 +1,174 @@
+all social data media application statrted
+Big Data
+4 V's in Big data
+Velocity
+   speed gathering data has increased
+Variety
+   data in temperature , about people, liking of people
+
+Veracity
+    the oraganization who handles data has more control on data an hence quality of data is good
+volume
+   high volume of information for taking decisions
+
+unstructured 
+
+SQL and NOSQL
+sructured
+arrange the data in table
+account (accid,accnum,balance,custno)
+all finacial applications where you need security or transaction control
+ACID 
+
+
+WhatsAPP
+Facebook
+instagram
+
+-----redudancy of data will be large
+-----format of information will be diifferent for differt people so it unstructured
+NOSQL
+JSON format or in BSON (javascript object notation, Binary JSON)
+
+
+database will have different way to store
+key-value pair
+couchbaseDB
+{111:
+   {empno:111,name:"Kishori",addreess:"djhj",
+   skills:['python','java','Database'],
+   deptno: {deptno:12,dname:"hr",dloc:"mumbai"}
+   projecct:[{name:'inssurance',exp:4},{name:'inssurance'},{name:'loan',exp:10}]}
+
+}
+
+
+
+document format----MongoDB
+{
+   empno:111,name:"Kishori",addreess:"djhj",
+   skills:['python','java','Database'],
+   deptno: {deptno:12,dname:"hr",dloc:"mumbai"}
+   projecct:[{name:'inssurance',exp:4},{name:'inssurance'},{name:'loan',exp:10}]
+
+}
+{
+   empId:111,name:"Kishori",addreess:"djhj",
+   skills:['python','java','Database'],
+   }
+   projecct:[{projectname:'inssurance',exp:4},{name:'inssurance'},{name:'loan',exp:10}]
+
+}
+
+
+rowwise or columnwise data
+
+1000 Parag  3456
+200  Anjali 4545
+300  Ashu   54487
+
+
+Rowwise data storage    calculate avg sal
+  
+1000 Parag  3456,200  Anjali 4545,300  Ashu   54487
+
+coulumn wise(distributed format )  calculate avg salary------- used in data analysis
+  1000  200  300, parag  Anjali  Ashu,3456  4545  54487
+
+
+NOSQL
+mongoDB,Cassandra,CouchbaseDB,hbase
+
+CAP theorom
+consistency,availability, partition talerancee
+
+
+All distributed database will have any 2 of these properties
+
+
+
+----nosql---Mongodb
+$ne,$gt,$lt,$eq,$lte,$in, $nin ,$exists, $mod, $type,$size,$elemMatch ,$not
+
+------find all documents show only name and rating from movie collection with rating=3
+db.movie.find({filter condition},{projection})
+
+  
+db.movie.find({rating:3},{name:1,rating:1,_id:0}) 
+
+------find all documents show all the keys except price  from movie collection with rating=3
+> db.movie.find({rating:3},{price:0,actor:0,_id:0})
+
+----find all documents display only name and rating and actor
+
+>db.movie.find({},{name:1,rating:1,actor:1,_id:0})
+
+----to find all documents with ticket_num =200
+>db.movie.find({ticket_num:200})
+-----to find all mpovies with rating>3
+>db.movie.find({rating:{$gt:3}},{name:1,rating:1,_id:0})
+-----find restauren from 3rd position onward 4 records with zipcode='11214'
+> db.restaurent.find({'address.zipcode':'11214'},{name:1,'address.zipcode':1}).limit(4).skip(2)
+-----display all movies with rating< 4 in sorted order of rating
+>db.movie.find({rating:{$lt:4}},{name:1,rating:1,price:1,_id:0}).sort({rating:1}).limit(2)
+---list all documents with price=200 and rating =3
+>db.movie.find({price:200,rating:3},{name:1,rating:1,price:1,_id:0})
+---list all documents with price>200 and rating >=3
+> db.movie.find({price:{$gt:200},rating:{$gte:3}},{name:1,rating:1,price:1,_id:0})
+>db.movie.find({$and:[{price:{$gt:200}},{rating:{$gte:3}}]},{name:1,rating:1,price:1,_id:0})
+---list all documents with price>200 or rating >=3
+price:{$gt:200}
+rating:{$gte:3}
+$or:[{price:{$gt:200}},{rating:{$gte:3}}]
+> db.movie.find({$or:[{price:{$gt:200}},{rating:{$gte:3}}]},{name:1,rating:1,price:1,_id:0})
+
+--list all movies with price>200 and  <400
+db.movie.find({price:{$gte:200,$lte:400}})
+
+------list all movies with price = either 310 or 360 or 400
+db.movie.find({price:{$in:[310,360,400]})
+------list all movies with price = either 310 or 360 or 400
+db.movie.find({price:{$nin:[310,360,400]})
+-----list all movies in which Amitabh has acted
+db.movie.find({actor:'Amitabh'})
+
+-- all reataurents with grade='A' on date 12 march with score =2
+
+db.restaurent.find({grades:{$elemMatch:{"date" : ISODate("2013-03-12T00:00:00Z"),"grade" : "A","score" : 2}}})
+
+----find all restaurent with score=2 at ist index position in grades                      
+db.restaurent.find({'grades.1.score':2}).limit(3).pretty()
+
+
+----- to find all ratings which are divisible by 2
+db.movie.find({rating:{$mod:[2,0]}})
+
+--------list all movies with size of actor movie =3
+
+ db.movie.find({actor:{$size:3}}).limit(3).pretty()
+
+----to find all movies with rating type is string size=3
+ db.movie.find({rating:{$type:'string'}}).limit(3).pretty()
+
+------- to find all movies in which anitabh has acted
+db.movie.find(actor:/[Aa]mitabh/)
+
+-----to find all movies with name ends with t
+
+db.movie.find({name:/t$/})
+
+--- find all movies with name starts with K and ends with digit
+
+ db.movie.find({name:/^K.*\d$/})
+
+------find all movies with rating is null
+db.movie.find({rating:null})
+-----find all movies with rating key exists and and value is null
+------find all movies with rating is null if rating key exists
+db.movie.find({rating:{$in:[null],$exists:true}})
+
+-----find all movies whith price not in range 200 and 400
+db.movie.find({price:{$not:{$gt:200,$lt:400}}})
+
+
+ 

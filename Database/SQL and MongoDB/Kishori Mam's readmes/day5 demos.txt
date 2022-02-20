@@ -1,0 +1,1166 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.22 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use iacsd2111
+Database changed
+mysql> select last_day(curdate());
++---------------------+
+| last_day(curdate()) |
++---------------------+
+| 2021-11-30          |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> select date_sub(last_day(curdate()),interval 3 month);
++------------------------------------------------+
+| date_sub(last_day(curdate()),interval 3 month) |
++------------------------------------------------+
+| 2021-08-30                                     |
++------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select date_sub(date_add(last_day(curdate(),interval 1 day),interval 3 month);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '),interval 3 month)' at line 1
+mysql> select date_sub(date_add(last_day(curdate()),interval 1 day),interval 3 month);
++-------------------------------------------------------------------------+
+| date_sub(date_add(last_day(curdate()),interval 1 day),interval 3 month) |
++-------------------------------------------------------------------------+
+| 2021-09-01                                                              |
++-------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select date_sub(date_add(last_day(curdate()),interval 1 day),interval 4 month);
++-------------------------------------------------------------------------+
+| date_sub(date_add(last_day(curdate()),interval 1 day),interval 4 month) |
++-------------------------------------------------------------------------+
+| 2021-08-01                                                              |
++-------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from product;
++------+-----------+---------+-------+-----------+
+| pid  | pname     | company | sales | amount    |
++------+-----------+---------+-------+-----------+
+|    1 | handbag   | vip     |    20 |  20000.00 |
+|    2 | sack      | vip     |    10 |  15000.00 |
+|    3 | sack      | Nike    |     5 |  12000.00 |
+|    4 | handbag   | Nike    |    20 |  50000.00 |
+|    5 | cabin bag | Nike    |    10 | 100000.00 |
++------+-----------+---------+-------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select company,pname,avg(amount) over (partition by pname)
+    -> from product;
++---------+-----------+---------------------------------------+
+| company | pname     | avg(amount) over (partition by pname) |
++---------+-----------+---------------------------------------+
+| Nike    | cabin bag |                         100000.000000 |
+| vip     | handbag   |                          35000.000000 |
+| Nike    | handbag   |                          35000.000000 |
+| vip     | sack      |                          13500.000000 |
+| Nike    | sack      |                          13500.000000 |
++---------+-----------+---------------------------------------+
+5 rows in set (0.00 sec)
+
+mysql> select hiredate,year(hiredate)
+    -> from emp;
++------------+----------------+
+| hiredate   | year(hiredate) |
++------------+----------------+
+| 1980-12-17 |           1980 |
+| 1981-02-20 |           1981 |
+| 1981-02-22 |           1981 |
+| 1981-04-02 |           1981 |
+| 1981-09-28 |           1981 |
+| 1981-05-01 |           1981 |
+| 1981-06-09 |           1981 |
+| 1982-12-09 |           1982 |
+| 1981-11-17 |           1981 |
+| 1981-09-08 |           1981 |
+| 1983-01-12 |           1983 |
+| 1981-12-03 |           1981 |
+| 1981-12-03 |           1981 |
+| 1982-01-23 |           1982 |
+| 1981-02-12 |           1981 |
+| 2011-02-27 |           2011 |
+| 2011-02-27 |           2011 |
++------------+----------------+
+17 rows in set (0.00 sec)
+
+mysql> select year(hiredate),count(*)
+    -> from emp
+    -> group by year(hiredate);
++----------------+----------+
+| year(hiredate) | count(*) |
++----------------+----------+
+|           1980 |        1 |
+|           1981 |       11 |
+|           1982 |        2 |
+|           1983 |        1 |
+|           2011 |        2 |
++----------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select year(hiredate),count(*)
+    -> from emp
+    -> group by year(hiredate)
+    -> having count(*)>10;
++----------------+----------+
+| year(hiredate) | count(*) |
++----------------+----------+
+|           1981 |       11 |
++----------------+----------+
+1 row in set (0.00 sec)
+
+mysql> select deptno, year(hiredate),count(*)
+    -> from emp
+    -> group by deptno,year(hiredate);
++--------+----------------+----------+
+| deptno | year(hiredate) | count(*) |
++--------+----------------+----------+
+|     20 |           1980 |        1 |
+|     30 |           1981 |        6 |
+|     20 |           1981 |        2 |
+|     10 |           1981 |        3 |
+|     20 |           1982 |        1 |
+|     20 |           1983 |        1 |
+|     10 |           1982 |        1 |
+|     10 |           2011 |        2 |
++--------+----------------+----------+
+8 rows in set (0.00 sec)
+
+mysql> select deptno, year(hiredate),count(*)
+    -> from emp
+    -> group by deptno,year(hiredate)
+    -> order by deptno;
++--------+----------------+----------+
+| deptno | year(hiredate) | count(*) |
++--------+----------------+----------+
+|     10 |           1981 |        3 |
+|     10 |           1982 |        1 |
+|     10 |           2011 |        2 |
+|     20 |           1980 |        1 |
+|     20 |           1981 |        2 |
+|     20 |           1982 |        1 |
+|     20 |           1983 |        1 |
+|     30 |           1981 |        6 |
++--------+----------------+----------+
+8 rows in set (0.00 sec)
+
+mysql> select company,pname,avg(amount) over (partition by pname),count(*) over (partion by pname)
+    -> from product;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'by pname)
+from product' at line 1
+mysql> select company,pname,avg(amount) over (partition by pname),count(*) over (partition by pname)
+    -> from product;
++---------+-----------+---------------------------------------+------------------------------------+
+| company | pname     | avg(amount) over (partition by pname) | count(*) over (partition by pname) |
++---------+-----------+---------------------------------------+------------------------------------+
+| Nike    | cabin bag |                         100000.000000 |                                  1 |
+| vip     | handbag   |                          35000.000000 |                                  2 |
+| Nike    | handbag   |                          35000.000000 |                                  2 |
+| vip     | sack      |                          13500.000000 |                                  2 |
+| Nike    | sack      |                          13500.000000 |                                  2 |
++---------+-----------+---------------------------------------+------------------------------------+
+5 rows in set (0.00 sec)
+
+mysql>
+mysql> create table student1(
+    -> sid int primary key,
+    -> sname varchar(30) not null,
+    -> adress varchar(30),
+    -> mobile int(10) unique
+    -> );
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+
+mysql> insert into student1 values(1,'Rajas','Deccan',111111);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student1(sname,sid,mobile,adress) values('Rakesh',2,111111,'Deccan');
+ERROR 1062 (23000): Duplicate entry '111111' for key 'student1.mobile'
+mysql> insert into student1(sname,sid,mobile,adress) values('Rakesh',2,111112,'Deccan');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student1 values(1,'Rajas','Deccan',111111);
+ERROR 1062 (23000): Duplicate entry '1' for key 'student1.PRIMARY'
+mysql> insert into student1 values(3,'Rajas','Deccan',111112);
+ERROR 1062 (23000): Duplicate entry '111112' for key 'student1.mobile'
+mysql> insert into student1 values(3,'Rajas','Deccan',111113);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student1 values(4,'Ashutosh','Kothrud',111114);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from student;
++-----+--------+--------+-----------+
+| sid | sname  | course | fees      |
++-----+--------+--------+-----------+
+|   1 | Rajas  | DAC    | 100000.00 |
+|   2 | Deven  | DAC    |  95000.00 |
+|   3 | Rujuta | DAC    |  95000.00 |
+|   4 | Rujuta | DBDA   |  95000.00 |
+|   5 | Gauri  | DBDA   |  85000.00 |
+|   6 | Ashish | DBDA   |  95000.00 |
++-----+--------+--------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+--------+
+| sid | sname    | adress  | mobile |
++-----+----------+---------+--------+
+|   1 | Rajas    | Deccan  | 111111 |
+|   2 | Rakesh   | Deccan  | 111112 |
+|   3 | Rajas    | Deccan  | 111113 |
+|   4 | Ashutosh | Kothrud | 111114 |
++-----+----------+---------+--------+
+4 rows in set (0.00 sec)
+
+mysql> insert into student1 values(5,'Ashwini','Kothrud',1111141111);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student1 values(6,'Deepa','Kothrud',11111411111);
+ERROR 1264 (22003): Out of range value for column 'mobile' at row 1
+mysql> insert into student1 values(6,'Deepa','Kothrud',9893972243);
+ERROR 1264 (22003): Out of range value for column 'mobile' at row 1
+mysql> select * from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select * from student1
+    -> ;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Deccan  |     111112 |
+|   3 | Rajas    | Deccan  |     111113 |
+|   4 | Ashutosh | Kothrud |     111114 |
+|   5 | Ashwini  | Kothrud | 1111141111 |
++-----+----------+---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> update student1
+    -> set adress='Camp'
+    -> where sid=2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   3 | Rajas    | Deccan  |     111113 |
+|   4 | Ashutosh | Kothrud |     111114 |
+|   5 | Ashwini  | Kothrud | 1111141111 |
++-----+----------+---------+------------+
+5 rows in set (0.01 sec)
+
+mysql> delete
+    -> from student1
+    -> where sid=3;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Ashutosh | Kothrud |     111114 |
+|   5 | Ashwini  | Kothrud | 1111141111 |
++-----+----------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> update student1
+    -> set address='Hadpsar',mobile=22222
+    -> ^C
+mysql> update student1
+    -> set adress='Hadpsar',mobile=22222
+    -> where address='kothrud';
+ERROR 1054 (42S22): Unknown column 'address' in 'where clause'
+mysql> desc student1
+    -> ;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| sid    | int         | NO   | PRI | NULL    |       |
+| sname  | varchar(30) | NO   |     | NULL    |       |
+| adress | varchar(30) | YES  |     | NULL    |       |
+| mobile | int         | YES  | UNI | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> update student1
+    -> set adress='Hadpsar',mobile=22222
+    -> where adress='kothrud';
+ERROR 1062 (23000): Duplicate entry '22222' for key 'student1.mobile'
+mysql> update student1
+    -> set adress='Hadpsar',sname='Sangeeta'
+    -> where adress='Kothrud';
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
++-----+----------+---------+------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into student1(sid,sname) values(6,'Swati')
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into student1(sid) values(7);
+ERROR 1364 (HY000): Field 'sname' doesn't have a default value
+mysql> insert into student1(sid,sname) values(7,'Swati')
+    -> ;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
+|   7 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> set autocommit=0
+    -> ;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into student1(sid,sname) values(8,'Swati')
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student;
++-----+--------+--------+-----------+
+| sid | sname  | course | fees      |
++-----+--------+--------+-----------+
+|   1 | Rajas  | DAC    | 100000.00 |
+|   2 | Deven  | DAC    |  95000.00 |
+|   3 | Rujuta | DAC    |  95000.00 |
+|   4 | Rujuta | DBDA   |  95000.00 |
+|   5 | Gauri  | DBDA   |  85000.00 |
+|   6 | Ashish | DBDA   |  95000.00 |
++-----+--------+--------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
+|   7 | Swati    | NULL    |       NULL |
+|   8 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+7 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
+|   7 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> delete from student1
+    -> where sid=7;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
+|   7 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
+|   7 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> delete from student1;
+Query OK, 6 rows affected (0.00 sec)
+
+mysql> select * from student1;
+Empty set (0.00 sec)
+
+mysql> roolback;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'roolback' at line 1
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
+|   7 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> create table faculty(
+    -> fid int primary key,
+    -> fname varchar(30) not null,
+    -> sp_sub varchar(30) default 'java'
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table course(
+    -> cid int,
+    -> cname varchar(30) unique not null,
+    -> start_date date,
+    -> faid int,
+    -> primary key(cid),
+    -> foreign key fk_fid(faid) references faculty(fid)
+    -> on delete set null
+    -> on update cascade
+    ->
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc faculty
+    -> ;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| fid    | int         | NO   | PRI | NULL    |       |
+| fname  | varchar(30) | NO   |     | NULL    |       |
+| sp_sub | varchar(30) | YES  |     | java    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> set autocomiit=0
+    -> ;
+ERROR 1193 (HY000): Unknown system variable 'autocomiit'
+mysql> set autocommit=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into faculty values(100,'Rohit','Java');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into faculty values(200,'Sarika','Java');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into faculty(fid,fname) values(300,'Snehal');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from faculty;
++-----+--------+--------+
+| fid | fname  | sp_sub |
++-----+--------+--------+
+| 100 | Rohit  | Java   |
+| 200 | Sarika | Java   |
+| 300 | Snehal | java   |
++-----+--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> insert into faculty values(200,'Rahul','C++');
+ERROR 1062 (23000): Duplicate entry '200' for key 'faculty.PRIMARY'
+mysql> insert into faculty values(400,'Rahul','C++');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from faculty;
++-----+--------+--------+
+| fid | fname  | sp_sub |
++-----+--------+--------+
+| 100 | Rohit  | Java   |
+| 200 | Sarika | Java   |
+| 300 | Snehal | java   |
+| 400 | Rahul  | C++    |
++-----+--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into faculty values(500,'Rahul','C++');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into faculty values(600,'Rahul','C++');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from faculty;
++-----+--------+--------+
+| fid | fname  | sp_sub |
++-----+--------+--------+
+| 100 | Rohit  | Java   |
+| 200 | Sarika | Java   |
+| 300 | Snehal | java   |
+| 400 | Rahul  | C++    |
+| 500 | Rahul  | C++    |
+| 600 | Rahul  | C++    |
++-----+--------+--------+
+6 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from faculty;
++-----+--------+--------+
+| fid | fname  | sp_sub |
++-----+--------+--------+
+| 100 | Rohit  | Java   |
+| 200 | Sarika | Java   |
+| 300 | Snehal | java   |
+| 400 | Rahul  | C++    |
++-----+--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> insert into faculty values(501,'Vidya','C++');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into faculty values(502,'Ashwini','C++');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint A;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into faculty values(601,'Prashant','.NET');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into faculty values(602,'narendra','.NET');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into faculty values(603,'amit','.NET');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint B
+    -> ;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into faculty values(700,'amitshdgjhgdhg','.NET');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> rollback to B;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 300 | Snehal   | java   |
+| 400 | Rahul    | C++    |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 300 | Snehal   | java   |
+| 400 | Rahul    | C++    |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> set autocommit=1
+    -> ;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> desc course;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| cid        | int         | NO   | PRI | NULL    |       |
+| cname      | varchar(30) | NO   | UNI | NULL    |       |
+| start_date | date        | YES  |     | NULL    |       |
+| faid       | int         | YES  | MUL | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> select * from course;
+Empty set (0.00 sec)
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 300 | Snehal   | java   |
+| 400 | Rahul    | C++    |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> insert into course values(1000,'java','2021-02-11',100);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into course values(1001,'java','2021-02-11',367);
+ERROR 1062 (23000): Duplicate entry 'java' for key 'course.cname'
+mysql> insert into course values(1001,'python','2021-02-11',367);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`iacsd2111`.`course`, CONSTRAINT `course_ibfk_1` FOREIGN KEY (`faid`) REFERENCES `faculty` (`fid`) ON DELETE SET NULL ON UPDATE CASCADE)
+mysql> insert into course values(1001,'python','2021-02-11',400);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into course values(1002,'python Django',str_to_date('02/03/2020','%d/%m/%Y'),400);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from course;
++------+---------------+------------+------+
+| cid  | cname         | start_date | faid |
++------+---------------+------------+------+
+| 1000 | java          | 2021-02-11 |  100 |
+| 1001 | python        | 2021-02-11 |  400 |
+| 1002 | python Django | 2020-03-02 |  400 |
++------+---------------+------------+------+
+3 rows in set (0.00 sec)
+
+mysql> insert into course values(1002,'Web programming',str_to_date('02/05/2020','%d/%m/%Y'),300);
+ERROR 1062 (23000): Duplicate entry '1002' for key 'course.PRIMARY'
+mysql> insert into course values(1003,'Web programming',str_to_date('02/05/2020','%d/%m/%Y'),300);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into course values(1004,'Databases',str_to_date('02/05/2020','%d/%m/%Y'),300);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from course;
++------+-----------------+------------+------+
+| cid  | cname           | start_date | faid |
++------+-----------------+------------+------+
+| 1000 | java            | 2021-02-11 |  100 |
+| 1001 | python          | 2021-02-11 |  400 |
+| 1002 | python Django   | 2020-03-02 |  400 |
+| 1003 | Web programming | 2020-05-02 |  300 |
+| 1004 | Databases       | 2020-05-02 |  300 |
++------+-----------------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 300 | Snehal   | java   |
+| 400 | Rahul    | C++    |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> update faculty
+    -> set fid=301
+    -> where fid=300;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 400 | Rahul    | C++    |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> select * from course;
++------+-----------------+------------+------+
+| cid  | cname           | start_date | faid |
++------+-----------------+------------+------+
+| 1000 | java            | 2021-02-11 |  100 |
+| 1001 | python          | 2021-02-11 |  400 |
+| 1002 | python Django   | 2020-03-02 |  400 |
+| 1003 | Web programming | 2020-05-02 |  301 |
+| 1004 | Databases       | 2020-05-02 |  301 |
++------+-----------------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> delete
+    -> from faculty
+    -> where fid=400;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
++-----+----------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select * from course;
++------+-----------------+------------+------+
+| cid  | cname           | start_date | faid |
++------+-----------------+------------+------+
+| 1000 | java            | 2021-02-11 |  100 |
+| 1001 | python          | 2021-02-11 | NULL |
+| 1002 | python Django   | 2020-03-02 | NULL |
+| 1003 | Web programming | 2020-05-02 |  301 |
+| 1004 | Databases       | 2020-05-02 |  301 |
++------+-----------------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> update course
+    -> set faid=602
+    -> where cid=1001;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from course;
++------+-----------------+------------+------+
+| cid  | cname           | start_date | faid |
++------+-----------------+------------+------+
+| 1000 | java            | 2021-02-11 |  100 |
+| 1001 | python          | 2021-02-11 |  602 |
+| 1002 | python Django   | 2020-03-02 | NULL |
+| 1003 | Web programming | 2020-05-02 |  301 |
+| 1004 | Databases       | 2020-05-02 |  301 |
++------+-----------------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> create table student_course(
+    -> sid int,
+    -> cid int,
+    -> fees decimal(12,2) check (fees>1000),
+    -> start_date date,
+    -> end_date date,
+    -> primary key(sid,cid),
+    -> foreign key fk_sid(sid) references student(sid)
+    -> on delete set null
+    -> on update cascade,
+    -> foreign key fk_cid(cid) references course(cid)
+    -> on delete set null
+    -> on update cascade
+    ->
+    -> );
+ERROR 1830 (HY000): Column 'sid' cannot be NOT NULL: needed in a foreign key constraint 'student_course_ibfk_1' SET NULL
+mysql> create table student_course(
+    -> sid int,
+    -> cid int,
+    -> fees decimal(12,2) check (fees>1000),
+    -> start_date date,
+    -> end_date date,
+    -> primary key(sid,cid),
+    -> foreign key fk_sid(sid) references student1(sid)
+    -> on delete set null
+    -> on update cascade,
+    -> foreign key fk_cid(cid) references course(cid)
+    -> on delete set null
+    -> on update cascade
+    ->
+    -> );
+ERROR 1830 (HY000): Column 'sid' cannot be NOT NULL: needed in a foreign key constraint 'student_course_ibfk_1' SET NULL
+mysql> create table student_course(
+    -> sid int,
+    -> cid int,
+    -> fees decimal(12,2) check (fees>1000),
+    -> start_date date,
+    -> end_date date,
+    -> primary key(sid,cid),
+    -> foreign key fk_sid(sid) references student1(sid)
+    -> on update cascade
+    -> on delete cascade,
+    -> foreign key fk_cid(cid) references course(cid)
+    -> on update cascade
+    -> on delete cascade
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
+|   7 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from course;
++------+-----------------+------------+------+
+| cid  | cname           | start_date | faid |
++------+-----------------+------------+------+
+| 1000 | java            | 2021-02-11 |  100 |
+| 1001 | python          | 2021-02-11 |  602 |
+| 1002 | python Django   | 2020-03-02 | NULL |
+| 1003 | Web programming | 2020-05-02 |  301 |
+| 1004 | Databases       | 2020-05-02 |  301 |
++------+-----------------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> desc student_course;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| sid        | int           | NO   | PRI | NULL    |       |
+| cid        | int           | NO   | PRI | NULL    |       |
+| fees       | decimal(12,2) | YES  |     | NULL    |       |
+| start_date | date          | YES  |     | NULL    |       |
+| end_date   | date          | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into student_course values(1,1000,100000.00,'2021-03-02','2021-05-02');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student_course values(2,1000,100,'2021-03-02','2021-05-02');
+ERROR 3819 (HY000): Check constraint 'student_course_chk_1' is violated.
+mysql> insert into student_course values(2,1000,-100,'2021-03-02','2021-05-02');
+ERROR 3819 (HY000): Check constraint 'student_course_chk_1' is violated.
+mysql> insert into student_course values(2,1000,200000,'2021-03-02','2021-05-02');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student_course values(2,1000,200000,'2021-03-02','2021-05-02');
+ERROR 1062 (23000): Duplicate entry '2-1000' for key 'student_course.PRIMARY'
+mysql> insert into student_course values(2,1001,200000,'2021-03-02','2021-05-02');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student_course values(2,1003,200000,'2021-03-02','2021-05-02');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student_course values(4,1003,200000,'2021-03-02','2021-05-02');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student_course;
++-----+------+-----------+------------+------------+
+| sid | cid  | fees      | start_date | end_date   |
++-----+------+-----------+------------+------------+
+|   1 | 1000 | 100000.00 | 2021-03-02 | 2021-05-02 |
+|   2 | 1000 | 200000.00 | 2021-03-02 | 2021-05-02 |
+|   2 | 1001 | 200000.00 | 2021-03-02 | 2021-05-02 |
+|   2 | 1003 | 200000.00 | 2021-03-02 | 2021-05-02 |
+|   4 | 1003 | 200000.00 | 2021-03-02 | 2021-05-02 |
++-----+------+-----------+------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   1 | Rajas    | Deccan  |     111111 |
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
+|   7 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> delete from student1
+    -> where sid=1;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student1;
++-----+----------+---------+------------+
+| sid | sname    | adress  | mobile     |
++-----+----------+---------+------------+
+|   2 | Rakesh   | Camp    |     111112 |
+|   4 | Sangeeta | Hadpsar |     111114 |
+|   5 | Sangeeta | Hadpsar | 1111141111 |
+|   6 | Swati    | NULL    |       NULL |
+|   7 | Swati    | NULL    |       NULL |
++-----+----------+---------+------------+
+5 rows in set (0.01 sec)
+
+mysql> select * from student_course;
++-----+------+-----------+------------+------------+
+| sid | cid  | fees      | start_date | end_date   |
++-----+------+-----------+------------+------------+
+|   2 | 1000 | 200000.00 | 2021-03-02 | 2021-05-02 |
+|   2 | 1001 | 200000.00 | 2021-03-02 | 2021-05-02 |
+|   2 | 1003 | 200000.00 | 2021-03-02 | 2021-05-02 |
+|   4 | 1003 | 200000.00 | 2021-03-02 | 2021-05-02 |
++-----+------+-----------+------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> update student_course
+    -> set fees=100000;
+Query OK, 4 rows affected (0.01 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> select * from student_course;
++-----+------+-----------+------------+------------+
+| sid | cid  | fees      | start_date | end_date   |
++-----+------+-----------+------------+------------+
+|   2 | 1000 | 100000.00 | 2021-03-02 | 2021-05-02 |
+|   2 | 1001 | 100000.00 | 2021-03-02 | 2021-05-02 |
+|   2 | 1003 | 100000.00 | 2021-03-02 | 2021-05-02 |
+|   4 | 1003 | 100000.00 | 2021-03-02 | 2021-05-02 |
++-----+------+-----------+------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into student_course values(4,1003,200000,'2021-03-02',date_add('2021-03-02',interval 3 month));
+ERROR 1062 (23000): Duplicate entry '4-1003' for key 'student_course.PRIMARY'
+mysql> insert into student_course values(5,1003,200000,'2021-03-02',date_add('2021-03-02',interval 3 month));
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create table mytab()
+    ->
+    -> ^C
+mysql>
+mysql> create table mytab()
+    -> ^C
+mysql> create table mytab(
+    -> myid int,
+    -> name varchar(20));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into mytab values(1,'xxxx');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into mytab values(1,'xxxx');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into mytab values(1,'xxxx');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into mytab values(1,'xxxx');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab;
++------+------+
+| myid | name |
++------+------+
+|    1 | xxxx |
+|    1 | xxxx |
+|    1 | xxxx |
+|    1 | xxxx |
++------+------+
+4 rows in set (0.00 sec)
+
+mysql> drop table mytab;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop table mytab;
+ERROR 1051 (42S02): Unknown table 'iacsd2111.mytab'
+mysql> select * from mytab;
+ERROR 1146 (42S02): Table 'iacsd2111.mytab' doesn't exist
+mysql> create table mytab(
+    -> id int auto_increment,
+    -> name varchar(30));
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> create table mytab(
+    -> id int primary key auto_increment,
+    -> name varchar(30));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into mytab(name) values('xxx');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into mytab(name) values('yyyy');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from mytab;
++----+------+
+| id | name |
++----+------+
+|  1 | xxx  |
+|  2 | yyyy |
++----+------+
+2 rows in set (0.00 sec)
+
+mysql> insert into mytab(name) values('xxxxx');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into mytab values(10,'tttt');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from mytab;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | xxx   |
+|  2 | yyyy  |
+|  3 | xxxxx |
+| 10 | tttt  |
++----+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into mytab(name) values('xxx111');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from mytab;
++----+--------+
+| id | name   |
++----+--------+
+|  1 | xxx    |
+|  2 | yyyy   |
+|  3 | xxxxx  |
+| 10 | tttt   |
+| 11 | xxx111 |
++----+--------+
+5 rows in set (0.00 sec)
+
+mysql> delete from mytab where id=10;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into mytab(name) values('xxx222');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab;
++----+--------+
+| id | name   |
++----+--------+
+|  1 | xxx    |
+|  2 | yyyy   |
+|  3 | xxxxx  |
+| 11 | xxx111 |
+| 12 | xxx222 |
++----+--------+
+5 rows in set (0.00 sec)
+
+mysql> delete from mytab where id>10;
+Query OK, 2 rows affected (0.00 sec)
+
+mysql> insert into mytab(name) values('xxx333');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab;
++----+--------+
+| id | name   |
++----+--------+
+|  1 | xxx    |
+|  2 | yyyy   |
+|  3 | xxxxx  |
+| 13 | xxx333 |
++----+--------+
+4 rows in set (0.00 sec)
+
+mysql>

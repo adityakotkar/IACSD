@@ -1,0 +1,352 @@
+OLTP-----online transaction processing'
+
+OLAP-----Online Analytical processing
+
+row wise format
+1  Rajiv  3456,2  Ashu   45456,3 ajksdlk 4950 
+
+columnwise format----data analysis ---- aggregate info
+1  2  3, Rajiv,Ashu,ajksdlk,3456,45456,4950
+
+
+MongoDB
+----- find movie with rating either 3 or 2 or 5 and price > 200 and < 400
+db.movie.find({rating:{$in:[3,2,5]},price:{$gt:200,$lt:400}})
+
+---- find all movies with price > 200 or ticke_num not = 200,250 or 300
+db.movie.find({price:{$gt:200},ticket_num{$nin[200,250,300]}})
+price:{$gt:200}
+ticket_num:{$nin:[200,250,300]}
+$or:[{price:{$gt:200}},{ticket_num:{$nin:[200,250,300]}}]
+db.movie.find({$or:[{price:{$gt:200}},{ticket_num:{$nin:[200,250,300]}}]})
+
+-----Write a MongoDB query to find the restaurant Id, name and grades for those 
+restaurants where the 2nd index position element of grades array contains a grade of "A" 
+and score 9 on an ISODate "2014-08-11T00:00:00Z". 
+> db.restaurent.find({"grades.2.score":9,"grades.2.grade":"A","grades.2.date" : ISODate("2012-11-21T00:00:00Z")}).pretty();
+
+$and:[{"grades.2.score":9},{"grades.2.grade":"A"},{"grades.2.date":ISODate("2014-08-11T00:00:00Z")}]
+
+db.restaurent.find({$and:[{"grades.2.score":9},{"grades.2.grade":"A"},{"grades.2.date":ISODate("2014-08-11T00:00:00Z")}]
+})
+
+
+capped collection
+1. once collection is create you cannot remove the limit
+2. you cannot modify it normal collection
+3. you cannot delete records from capped collection
+
+---but we can delete documents from collection which not capped collection
+db.movie.remove(criteria)
+db.movie.remove({}) ------- all the records
+db.movie.deleteMany({})----all the records
+db.movie.remove({rating:6}) ----- remove all records with rating 6
+
+db.movie.deleteOne({rating:6}) -----remove first record with rating 6
+
+db.movie.deleteMany remove all records with rating 6
+
+Update:
+1. add new key, delete key,increament/decreament the value of a key,
+overwrite value of a key
+2. array  value added, delete value,
+3. while updating the document if don't find the document then we want to add
+it upsert--- update or insert
+$currentDate ---- current date assign to a key
+$inc---- to add or subtract and then overwrrite
+$max---- to overwrite if given value is maximum than existing value
+$min---- to overwrite if given value is min than existing value
+$mul ---- to multiply existing value and then overwrite 
+$rename --- to change the name of key
+$set ---- ovewrite value of the key
+$unset---- delete the pair key and value pair 
+
+Array
+
+$pop ---to delete the value either from the begining or from the end
+$pull --- to delete the value from array
+$push ---- to add in the array 
+         $each and $position
+$    ------ acts as a place holder to update the first element that maches th condition
+$[] ---- acts as a place holder to update all elements from the array
+$[element] ---acts as a place holder to update all elements that matches the given condition
+
+
+to update data
+updateMany({condition},{update action})
+updateOne({condition},{update action})
+update({condition},{update actions},{multi:true,upsert:true})
+
+----update rating of movie padmavat to 5
+db.movie.update({name:'padmavat'},{$set:{rating:5}},{multi:true})
+
+----- to upadte rating of padmavat and Adhddhund to 6 and increase the price by 10 rs if price is not null
+db.movie.update({name:{$in:['padmavat','Andhadhund']},price:{$nin:[null]}},
+{$set:{rating:6},$inc:{price:10}},
+{multi:true})
+
+----- to remove the key value pair from existing document
+db.movie.update({name:'padmavat'},
+{$unset:{cancellation:''}},
+{multi:true})
+
+
+----- to upadte rating of padmavat and Adhddhund to 6 and increase the price by 10 rs if price is not null
+db.movie.update({name:{$in:['padmavat','Andhadhund']},price:{$nin:[null]}},
+{$set:{price:400,"lastmodified.reason":"public demand"},$currentDate:{"lastmodified.date":true}},
+{multi:true})
+
+-------to change the rating to 8 if this is < than existing rating
+
+db.movie.update({name:{$in:['padmavat','Andhadhund']},price:{$nin:[null]}},
+{$min:{rating :8}},
+{multi:true})
+
+-------to change the rating to 8 if this is > than existing rating
+
+db.movie.update({name:{$in:['padmavat','Andhadhund']},price:{$nin:[null]}},
+{$max:{rating :8}},
+{multi:true})
+
+------increase the price of padmavat by 10%
+
+1.10*price
+0.05*price
+
+db.movie.update({name:{$in:['padmavat','Andhadhund']},price:{$nin:[null]}},
+{$mul:{price :1.10}},
+{multi:true})
+
+---- to change the name of key price to currprice
+db.movie.update({name:{$in:['padmavat','Andhadhund']},price:{$nin:[null]}},
+{$rename:{price :'currprice'}},
+{multi:true})
+
+
+----to add a record if not found
+
+db.movie.update({name:''},price:{$nin:[null]}},
+{$rename:{price :'currprice'}},
+{multi:true})
+
+
+----- overwrite rating by 6 and increament price by 10 for movie Titanic if found other 
+add documrnt if not found
+
+db.movie.update({name:/[Tt]itanic/},
+{$set:{rating:5},$inc:{price:300}},
+{multi:true,upsert:true});
+----upsert will add the record only if no record found which matches the condition
+
+
+----- update price to 500 increase rating by 2 for all movies with ticket_num is
+either 200 or 250 or 300 also assign currentdate to key changedOn
+
+db.movie.update({ticket_num:{$in:[200,250,300]}},{$set:{price:500},
+$currentDate:{'changedon':true},$inc:{rating:2}},{multi:true})
+
+----add ayushman in actor array of movie andhadhund
+db.movie.update({name:'Andhadhund'},{$push:{actor:'Ayushman'}},{multi:true})
+
+----add rani mukhajee and Saif ali khan in hum tum
+---$each is required when you want to add more elementsand if you want to use position then also use 
+each even if single element is there
+db.movie.update({name:'hum tum'},{$push:{actor:{$each:["Rani Mukharjee","saif ali khan"]}}},{multi:true})
+
+------delete from actor array from the end
+db.movie.update({name:'hum tum'},{$pop:{actor:1}})
+
+-----delete karri actor from movie kahani
+db.movie.update({name:'kahani'},{$pull:{actor:'karri'}})
+
+------add object in grades array for resturent 
+{
+                        "date" : ISODate("2015-04-23T00:00:00Z"),
+                        "grade" : "A+",
+                        "score" : 15
+                }
+db.restaurent.update({"borough" : "Brooklyn"},
+{$push:{grades: {"date" : ISODate("2015-04-23T00:00:00Z"),
+                  "grade" : "A+",
+                  "score" : 15
+                }}},{multi:true})
+				
+-------increase score by 2 for all restaurents with borough = "Brooklyn"
+	db.restaurent.update({"borough" : "Brooklyn"},{$inc:{grades.$[].score:2}},{multi:true})
+
+-----to update all scores of grades array  in restaurent collection for "borough" : "Brooklyn" inc by 2
+
+db.restaurent.update({"borough" : "Brooklyn",'grades.score':{$nin:[null]}},
+{$inc:{'grades.$[].score':2}},{multi:true})	
+				
+-----to update all scores of grades array  in restaurent collection "borough" : "Brooklyn"
+and grade=A+ inc by 2
+
+db.restaurent.update({"borough" : "Brooklyn",'grades.grade':"A+"},
+{$inc:{'grades.$.score':2}},{multi:true})	
+							
+-----to update all scores of grades array  in restaurent collection "borough" : "Brooklyn"
+and grade=A inc by 2
+
+db.restaurent.update({"borough" : "Brooklyn"},
+{$inc:{'grades.$[elem].score':2}},{multi:true,arrayFilters:[{'elem.grade':"A"}]})	
+
+
+{borough:"Brooklyn"
+grades:[
+     {
+	  grade:"A",
+	  score:5
+	 },
+	 {
+	  grade:"A",
+	  score:5
+	 },
+	 {
+	  grade:"A",
+	  score:5
+	 }
+	 {
+	  grade:"B",
+	  score:3
+	 }
+]
+}
+{borough:"Brooklyn",
+grades:[
+     {
+	  grade:"A",
+	  score:3
+	 },
+	 {
+	  grade:"B",
+	  score:3
+	 },
+	 {
+	  grade:"A",
+	  score:3
+	 }
+	 {
+	  grade:"B",
+	  score:3
+	 }
+]
+}
+{borough:"Brooklyn"
+grades:[
+     {
+	  grade:"A",
+	  score:3
+	 },
+	 {
+	  grade:"A+",
+	  score:3
+	 },
+	 {
+	  grade:"A",
+	  score:3
+	 }
+	 {
+	  grade:"B",
+	  score:3
+	 }
+]
+}
+{borough:"Brooklyn"
+grades:[
+     {
+	  grade:"A",
+	  score:3
+	 },
+	 {
+	  grade:"A",
+	  score:3
+	 },
+	 {
+	  grade:"A",
+	  score:3
+	 }
+	 {
+	  grade:"B",
+	  score:3
+	 }
+]
+}
+{borough:"Brooklyn"
+grades:[
+     {
+	  grade:"A",
+	  score:3
+	 },
+	 {
+	  grade:"A",
+	  score:3
+	 },
+	 {
+	  grade:"A",
+	  score:3
+	 }
+	 {
+	  grade:"B",
+	  score:3
+	 }
+]
+}
+
+student
+{name:"revati",marks:[85,85,85,85,85]}
+{name:"rajan",marks:[80,90,90,85,90]}
+{name:"ashu",marks:[80,77,90,90,90]}
+{name:"swapnali",marks:[60,65,90,90,90]}
+
+db.student.update({name:'revati'},{"marks.$[elem]":85},{multi:true,arrayFilters:[{elem:90}]})
+
+-------indexes in mongodb
+----to create index in mongodb
+db.movie.createIndex({rating:1})
+db.movie.ensureIndex({rating:1})   -----removed in version 5
+
+
+---to list all indexes in collection
+db.movie.getIndexes()
+
+
+---to delete index
+db.movie.dropIndex(name of the index)
+
+single field index -- if index is created on one field 
+   db.movie.createIndex({rating:1})
+
+compound index--if based on mutiple keys
+db.movie.createIndex({rating:1,price:-1})
+
+multikey index
+db.restaurent.createIndex({'grades.score':1})
+
+Geospatial ----- lattitude, logitude
+Text index --- if you search keyword base
+Hashed ---will store index based on hashing
+
+------to drop database
+db.dropDatabase() ------this will drop the database
+
+-----to drop collection
+db.collection.drop();
+
+to drop student collection
+db.student.drop();
+
+----to rename collection
+db.collection.renameCollection(new name)
+
+---synonyms in database
+in any database a row,record or tuple is used interchangably
+
+tables,relation,
+
+field, attribute,column
+
+
+
+  
+

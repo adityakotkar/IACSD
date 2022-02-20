@@ -1,0 +1,296 @@
+ Write a procedure that displays the following information of all emp
+Empno,Name,job,Salary,Status,deptno
+Note: - Status will be (Greater, Lesser or Equal) respective to average salary 
+of their own
+department. Display an error message Emp table is empty if there is no matching
+record.
+drop procedure if exists getStatus;
+delimiter //
+create procedure getStatus()
+begin
+declare v_empno,v_deptno,v_stop,v_cnt int default 0;
+declare v_ename varchar(20);
+declare v_job varchar(20);
+declare v_sal,v_avg decimal(12,2);
+declare v_status varchar(20);
+declare emp_cur cursor for select empno,deptno,ename,job,sal from emp;
+declare continue handler for NOT FOUND set v_stop=1;
+open emp_cur;
+label1:loop
+  fetch emp_cur into v_empno,v_deptno,v_ename,v_job,v_sal;
+  if v_stop=1 then
+     if v_cnt=0 then
+        select 'Table is empty';
+     end if; 
+     leave label1;
+  end if;
+  set v_cnt=v_cnt+1;
+  select avg(sal) into v_avg
+  from emp
+  where deptno=v_deptno;
+  if v_sal< v_avg then
+     set v_status='lesser';
+  elseif v_sal=v_avg then
+     set v_status='equal';
+  else
+     set v_status='greater';
+  end if;
+  select v_empno,v_ename,v_job,v_deptno,v_sal,v_status;
+  update emp
+  set status=v_status
+  where empno=v_empno;
+end loop;
+
+close emp_cur;
+end//
+
+delimiter ;
+
+-------builtin functions
+single row fucntions
+
+difference between functions and procedure
+
+procedure                                              function
+1.it doesnot return any                                it returns a single value
+value
+
+2. use call statement to call 
+a procedure, you cannot use it in select statement     we can call functions in select statement
+
+
+to allow create functions
+SET GLOBAL log_bin_trust_function_creators = 1;
+
+
+select empno,ename,hiredate,year(hiredate)
+from emp;
+delimiter //
+
+create function calc_exp(h_date date) returns int
+begin
+   declare v_exp int default 0;
+   set v_exp=floor(datediff(curdate(),h_date)/365);
+   return v_exp; 
+end//
+
+
+call myproc(100,@c)
+
+select empno,ename,hiredate,calc_exp(hiredate)
+from emp;
+
+create function genEmail(p_ename varchar(20),p_job varchar(25)) returns varchar(40)
+begin
+   declare v_email varchar(40);
+   set v_email=concat(p_ename,'.',substr(p_job,1,3),'.@mycompany.com');
+   return v_email;
+end//
+
+
+----write a function to calculate bonus
+if job is CLERK then
+20% sal+2% sal*comm+200
+
+if job is Manager
+  15% sal+1% sal*comm+1000
+
+analyst
+  8% sal+2% sal*comm+5000
+otherwise
+  sal+comm+8000
+
+
+delimiter //
+create function cal_bonus(p_sal int,p_comm int,p_job varchar(20)) returns decimal(12,2)
+begin
+  declare v_bonus decimal(12,2);
+  	if p_job = 'CLERK' then
+            set v_bonus=0.2*p_sal+0.02*p_sal*ifnull(p_comm,1)+200;
+        elseif p_job = 'MANAGER' then
+            set  v_bonus=0.15*p_sal+0.01*p_sal*ifnull(p_comm,1)+1000;
+        elseif p_job ='ANALYST' then 
+	    set v_bonus=0.08*p_sal+0.02*p_sal*ifnull(p_comm,1)+5000;
+	else
+            set v_bonus=p_sal+ifnull(p_comm,0)+8000; 
+        end if;
+        return v_bonus;
+end//
+
+-----list of functions
+
+show function status where db='iacsd2111';
+
+----drop function cal_bonus;
+
+
+SELECT ROUTINE_DEFINITION 
+FROM information_schema.ROUTINES WHERE 
+SPECIFIC_NAME='cal_bonus';
+
+------exception handling
+
+declare action handler for condition_value statement
+
+declare continue handle for NOT FOUND  set v_stop=1;
+
+actions can be
+1. continue ---after handling exception resume the execution
+2. exit ----- after handling exception ternimate the excution immediately
+
+condition_value can be
+1. MySQL error code 
+2. statndard SQLSTATE value or SQLWARNING or Not found or SQLEXCPETION, S
+
+example for exit handler
+
+declare exit handler for SQLEXCEPTION
+begin
+rollback;
+select 'error has occured'
+end;
+
+declare continue handler for SQLEXCEPTION
+begin
+rollback;
+select 'error has occured';
+set v_stop=1;
+end;
+
+----write a procedure to insert recored in course table
+if duplicate record is enetred then show msg duplicate record and 
+display number records in the table.
+
+insert into course values(1008,'ccc','2000-03-01',100,'jshdjhas');
+
+delimiter ;
+drop procedure if exists insert_rec; 
+delimiter //
+
+create procedure insert_rec(p_cid int,p_cnm varchar(20),p_sdt date,p_fid int,p_desc varchar(20))
+begin
+ declare continue handler for 1062 select 'duplicate entry'; 
+ declare exit handler for SQLEXCEPTION select "error occured"; 
+declare continue handler for SQLSTATE 230000 select 'duplicate entry';
+ insert into course values(p_cid,p_cnm,p_sdt,p_fid,p_desc);
+ select count(*) from course;
+end//
+
+
+----- tigger is a special procedure which gets called automatically 
+1. audit of the data for security
+2. for maintaining log
+3. for managing complex views 
+4. for managing unnormalized;
+
+create table course_audit(
+sr_no int primary key auto_increament,
+old_cid int,
+new_cid int,
+chdate date,
+old_fees decimal(12,2),
+new_fees decimal(12,2),
+user_nm varchar(20)
+)
+
+drop trigger if exists ch_course;
+delimiter //
+
+create trigger ch_course before update on course
+for each row
+begin
+    insert into course_audit values(Old.cid,NEW.cid,curdate(),OLD.faid,NEW.faid,user(),'update');
+  
+end//
+
+create trigger del_course after delete on course
+for each row
+begin
+    insert into course_audit values(Old.cid,null,curdate(),OLD.faid,null,user(),'delete');
+  
+end//
+
+delete in course
+insert audit
+rollback;
+
+create trigger ins_course before insert on course
+for each row
+begin
+    insert into course_audit values(null,NEW.cid,curdate(),null,NEW.faid,user(),'insert');
+  
+end//
+
+----triggers to maintain change in salary and if anyone deletes the data
+
+EMPNO    | int           | NO   |     | NULL    |       |
+| ENAME    | varchar(10)   | YES  |     | NULL    |       |
+| JOB      | varchar(9)    | YES  |     | NULL    |       |
+| MGR      | int           | YES  |     | NULL    |       |
+| HIREDATE | date          | YES  |     | NULL    |       |
+| SAL      | decimal(7,2)  | YES  |     | NULL    |       |
+| COMM     | decimal(7,2)  | YES  |     | NULL    |       |
+| DEPTNO   | int           | YES  |     | NULL    |       |
+| status   | varchar(20)   | YES  |     | NULL    |       |
+| new_sal  | decimal(12,2) | YES  |     | NULL    |       |
+| action   | varchar(20)   | YES  |     | NULL    |       |
+| uname
+
+create trigger ch_sal after update on emp
+for each row
+begin
+  insert into emp_history values(OLD.empno,OLD.ename,OLD.job,OLD.mgr,OLD.hiredate,OLD.sal,
+        OLD.comm,OLD.deptno,OLD.status,NEW.sal,'update',user()); 
+   
+end//
+
+update emp
+set sal=5600
+where empno=7902
+
+create trigger del_emp after delete on emp
+for each row
+begin
+  insert into emp_history values(OLD.empno,OLD.ename,OLD.job,OLD.mgr,OLD.hiredate,OLD.sal,
+        OLD.comm,OLD.deptno,OLD.status,null,'delete',user()); 
+   
+end//
+
+databse level
+   database start after 
+   database shutdown before
+   login  after
+   logout  before
+
+statement level ----cannot write it in mysql but can write in oracle
+row level------- will get executed once for every row we change
+
+trigger timings
+    before
+    after
+    insteadof ----- these are used only on views---these are only in oracle;
+
+
+PLSQL --- mysql 
+if statement
+while , reapeat until, loop endloop
+procedure
+functions
+cursors
+triggers
+exception handling
+
+
+db1 emp
+db2 dept
+
+select *
+from db1.emp e, db2.dept d
+where e.deptno=d.deptno;
+
+
+MONGODB-- noSQL--- CRUD 
+collection, read,update,delete, index
+
+
+

@@ -1,0 +1,1588 @@
+Microsoft Windows [Version 10.0.19043.1348]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\anilk>mongo
+MongoDB shell version v5.0.2
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("f5c876b0-09af-453d-b3ea-3551f47ba33e") }
+MongoDB server version: 5.0.2
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+We recommend you begin using "mongosh".
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2021-11-29T09:45:40.633+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+        2021-11-29T09:45:40.633+05:30: This server is bound to localhost. Remote systems will be unable to connect to this server. Start the server with --bind_ip <address> to specify which IP addresses it should serve responses from, or with --bind_ip_all to bind to all interfaces. If this behavior is desired, start the server with --bind_ip 127.0.0.1 to disable this warning
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> shw dbs
+uncaught exception: SyntaxError: unexpected token: identifier :
+@(shell):1:4
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> use test
+switched to db test
+> db
+test
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> db.createCollection("Student")
+{ "ok" : 1 }
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+test    0.000GB
+> db
+test
+> show collections
+Student
+> db.insert({sid:123,sname:'Revati',hobbies:['reading','biking','shopping'],bdate:ISODate("02/04/1995")})
+uncaught exception: Error: invalid ISO date: 02/04/1995 :
+ISODate@src/mongo/shell/types.js:85:15
+@(shell):1:81
+> db.insert({sid:123,sname:'Revati',hobbies:['reading','biking','shopping'],bdate:ISODate("02-04-1995")})
+uncaught exception: Error: invalid ISO date: 02-04-1995 :
+ISODate@src/mongo/shell/types.js:85:15
+@(shell):1:81
+> db.insert({sid:123,sname:'Revati',hobbies:['reading','biking','shopping']})
+uncaught exception: TypeError: db.insert is not a function :
+@(shell):1:1
+> db.student.insert({sid:123,sname:'Revati',hobbies:['reading','biking','shopping'],bdate:ISODate("2000-02-db.student.insert({sid:123,sname:'Revati',hobbies:['reading','biking','shopping'],bdate:ISODate("2000-02-db.student.insert({sid:123,sname:'Revati',hobbies:['reading','biking','shopping'],bdate:ISODate("2000-02-03")})
+WriteResult({ "nInserted" : 1 })
+> db.student.insert({sid:124,sname:'Rajan',hobbies:['reading','biking','shopping'],bdate:ISODate("2003-02-03")})
+WriteResult({ "nInserted" : 1 })
+> db.student.find();
+{ "_id" : ObjectId("61a457b4510cd8e3d921bd7b"), "sid" : 123, "sname" : "Revati", "hobbies" : [ "reading", "biking", "shopping" ], "bdate" : ISODate("2000-02-03T00:00:00Z") }
+{ "_id" : ObjectId("61a457f2510cd8e3d921bd7c"), "sid" : 124, "sname" : "Rajan", "hobbies" : [ "reading", "biking", "shopping" ], "bdate" : ISODate("2003-02-03T00:00:00Z") }
+> db.emp.insert({empid:1,ename:"Kishori"})
+WriteResult({ "nInserted" : 1 })
+> show collections
+Student
+emp
+student
+> db.emp.find();
+{ "_id" : ObjectId("61a459b1510cd8e3d921bd7d"), "empid" : 1, "ename" : "Kishori" }
+> db.student.find();
+{ "_id" : ObjectId("61a457b4510cd8e3d921bd7b"), "sid" : 123, "sname" : "Revati", "hobbies" : [ "reading", "biking", "shopping" ], "bdate" : ISODate("2000-02-03T00:00:00Z") }
+{ "_id" : ObjectId("61a457f2510cd8e3d921bd7c"), "sid" : 124, "sname" : "Rajan", "hobbies" : [ "reading", "biking", "shopping" ], "bdate" : ISODate("2003-02-03T00:00:00Z") }
+> db.student.find().preety();
+uncaught exception: TypeError: db.student.find(...).preety is not a function :
+@(shell):1:1
+> db.student.find().pretty();
+{
+        "_id" : ObjectId("61a457b4510cd8e3d921bd7b"),
+        "sid" : 123,
+        "sname" : "Revati",
+        "hobbies" : [
+                "reading",
+                "biking",
+                "shopping"
+        ],
+        "bdate" : ISODate("2000-02-03T00:00:00Z")
+}
+{
+        "_id" : ObjectId("61a457f2510cd8e3d921bd7c"),
+        "sid" : 124,
+        "sname" : "Rajan",
+        "hobbies" : [
+                "reading",
+                "biking",
+                "shopping"
+        ],
+        "bdate" : ISODate("2003-02-03T00:00:00Z")
+}
+> db.emp.insert({empid:1,ename:"Kishori"})
+WriteResult({ "nInserted" : 1 })
+> db.emp.insert({empid:1,ename:"Kishori"})
+WriteResult({ "nInserted" : 1 })
+> db.emp.find()
+{ "_id" : ObjectId("61a459b1510cd8e3d921bd7d"), "empid" : 1, "ename" : "Kishori" }
+{ "_id" : ObjectId("61a45a37510cd8e3d921bd7e"), "empid" : 1, "ename" : "Kishori" }
+{ "_id" : ObjectId("61a45a39510cd8e3d921bd7f"), "empid" : 1, "ename" : "Kishori" }
+> db.emp.insert({_id:1,ename:"Kishori"})
+WriteResult({ "nInserted" : 1 })
+> db.emp.find()
+{ "_id" : ObjectId("61a459b1510cd8e3d921bd7d"), "empid" : 1, "ename" : "Kishori" }
+{ "_id" : ObjectId("61a45a37510cd8e3d921bd7e"), "empid" : 1, "ename" : "Kishori" }
+{ "_id" : ObjectId("61a45a39510cd8e3d921bd7f"), "empid" : 1, "ename" : "Kishori" }
+{ "_id" : 1, "ename" : "Kishori" }
+> db.emp.insert({_id:1,ename:"Kishori"})
+WriteResult({
+        "nInserted" : 0,
+        "writeError" : {
+                "code" : 11000,
+                "errmsg" : "E11000 duplicate key error collection: test.emp index: _id_ dup key: { _id: 1.0 }"
+        }
+})
+> db.emp.insert({empid:'sdskdfj',ename:"Kishori",sal:34287})
+WriteResult({ "nInserted" : 1 })
+> db.emp.insert({empid:'sdskdfj',ename:"Kishori",salary:34287})
+WriteResult({ "nInserted" : 1 })
+> db.emp.insert({empid:'sdskdfj',ename:"Kishori",salary:34287})
+WriteResult({ "nInserted" : 1 })
+> db.student.findOne();
+{
+        "_id" : ObjectId("61a457b4510cd8e3d921bd7b"),
+        "sid" : 123,
+        "sname" : "Revati",
+        "hobbies" : [
+                "reading",
+                "biking",
+                "shopping"
+        ],
+        "bdate" : ISODate("2000-02-03T00:00:00Z")
+}
+> db.emp.insertMany([{empid:'sdskdfj',ename:"Kishori",salary:34287},{empno:123,ename:'Raj'}])
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("61a45cb9510cd8e3d921bd83"),
+                ObjectId("61a45cb9510cd8e3d921bd84")
+        ]
+}
+> db.createCollection('myblogs',{capped:true,max:2,size:30000});
+{ "ok" : 1 }
+> db.myblogs.insert({name:'blog1',comment:'very informative'})
+WriteResult({ "nInserted" : 1 })
+> db.myblogs.insert({name:'blog1',comment:'very nicely written'})
+WriteResult({ "nInserted" : 1 })
+> db.myblogs.find();
+{ "_id" : ObjectId("61a45dce510cd8e3d921bd85"), "name" : "blog1", "comment" : "very informative" }
+{ "_id" : ObjectId("61a45ddf510cd8e3d921bd86"), "name" : "blog1", "comment" : "very nicely written" }
+> db.myblogs.insert({name:'blog1',comment:'good'})
+WriteResult({ "nInserted" : 1 })
+> db.myblogs.find();
+{ "_id" : ObjectId("61a45ddf510cd8e3d921bd86"), "name" : "blog1", "comment" : "very nicely written" }
+{ "_id" : ObjectId("61a45e01510cd8e3d921bd87"), "name" : "blog1", "comment" : "good" }
+> db.myblogs.insert({name:'blog1',comment:'good info'})
+WriteResult({ "nInserted" : 1 })
+> db.myblogs.find();
+{ "_id" : ObjectId("61a45e01510cd8e3d921bd87"), "name" : "blog1", "comment" : "good" }
+{ "_id" : ObjectId("61a45e22510cd8e3d921bd88"), "name" : "blog1", "comment" : "good info" }
+> db.myblogs.find().pretty();
+{
+        "_id" : ObjectId("61a45e01510cd8e3d921bd87"),
+        "name" : "blog1",
+        "comment" : "good"
+}
+{
+        "_id" : ObjectId("61a45e22510cd8e3d921bd88"),
+        "name" : "blog1",
+        "comment" : "good info"
+}
+> show collections
+Student
+emp
+movie
+myblogs
+restaurent
+student
+> db.movie.find();
+{ "_id" : ObjectId("5c8283789eb55675f0272933"), "name" : "uri", "rating" : 5, "actor" : [ "vicky kaushal", "yami", "Paresh Rawal" ] }
+{ "_id" : ObjectId("5aaa3334639395f86922a882"), "name" : "aradhana", "actor" : [ "amitabh", "prem", "rajesh khanna" ], "rating" : 3, "ticket_no" : 550, "price" : 260 }
+{ "_id" : ObjectId("5ca453ef2952ebdd7ae2a92f"), "name" : "Kesari", "actor" : [ "Akshay Kumar", "Pariniti chopra" ], "rating" : 6, "price" : 350, "ticket_no" : 270, "rdate" : ISODate("2019-01-23T00:00:00Z") }
+{ "_id" : ObjectId("5ca47ef82952ebdd7ae2a932"), "name" : "newton", "ticket_no" : 690, "actor" : [ "Rajkumar Rao", "Pankaj Tripathi" ], "price" : 310, "lastmodified" : ISODate("2019-09-28T14:47:49.204Z") }
+{ "_id" : ObjectId("5ca47e5b2952ebdd7ae2a931"), "name" : "padmavat", "rating" : 4, "price" : 250, "ticket_no" : 300, "actor" : [ "Deepika", "shahid kapoor", "ranveer singh", "aditi Rao", "aaaaa" ], "cancellation" : { "date" : Timestamp(1567175239, 1) } }
+{ "_id" : ObjectId("5ca456072952ebdd7ae2a930"), "name" : "paa", "actor" : [ "Amitabh", "vidya balan", "Abhishek" ], "rating" : 2, "price" : 270, "ticket_no" : 210, "rdate" : ISODate("2019-01-23T00:00:00Z"), "others" : { "director" : "R Balki", "songs" : "Amit trivedi" } }
+{ "_id" : ObjectId("5aaa31ee639395f86922a87f"), "name" : "3 idiots", "actor" : [ "Kareena Kapoor", "amir", "kareena", "mahadavan", "sharman" ], "rating" : 3, "ticket_no" : 150, "price" : 200 }
+{ "_id" : ObjectId("5d89e9adfd4adc2f84279f43"), "name" : "chichore", "price" : 274, "rating" : 4.3, "actor" : [ "sushant", "shradha kapoor", "zzz", "harshal" ] }
+{ "_id" : ObjectId("5d6935a3470e2bef2a82cdfa"), "name" : "mission mangal", "price" : 350, "actor" : [ "Sonakshi", "Vidya Balan" ], "rating" : 6 }
+{ "_id" : ObjectId("5d8f6eec620d2353221b91dd"), "price" : 280 }
+{ "_id" : ObjectId("5d8f51ce065d3e2aa902aa22"), "name" : "dream girl", "actor" : [ "ayushman", "nushrat bharucha" ], "price" : 250, "rating" : null }
+{ "_id" : ObjectId("5aaa3334639395f86922a880"), "name" : "lagaan", "actor" : [ "amir", "angraz" ], "rating" : 6, "ticket_no" : 410, "price" : 350, "cancellation" : { "date" : Timestamp(1554356003, 1), "reason" : "user request" }, "lastModified" : ISODate("2019-04-04T05:33:23.022Z") }
+{ "_id" : ObjectId("5c865923d82c19b8ed996550"), "name" : "Dil dhadakane do", "rating" : 3, "price" : 340, "actor" : "['Anil kapoor']" }
+{ "_id" : ObjectId("5bf6a36f57b2d4cc676c7a95"), "name" : "Andhadhund", "price" : 400, "actor" : [ "Ayushman", "radhika" ], "rating" : 4 }
+{ "_id" : ObjectId("5aaa3334639395f86922a881"), "name" : "sholay", "actor" : [ "Dharamendra", "Amitabh", "Sachin Pilgaokar", "Dharamendra", "Dharamendra", "Mr. Khote", "jaya bacchan", "sanjiv kapoor" ], "rating" : 6, "ticket_no" : 550, "price" : 350, "position" : [ 2, 2 ] }
+{ "_id" : ObjectId("5bf6a38c57b2d4cc676c7a96"), "name" : "Andhadhund", "price" : null, "actor" : [ "Tabbu" ], "rating" : 4 }
+{ "_id" : ObjectId("5aaa31a2639395f86922a87e"), "name" : "kahani", "actor" : [ "aaaa", "bbbb", "karan", "karri", "vidya" ], "ticket_no" : 420, "price" : 200, "ac7tors" : [ "bbbb" ], "rating" : 8, "lastmodified" : ISODate("2019-04-07T11:25:40.634Z") }
+{ "_id" : ObjectId("5aab6da4639395f86922a883"), "name" : "kahani 2", "ticket_no" : 820, "actor" : [ "vidya", "Arjun", "Jonny", "nawaz", "prasad", "Shreyas", "Jonny", "yash" ], "rating" : 5, "price" : 200 }
+> db.movie.find().pretty()
+{
+        "_id" : ObjectId("5c8283789eb55675f0272933"),
+        "name" : "uri",
+        "rating" : 5,
+        "actor" : [
+                "vicky kaushal",
+                "yami",
+                "Paresh Rawal"
+        ]
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a882"),
+        "name" : "aradhana",
+        "actor" : [
+                "amitabh",
+                "prem",
+                "rajesh khanna"
+        ],
+        "rating" : 3,
+        "ticket_no" : 550,
+        "price" : 260
+}
+{
+        "_id" : ObjectId("5ca453ef2952ebdd7ae2a92f"),
+        "name" : "Kesari",
+        "actor" : [
+                "Akshay Kumar",
+                "Pariniti chopra"
+        ],
+        "rating" : 6,
+        "price" : 350,
+        "ticket_no" : 270,
+        "rdate" : ISODate("2019-01-23T00:00:00Z")
+}
+{
+        "_id" : ObjectId("5ca47ef82952ebdd7ae2a932"),
+        "name" : "newton",
+        "ticket_no" : 690,
+        "actor" : [
+                "Rajkumar Rao",
+                "Pankaj Tripathi"
+        ],
+        "price" : 310,
+        "lastmodified" : ISODate("2019-09-28T14:47:49.204Z")
+}
+{
+        "_id" : ObjectId("5ca47e5b2952ebdd7ae2a931"),
+        "name" : "padmavat",
+        "rating" : 4,
+        "price" : 250,
+        "ticket_no" : 300,
+        "actor" : [
+                "Deepika",
+                "shahid kapoor",
+                "ranveer singh",
+                "aditi Rao",
+                "aaaaa"
+        ],
+        "cancellation" : {
+                "date" : Timestamp(1567175239, 1)
+        }
+}
+{
+        "_id" : ObjectId("5ca456072952ebdd7ae2a930"),
+        "name" : "paa",
+        "actor" : [
+                "Amitabh",
+                "vidya balan",
+                "Abhishek"
+        ],
+        "rating" : 2,
+        "price" : 270,
+        "ticket_no" : 210,
+        "rdate" : ISODate("2019-01-23T00:00:00Z"),
+        "others" : {
+                "director" : "R Balki",
+                "songs" : "Amit trivedi"
+        }
+}
+{
+        "_id" : ObjectId("5aaa31ee639395f86922a87f"),
+        "name" : "3 idiots",
+        "actor" : [
+                "Kareena Kapoor",
+                "amir",
+                "kareena",
+                "mahadavan",
+                "sharman"
+        ],
+        "rating" : 3,
+        "ticket_no" : 150,
+        "price" : 200
+}
+{
+        "_id" : ObjectId("5d89e9adfd4adc2f84279f43"),
+        "name" : "chichore",
+        "price" : 274,
+        "rating" : 4.3,
+        "actor" : [
+                "sushant",
+                "shradha kapoor",
+                "zzz",
+                "harshal"
+        ]
+}
+{
+        "_id" : ObjectId("5d6935a3470e2bef2a82cdfa"),
+        "name" : "mission mangal",
+        "price" : 350,
+        "actor" : [
+                "Sonakshi",
+                "Vidya Balan"
+        ],
+        "rating" : 6
+}
+{ "_id" : ObjectId("5d8f6eec620d2353221b91dd"), "price" : 280 }
+{
+        "_id" : ObjectId("5d8f51ce065d3e2aa902aa22"),
+        "name" : "dream girl",
+        "actor" : [
+                "ayushman",
+                "nushrat bharucha"
+        ],
+        "price" : 250,
+        "rating" : null
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a880"),
+        "name" : "lagaan",
+        "actor" : [
+                "amir",
+                "angraz"
+        ],
+        "rating" : 6,
+        "ticket_no" : 410,
+        "price" : 350,
+        "cancellation" : {
+                "date" : Timestamp(1554356003, 1),
+                "reason" : "user request"
+        },
+        "lastModified" : ISODate("2019-04-04T05:33:23.022Z")
+}
+{
+        "_id" : ObjectId("5c865923d82c19b8ed996550"),
+        "name" : "Dil dhadakane do",
+        "rating" : 3,
+        "price" : 340,
+        "actor" : "['Anil kapoor']"
+}
+{
+        "_id" : ObjectId("5bf6a36f57b2d4cc676c7a95"),
+        "name" : "Andhadhund",
+        "price" : 400,
+        "actor" : [
+                "Ayushman",
+                "radhika"
+        ],
+        "rating" : 4
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a881"),
+        "name" : "sholay",
+        "actor" : [
+                "Dharamendra",
+                "Amitabh",
+                "Sachin Pilgaokar",
+                "Dharamendra",
+                "Dharamendra",
+                "Mr. Khote",
+                "jaya bacchan",
+                "sanjiv kapoor"
+        ],
+        "rating" : 6,
+        "ticket_no" : 550,
+        "price" : 350,
+        "position" : [
+                2,
+                2
+        ]
+}
+{
+        "_id" : ObjectId("5bf6a38c57b2d4cc676c7a96"),
+        "name" : "Andhadhund",
+        "price" : null,
+        "actor" : [
+                "Tabbu"
+        ],
+        "rating" : 4
+}
+{
+        "_id" : ObjectId("5aaa31a2639395f86922a87e"),
+        "name" : "kahani",
+        "actor" : [
+                "aaaa",
+                "bbbb",
+                "karan",
+                "karri",
+                "vidya"
+        ],
+        "ticket_no" : 420,
+        "price" : 200,
+        "ac7tors" : [
+                "bbbb"
+        ],
+        "rating" : 8,
+        "lastmodified" : ISODate("2019-04-07T11:25:40.634Z")
+}
+{
+        "_id" : ObjectId("5aab6da4639395f86922a883"),
+        "name" : "kahani 2",
+        "ticket_no" : 820,
+        "actor" : [
+                "vidya",
+                "Arjun",
+                "Jonny",
+                "nawaz",
+                "prasad",
+                "Shreyas",
+                "Jonny",
+                "yash"
+        ],
+        "rating" : 5,
+        "price" : 200
+}
+> db.restaurent.findOne().pretty();
+uncaught exception: TypeError: db.restaurent.findOne(...).pretty is not a function :
+@(shell):1:1
+> db.restaurent.findOne()
+{
+        "_id" : ObjectId("61a460efee84e28e0bee1841"),
+        "address" : {
+                "building" : "7715",
+                "coord" : [
+                        -73.9973325,
+                        40.61174889999999
+                ],
+                "street" : "18 Avenue",
+                "zipcode" : "11214"
+        },
+        "borough" : "Brooklyn",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-04-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2013-04-23T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-04-24T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2011-12-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                }
+        ],
+        "name" : "C & C Catering Service",
+        "restaurant_id" : "40357437"
+}
+> db.movie.find({rating:3},{name:1,rating:1})
+{ "_id" : ObjectId("5aaa3334639395f86922a882"), "name" : "aradhana", "rating" : 3 }
+{ "_id" : ObjectId("5aaa31ee639395f86922a87f"), "name" : "3 idiots", "rating" : 3 }
+{ "_id" : ObjectId("5c865923d82c19b8ed996550"), "name" : "Dil dhadakane do", "rating" : 3 }
+> db.movie.find({rating:3},{name:1,rating:1,_id:0})
+{ "name" : "aradhana", "rating" : 3 }
+{ "name" : "3 idiots", "rating" : 3 }
+{ "name" : "Dil dhadakane do", "rating" : 3 }
+> db.movie.find({rating:3},{price:0,_id:0})
+{ "name" : "aradhana", "actor" : [ "amitabh", "prem", "rajesh khanna" ], "rating" : 3, "ticket_no" : 550 }
+{ "name" : "3 idiots", "actor" : [ "Kareena Kapoor", "amir", "kareena", "mahadavan", "sharman" ], "rating" : 3, "ticket_no" : 150 }
+{ "name" : "Dil dhadakane do", "rating" : 3, "actor" : "['Anil kapoor']" }
+> db.movie.find({},{name:1,rating:1,actor:1,_id:0})
+{ "name" : "uri", "rating" : 5, "actor" : [ "vicky kaushal", "yami", "Paresh Rawal" ] }
+{ "name" : "aradhana", "actor" : [ "amitabh", "prem", "rajesh khanna" ], "rating" : 3 }
+{ "name" : "Kesari", "actor" : [ "Akshay Kumar", "Pariniti chopra" ], "rating" : 6 }
+{ "name" : "newton", "actor" : [ "Rajkumar Rao", "Pankaj Tripathi" ] }
+{ "name" : "padmavat", "rating" : 4, "actor" : [ "Deepika", "shahid kapoor", "ranveer singh", "aditi Rao", "aaaaa" ] }
+{ "name" : "paa", "actor" : [ "Amitabh", "vidya balan", "Abhishek" ], "rating" : 2 }
+{ "name" : "3 idiots", "actor" : [ "Kareena Kapoor", "amir", "kareena", "mahadavan", "sharman" ], "rating" : 3 }
+{ "name" : "chichore", "rating" : 4.3, "actor" : [ "sushant", "shradha kapoor", "zzz", "harshal" ] }
+{ "name" : "mission mangal", "actor" : [ "Sonakshi", "Vidya Balan" ], "rating" : 6 }
+{  }
+{ "name" : "dream girl", "actor" : [ "ayushman", "nushrat bharucha" ], "rating" : null }
+{ "name" : "lagaan", "actor" : [ "amir", "angraz" ], "rating" : 6 }
+{ "name" : "Dil dhadakane do", "rating" : 3, "actor" : "['Anil kapoor']" }
+{ "name" : "Andhadhund", "actor" : [ "Ayushman", "radhika" ], "rating" : 4 }
+{ "name" : "sholay", "actor" : [ "Dharamendra", "Amitabh", "Sachin Pilgaokar", "Dharamendra", "Dharamendra", "Mr. Khote", "jaya bacchan", "sanjiv kapoor" ], "rating" : 6 }
+{ "name" : "Andhadhund", "actor" : [ "Tabbu" ], "rating" : 4 }
+{ "name" : "kahani", "actor" : [ "aaaa", "bbbb", "karan", "karri", "vidya" ], "rating" : 8 }
+{ "name" : "kahani 2", "actor" : [ "vidya", "Arjun", "Jonny", "nawaz", "prasad", "Shreyas", "Jonny", "yash" ], "rating" : 5 }
+> db.movie.find({rating:5},{name:1,rating:1,actor:1,_id:0})
+{ "name" : "uri", "rating" : 5, "actor" : [ "vicky kaushal", "yami", "Paresh Rawal" ] }
+{ "name" : "kahani 2", "actor" : [ "vidya", "Arjun", "Jonny", "nawaz", "prasad", "Shreyas", "Jonny", "yash" ], "rating" : 5 }
+> db.movie.find({},{name:1,rating:1,actor:1,_id:0})
+{ "name" : "uri", "rating" : 5, "actor" : [ "vicky kaushal", "yami", "Paresh Rawal" ] }
+{ "name" : "aradhana", "actor" : [ "amitabh", "prem", "rajesh khanna" ], "rating" : 3 }
+{ "name" : "Kesari", "actor" : [ "Akshay Kumar", "Pariniti chopra" ], "rating" : 6 }
+{ "name" : "newton", "actor" : [ "Rajkumar Rao", "Pankaj Tripathi" ] }
+{ "name" : "padmavat", "rating" : 4, "actor" : [ "Deepika", "shahid kapoor", "ranveer singh", "aditi Rao", "aaaaa" ] }
+{ "name" : "paa", "actor" : [ "Amitabh", "vidya balan", "Abhishek" ], "rating" : 2 }
+{ "name" : "3 idiots", "actor" : [ "Kareena Kapoor", "amir", "kareena", "mahadavan", "sharman" ], "rating" : 3 }
+{ "name" : "chichore", "rating" : 4.3, "actor" : [ "sushant", "shradha kapoor", "zzz", "harshal" ] }
+{ "name" : "mission mangal", "actor" : [ "Sonakshi", "Vidya Balan" ], "rating" : 6 }
+{  }
+{ "name" : "dream girl", "actor" : [ "ayushman", "nushrat bharucha" ], "rating" : null }
+{ "name" : "lagaan", "actor" : [ "amir", "angraz" ], "rating" : 6 }
+{ "name" : "Dil dhadakane do", "rating" : 3, "actor" : "['Anil kapoor']" }
+{ "name" : "Andhadhund", "actor" : [ "Ayushman", "radhika" ], "rating" : 4 }
+{ "name" : "sholay", "actor" : [ "Dharamendra", "Amitabh", "Sachin Pilgaokar", "Dharamendra", "Dharamendra", "Mr. Khote", "jaya bacchan", "sanjiv kapoor" ], "rating" : 6 }
+{ "name" : "Andhadhund", "actor" : [ "Tabbu" ], "rating" : 4 }
+{ "name" : "kahani", "actor" : [ "aaaa", "bbbb", "karan", "karri", "vidya" ], "rating" : 8 }
+{ "name" : "kahani 2", "actor" : [ "vidya", "Arjun", "Jonny", "nawaz", "prasad", "Shreyas", "Jonny", "yash" ], "rating" : 5 }
+> db.movie.find({rating:{$gt:3}},{name:1,rating:1,_id:0})
+{ "name" : "uri", "rating" : 5 }
+{ "name" : "Kesari", "rating" : 6 }
+{ "name" : "padmavat", "rating" : 4 }
+{ "name" : "chichore", "rating" : 4.3 }
+{ "name" : "mission mangal", "rating" : 6 }
+{ "name" : "lagaan", "rating" : 6 }
+{ "name" : "Andhadhund", "rating" : 4 }
+{ "name" : "sholay", "rating" : 6 }
+{ "name" : "Andhadhund", "rating" : 4 }
+{ "name" : "kahani", "rating" : 8 }
+{ "name" : "kahani 2", "rating" : 5 }
+> db.restaurent.findOne()
+{
+        "_id" : ObjectId("61a460efee84e28e0bee1841"),
+        "address" : {
+                "building" : "7715",
+                "coord" : [
+                        -73.9973325,
+                        40.61174889999999
+                ],
+                "street" : "18 Avenue",
+                "zipcode" : "11214"
+        },
+        "borough" : "Brooklyn",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-04-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2013-04-23T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-04-24T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2011-12-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                }
+        ],
+        "name" : "C & C Catering Service",
+        "restaurant_id" : "40357437"
+}
+> db.restaurent.find({'address.zipcode',{name:1,'address.zipcode':1}})
+uncaught exception: SyntaxError: missing : after property id :
+@(shell):1:37
+> db.restaurent.find({'address.zipcode':11214},{name:1,'address.zipcode':1})
+> db.restaurent.find({'address.zipcode':'11214'},{name:1,'address.zipcode':1})
+{ "_id" : ObjectId("61a460efee84e28e0bee1841"), "address" : { "zipcode" : "11214" }, "name" : "C & C Catering Service" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19de"), "address" : { "zipcode" : "11214" }, "name" : "Villa Fiorita" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19e0"), "address" : { "zipcode" : "11214" }, "name" : "Vegas Diner" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1a4c"), "address" : { "zipcode" : "11214" }, "name" : "My Father'S Place" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1b53"), "address" : { "zipcode" : "11214" }, "name" : "Grotto Azzura Pizzeria" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1cd8"), "address" : { "zipcode" : "11214" }, "name" : "Lenny'S Pizza" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1d56"), "address" : { "zipcode" : "11214" }, "name" : "La Casa Bella" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1dcf"), "address" : { "zipcode" : "11214" }, "name" : "Bagel Bazaar" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1e9b"), "address" : { "zipcode" : "11214" }, "name" : "La Cucina" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1eb0"), "address" : { "zipcode" : "11214" }, "name" : "New Ruan'S Restaurant" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1ede"), "address" : { "zipcode" : "11214" }, "name" : "Mondial Bakery" }
+{ "_id" : ObjectId("61a460efee84e28e0bee209d"), "address" : { "zipcode" : "11214" }, "name" : "Wendy'S" }
+{ "_id" : ObjectId("61a460efee84e28e0bee20e3"), "address" : { "zipcode" : "11214" }, "name" : "Nicky'S Pizza" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2101"), "address" : { "zipcode" : "11214" }, "name" : "Tanjia Hukka Bar" }
+{ "_id" : ObjectId("61a460efee84e28e0bee210d"), "address" : { "zipcode" : "11214" }, "name" : "C & C Catering" }
+{ "_id" : ObjectId("61a460efee84e28e0bee21b9"), "address" : { "zipcode" : "11214" }, "name" : "Pizza D Amore" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2212"), "address" : { "zipcode" : "11214" }, "name" : "New Dyker Restaurant" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2286"), "address" : { "zipcode" : "11214" }, "name" : "Golden Crown Bakery" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2353"), "address" : { "zipcode" : "11214" }, "name" : "Pizza Den" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2401"), "address" : { "zipcode" : "11214" }, "name" : "Burger King" }
+Type "it" for more
+> db.restaurent.find({'address.zipcode':'11214'},{name:1,'address.zipcode':1})
+{ "_id" : ObjectId("61a460efee84e28e0bee1841"), "address" : { "zipcode" : "11214" }, "name" : "C & C Catering Service" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19de"), "address" : { "zipcode" : "11214" }, "name" : "Villa Fiorita" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19e0"), "address" : { "zipcode" : "11214" }, "name" : "Vegas Diner" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1a4c"), "address" : { "zipcode" : "11214" }, "name" : "My Father'S Place" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1b53"), "address" : { "zipcode" : "11214" }, "name" : "Grotto Azzura Pizzeria" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1cd8"), "address" : { "zipcode" : "11214" }, "name" : "Lenny'S Pizza" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1d56"), "address" : { "zipcode" : "11214" }, "name" : "La Casa Bella" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1dcf"), "address" : { "zipcode" : "11214" }, "name" : "Bagel Bazaar" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1e9b"), "address" : { "zipcode" : "11214" }, "name" : "La Cucina" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1eb0"), "address" : { "zipcode" : "11214" }, "name" : "New Ruan'S Restaurant" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1ede"), "address" : { "zipcode" : "11214" }, "name" : "Mondial Bakery" }
+{ "_id" : ObjectId("61a460efee84e28e0bee209d"), "address" : { "zipcode" : "11214" }, "name" : "Wendy'S" }
+{ "_id" : ObjectId("61a460efee84e28e0bee20e3"), "address" : { "zipcode" : "11214" }, "name" : "Nicky'S Pizza" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2101"), "address" : { "zipcode" : "11214" }, "name" : "Tanjia Hukka Bar" }
+{ "_id" : ObjectId("61a460efee84e28e0bee210d"), "address" : { "zipcode" : "11214" }, "name" : "C & C Catering" }
+{ "_id" : ObjectId("61a460efee84e28e0bee21b9"), "address" : { "zipcode" : "11214" }, "name" : "Pizza D Amore" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2212"), "address" : { "zipcode" : "11214" }, "name" : "New Dyker Restaurant" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2286"), "address" : { "zipcode" : "11214" }, "name" : "Golden Crown Bakery" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2353"), "address" : { "zipcode" : "11214" }, "name" : "Pizza Den" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2401"), "address" : { "zipcode" : "11214" }, "name" : "Burger King" }
+Type "it" for more
+> it
+{ "_id" : ObjectId("61a460efee84e28e0bee248a"), "address" : { "zipcode" : "11214" }, "name" : "Baskin Robbins" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2493"), "address" : { "zipcode" : "11214" }, "name" : "Carvel Ice Cream" }
+{ "_id" : ObjectId("61a460efee84e28e0bee251a"), "address" : { "zipcode" : "11214" }, "name" : "Bad Boys Pizza" }
+{ "_id" : ObjectId("61a460efee84e28e0bee2526"), "address" : { "zipcode" : "11214" }, "name" : "The Aurora Pizza Caffe" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee28be"), "address" : { "zipcode" : "11214" }, "name" : "Carvel Ice Cream" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee2973"), "address" : { "zipcode" : "11214" }, "name" : "No. 1 Chinese Restaurant" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee297c"), "address" : { "zipcode" : "11214" }, "name" : "Wasabi Sushi" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee29f3"), "address" : { "zipcode" : "11214" }, "name" : "T & L Luncheonette" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee29f5"), "address" : { "zipcode" : "11214" }, "name" : "Sorrento" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee2a12"), "address" : { "zipcode" : "11214" }, "name" : "Il Colosseo" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee2ad0"), "address" : { "zipcode" : "11214" }, "name" : "Mcdonald'S" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee2adc"), "address" : { "zipcode" : "11214" }, "name" : "Mcdonald'S" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee2c1b"), "address" : { "zipcode" : "11214" }, "name" : "Istanbul" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee2ddc"), "address" : { "zipcode" : "11214" }, "name" : "Yu King Bakery" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee31ea"), "address" : { "zipcode" : "11214" }, "name" : "The Living Room Steak House" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee3315"), "address" : { "zipcode" : "11214" }, "name" : "Orange Grill Restaurant" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee3382"), "address" : { "zipcode" : "11214" }, "name" : "Dunkin' Donuts" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee33ac"), "address" : { "zipcode" : "11214" }, "name" : "Kowloon Cafe" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee3418"), "address" : { "zipcode" : "11214" }, "name" : "Tortillas King 86" }
+{ "_id" : ObjectId("61a460f0ee84e28e0bee34a8"), "address" : { "zipcode" : "11214" }, "name" : "Subway" }
+Type "it" for more
+> db.restaurent.find({'address.zipcode':'11214'},{name:1,'address.zipcode':1}).count()
+182
+> db.restaurent.find({'address.zipcode':'11214'},{name:1,'address.zipcode':1}).limit(4)
+{ "_id" : ObjectId("61a460efee84e28e0bee1841"), "address" : { "zipcode" : "11214" }, "name" : "C & C Catering Service" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19de"), "address" : { "zipcode" : "11214" }, "name" : "Villa Fiorita" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19e0"), "address" : { "zipcode" : "11214" }, "name" : "Vegas Diner" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1a4c"), "address" : { "zipcode" : "11214" }, "name" : "My Father'S Place" }
+> db.restaurent.find({'address.zipcode':'11214'},{name:1,'address.zipcode':1}).limit(4).skip(2)
+{ "_id" : ObjectId("61a460efee84e28e0bee19e0"), "address" : { "zipcode" : "11214" }, "name" : "Vegas Diner" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1a4c"), "address" : { "zipcode" : "11214" }, "name" : "My Father'S Place" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1b53"), "address" : { "zipcode" : "11214" }, "name" : "Grotto Azzura Pizzeria" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1cd8"), "address" : { "zipcode" : "11214" }, "name" : "Lenny'S Pizza" }
+> db.movie.find({rating:{$lt:4}},{name:1,rating:1,price:1,_id:0}).sort({rating:1}).limit(2)
+{ "name" : "paa", "rating" : 2, "price" : 270 }
+{ "name" : "aradhana", "rating" : 3, "price" : 260 }
+> db.movie.find({rating:{$lt:4}},{name:1,rating:1,price:1,_id:0}).sort({rating:1})
+{ "name" : "paa", "rating" : 2, "price" : 270 }
+{ "name" : "aradhana", "rating" : 3, "price" : 260 }
+{ "name" : "3 idiots", "rating" : 3, "price" : 200 }
+{ "name" : "Dil dhadakane do", "rating" : 3, "price" : 340 }
+> db.movie.find({rating:{$lte:4}},{name:1,rating:1,price:1,_id:0}).sort({rating:1})
+{ "name" : "paa", "rating" : 2, "price" : 270 }
+{ "name" : "aradhana", "rating" : 3, "price" : 260 }
+{ "name" : "3 idiots", "rating" : 3, "price" : 200 }
+{ "name" : "Dil dhadakane do", "rating" : 3, "price" : 340 }
+{ "name" : "padmavat", "rating" : 4, "price" : 250 }
+{ "name" : "Andhadhund", "price" : 400, "rating" : 4 }
+{ "name" : "Andhadhund", "price" : null, "rating" : 4 }
+> db.movie.find({rating:{$lte:4}},{name:1,rating:1,price:1,_id:0}).sort({rating:-1})
+{ "name" : "padmavat", "rating" : 4, "price" : 250 }
+{ "name" : "Andhadhund", "price" : 400, "rating" : 4 }
+{ "name" : "Andhadhund", "price" : null, "rating" : 4 }
+{ "name" : "aradhana", "rating" : 3, "price" : 260 }
+{ "name" : "3 idiots", "rating" : 3, "price" : 200 }
+{ "name" : "Dil dhadakane do", "rating" : 3, "price" : 340 }
+{ "name" : "paa", "rating" : 2, "price" : 270 }
+> db.movie.find({price:200,rating:3},{name:1,rating:1,price:1,_id:0})
+{ "name" : "3 idiots", "rating" : 3, "price" : 200 }
+> db.movie.find({price:{$gt:200},rating:{$gte:3}},{name:1,rating:1,price:1,_id:0})
+{ "name" : "aradhana", "rating" : 3, "price" : 260 }
+{ "name" : "Kesari", "rating" : 6, "price" : 350 }
+{ "name" : "padmavat", "rating" : 4, "price" : 250 }
+{ "name" : "chichore", "price" : 274, "rating" : 4.3 }
+{ "name" : "mission mangal", "price" : 350, "rating" : 6 }
+{ "name" : "lagaan", "rating" : 6, "price" : 350 }
+{ "name" : "Dil dhadakane do", "rating" : 3, "price" : 340 }
+{ "name" : "Andhadhund", "price" : 400, "rating" : 4 }
+{ "name" : "sholay", "rating" : 6, "price" : 350 }
+> db.movie.find({$or:[{price:{$gt:200}},{rating:{$gte:3}}]},{name:1,rating:1,price:1,_id:0})
+{ "name" : "uri", "rating" : 5 }
+{ "name" : "aradhana", "rating" : 3, "price" : 260 }
+{ "name" : "Kesari", "rating" : 6, "price" : 350 }
+{ "name" : "newton", "price" : 310 }
+{ "name" : "padmavat", "rating" : 4, "price" : 250 }
+{ "name" : "paa", "rating" : 2, "price" : 270 }
+{ "name" : "3 idiots", "rating" : 3, "price" : 200 }
+{ "name" : "chichore", "price" : 274, "rating" : 4.3 }
+{ "name" : "mission mangal", "price" : 350, "rating" : 6 }
+{ "price" : 280 }
+{ "name" : "dream girl", "price" : 250, "rating" : null }
+{ "name" : "lagaan", "rating" : 6, "price" : 350 }
+{ "name" : "Dil dhadakane do", "rating" : 3, "price" : 340 }
+{ "name" : "Andhadhund", "price" : 400, "rating" : 4 }
+{ "name" : "sholay", "rating" : 6, "price" : 350 }
+{ "name" : "Andhadhund", "price" : null, "rating" : 4 }
+{ "name" : "kahani", "price" : 200, "rating" : 8 }
+{ "name" : "kahani 2", "rating" : 5, "price" : 200 }
+> db.movie.find({$and:[{price:{$gt:200}},{rating:{$gte:3}}]},{name:1,rating:1,price:1,_id:0})
+{ "name" : "aradhana", "rating" : 3, "price" : 260 }
+{ "name" : "Kesari", "rating" : 6, "price" : 350 }
+{ "name" : "padmavat", "rating" : 4, "price" : 250 }
+{ "name" : "chichore", "price" : 274, "rating" : 4.3 }
+{ "name" : "mission mangal", "price" : 350, "rating" : 6 }
+{ "name" : "lagaan", "rating" : 6, "price" : 350 }
+{ "name" : "Dil dhadakane do", "rating" : 3, "price" : 340 }
+{ "name" : "Andhadhund", "price" : 400, "rating" : 4 }
+{ "name" : "sholay", "rating" : 6, "price" : 350 }
+> db.movie.find({price:{$gte:200,$lte:400}})
+{ "_id" : ObjectId("5aaa3334639395f86922a882"), "name" : "aradhana", "actor" : [ "amitabh", "prem", "rajesh khanna" ], "rating" : 3, "ticket_no" : 550, "price" : 260 }
+{ "_id" : ObjectId("5ca453ef2952ebdd7ae2a92f"), "name" : "Kesari", "actor" : [ "Akshay Kumar", "Pariniti chopra" ], "rating" : 6, "price" : 350, "ticket_no" : 270, "rdate" : ISODate("2019-01-23T00:00:00Z") }
+{ "_id" : ObjectId("5ca47ef82952ebdd7ae2a932"), "name" : "newton", "ticket_no" : 690, "actor" : [ "Rajkumar Rao", "Pankaj Tripathi" ], "price" : 310, "lastmodified" : ISODate("2019-09-28T14:47:49.204Z") }
+{ "_id" : ObjectId("5ca47e5b2952ebdd7ae2a931"), "name" : "padmavat", "rating" : 4, "price" : 250, "ticket_no" : 300, "actor" : [ "Deepika", "shahid kapoor", "ranveer singh", "aditi Rao", "aaaaa" ], "cancellation" : { "date" : Timestamp(1567175239, 1) } }
+{ "_id" : ObjectId("5ca456072952ebdd7ae2a930"), "name" : "paa", "actor" : [ "Amitabh", "vidya balan", "Abhishek" ], "rating" : 2, "price" : 270, "ticket_no" : 210, "rdate" : ISODate("2019-01-23T00:00:00Z"), "others" : { "director" : "R Balki", "songs" : "Amit trivedi" } }
+{ "_id" : ObjectId("5aaa31ee639395f86922a87f"), "name" : "3 idiots", "actor" : [ "Kareena Kapoor", "amir", "kareena", "mahadavan", "sharman" ], "rating" : 3, "ticket_no" : 150, "price" : 200 }
+{ "_id" : ObjectId("5d89e9adfd4adc2f84279f43"), "name" : "chichore", "price" : 274, "rating" : 4.3, "actor" : [ "sushant", "shradha kapoor", "zzz", "harshal" ] }
+{ "_id" : ObjectId("5d6935a3470e2bef2a82cdfa"), "name" : "mission mangal", "price" : 350, "actor" : [ "Sonakshi", "Vidya Balan" ], "rating" : 6 }
+{ "_id" : ObjectId("5d8f6eec620d2353221b91dd"), "price" : 280 }
+{ "_id" : ObjectId("5d8f51ce065d3e2aa902aa22"), "name" : "dream girl", "actor" : [ "ayushman", "nushrat bharucha" ], "price" : 250, "rating" : null }
+{ "_id" : ObjectId("5aaa3334639395f86922a880"), "name" : "lagaan", "actor" : [ "amir", "angraz" ], "rating" : 6, "ticket_no" : 410, "price" : 350, "cancellation" : { "date" : Timestamp(1554356003, 1), "reason" : "user request" }, "lastModified" : ISODate("2019-04-04T05:33:23.022Z") }
+{ "_id" : ObjectId("5c865923d82c19b8ed996550"), "name" : "Dil dhadakane do", "rating" : 3, "price" : 340, "actor" : "['Anil kapoor']" }
+{ "_id" : ObjectId("5bf6a36f57b2d4cc676c7a95"), "name" : "Andhadhund", "price" : 400, "actor" : [ "Ayushman", "radhika" ], "rating" : 4 }
+{ "_id" : ObjectId("5aaa3334639395f86922a881"), "name" : "sholay", "actor" : [ "Dharamendra", "Amitabh", "Sachin Pilgaokar", "Dharamendra", "Dharamendra", "Mr. Khote", "jaya bacchan", "sanjiv kapoor" ], "rating" : 6, "ticket_no" : 550, "price" : 350, "position" : [ 2, 2 ] }
+{ "_id" : ObjectId("5aaa31a2639395f86922a87e"), "name" : "kahani", "actor" : [ "aaaa", "bbbb", "karan", "karri", "vidya" ], "ticket_no" : 420, "price" : 200, "ac7tors" : [ "bbbb" ], "rating" : 8, "lastmodified" : ISODate("2019-04-07T11:25:40.634Z") }
+{ "_id" : ObjectId("5aab6da4639395f86922a883"), "name" : "kahani 2", "ticket_no" : 820, "actor" : [ "vidya", "Arjun", "Jonny", "nawaz", "prasad", "Shreyas", "Jonny", "yash" ], "rating" : 5, "price" : 200 }
+> db.movie.find({price:{$gte:200,$lte:400}}).pretty();
+{
+        "_id" : ObjectId("5aaa3334639395f86922a882"),
+        "name" : "aradhana",
+        "actor" : [
+                "amitabh",
+                "prem",
+                "rajesh khanna"
+        ],
+        "rating" : 3,
+        "ticket_no" : 550,
+        "price" : 260
+}
+{
+        "_id" : ObjectId("5ca453ef2952ebdd7ae2a92f"),
+        "name" : "Kesari",
+        "actor" : [
+                "Akshay Kumar",
+                "Pariniti chopra"
+        ],
+        "rating" : 6,
+        "price" : 350,
+        "ticket_no" : 270,
+        "rdate" : ISODate("2019-01-23T00:00:00Z")
+}
+{
+        "_id" : ObjectId("5ca47ef82952ebdd7ae2a932"),
+        "name" : "newton",
+        "ticket_no" : 690,
+        "actor" : [
+                "Rajkumar Rao",
+                "Pankaj Tripathi"
+        ],
+        "price" : 310,
+        "lastmodified" : ISODate("2019-09-28T14:47:49.204Z")
+}
+{
+        "_id" : ObjectId("5ca47e5b2952ebdd7ae2a931"),
+        "name" : "padmavat",
+        "rating" : 4,
+        "price" : 250,
+        "ticket_no" : 300,
+        "actor" : [
+                "Deepika",
+                "shahid kapoor",
+                "ranveer singh",
+                "aditi Rao",
+                "aaaaa"
+        ],
+        "cancellation" : {
+                "date" : Timestamp(1567175239, 1)
+        }
+}
+{
+        "_id" : ObjectId("5ca456072952ebdd7ae2a930"),
+        "name" : "paa",
+        "actor" : [
+                "Amitabh",
+                "vidya balan",
+                "Abhishek"
+        ],
+        "rating" : 2,
+        "price" : 270,
+        "ticket_no" : 210,
+        "rdate" : ISODate("2019-01-23T00:00:00Z"),
+        "others" : {
+                "director" : "R Balki",
+                "songs" : "Amit trivedi"
+        }
+}
+{
+        "_id" : ObjectId("5aaa31ee639395f86922a87f"),
+        "name" : "3 idiots",
+        "actor" : [
+                "Kareena Kapoor",
+                "amir",
+                "kareena",
+                "mahadavan",
+                "sharman"
+        ],
+        "rating" : 3,
+        "ticket_no" : 150,
+        "price" : 200
+}
+{
+        "_id" : ObjectId("5d89e9adfd4adc2f84279f43"),
+        "name" : "chichore",
+        "price" : 274,
+        "rating" : 4.3,
+        "actor" : [
+                "sushant",
+                "shradha kapoor",
+                "zzz",
+                "harshal"
+        ]
+}
+{
+        "_id" : ObjectId("5d6935a3470e2bef2a82cdfa"),
+        "name" : "mission mangal",
+        "price" : 350,
+        "actor" : [
+                "Sonakshi",
+                "Vidya Balan"
+        ],
+        "rating" : 6
+}
+{ "_id" : ObjectId("5d8f6eec620d2353221b91dd"), "price" : 280 }
+{
+        "_id" : ObjectId("5d8f51ce065d3e2aa902aa22"),
+        "name" : "dream girl",
+        "actor" : [
+                "ayushman",
+                "nushrat bharucha"
+        ],
+        "price" : 250,
+        "rating" : null
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a880"),
+        "name" : "lagaan",
+        "actor" : [
+                "amir",
+                "angraz"
+        ],
+        "rating" : 6,
+        "ticket_no" : 410,
+        "price" : 350,
+        "cancellation" : {
+                "date" : Timestamp(1554356003, 1),
+                "reason" : "user request"
+        },
+        "lastModified" : ISODate("2019-04-04T05:33:23.022Z")
+}
+{
+        "_id" : ObjectId("5c865923d82c19b8ed996550"),
+        "name" : "Dil dhadakane do",
+        "rating" : 3,
+        "price" : 340,
+        "actor" : "['Anil kapoor']"
+}
+{
+        "_id" : ObjectId("5bf6a36f57b2d4cc676c7a95"),
+        "name" : "Andhadhund",
+        "price" : 400,
+        "actor" : [
+                "Ayushman",
+                "radhika"
+        ],
+        "rating" : 4
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a881"),
+        "name" : "sholay",
+        "actor" : [
+                "Dharamendra",
+                "Amitabh",
+                "Sachin Pilgaokar",
+                "Dharamendra",
+                "Dharamendra",
+                "Mr. Khote",
+                "jaya bacchan",
+                "sanjiv kapoor"
+        ],
+        "rating" : 6,
+        "ticket_no" : 550,
+        "price" : 350,
+        "position" : [
+                2,
+                2
+        ]
+}
+{
+        "_id" : ObjectId("5aaa31a2639395f86922a87e"),
+        "name" : "kahani",
+        "actor" : [
+                "aaaa",
+                "bbbb",
+                "karan",
+                "karri",
+                "vidya"
+        ],
+        "ticket_no" : 420,
+        "price" : 200,
+        "ac7tors" : [
+                "bbbb"
+        ],
+        "rating" : 8,
+        "lastmodified" : ISODate("2019-04-07T11:25:40.634Z")
+}
+{
+        "_id" : ObjectId("5aab6da4639395f86922a883"),
+        "name" : "kahani 2",
+        "ticket_no" : 820,
+        "actor" : [
+                "vidya",
+                "Arjun",
+                "Jonny",
+                "nawaz",
+                "prasad",
+                "Shreyas",
+                "Jonny",
+                "yash"
+        ],
+        "rating" : 5,
+        "price" : 200
+}
+> db.movie.find({price:{$gte:300,$lte:400}}).pretty();
+{
+        "_id" : ObjectId("5ca453ef2952ebdd7ae2a92f"),
+        "name" : "Kesari",
+        "actor" : [
+                "Akshay Kumar",
+                "Pariniti chopra"
+        ],
+        "rating" : 6,
+        "price" : 350,
+        "ticket_no" : 270,
+        "rdate" : ISODate("2019-01-23T00:00:00Z")
+}
+{
+        "_id" : ObjectId("5ca47ef82952ebdd7ae2a932"),
+        "name" : "newton",
+        "ticket_no" : 690,
+        "actor" : [
+                "Rajkumar Rao",
+                "Pankaj Tripathi"
+        ],
+        "price" : 310,
+        "lastmodified" : ISODate("2019-09-28T14:47:49.204Z")
+}
+{
+        "_id" : ObjectId("5d6935a3470e2bef2a82cdfa"),
+        "name" : "mission mangal",
+        "price" : 350,
+        "actor" : [
+                "Sonakshi",
+                "Vidya Balan"
+        ],
+        "rating" : 6
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a880"),
+        "name" : "lagaan",
+        "actor" : [
+                "amir",
+                "angraz"
+        ],
+        "rating" : 6,
+        "ticket_no" : 410,
+        "price" : 350,
+        "cancellation" : {
+                "date" : Timestamp(1554356003, 1),
+                "reason" : "user request"
+        },
+        "lastModified" : ISODate("2019-04-04T05:33:23.022Z")
+}
+{
+        "_id" : ObjectId("5c865923d82c19b8ed996550"),
+        "name" : "Dil dhadakane do",
+        "rating" : 3,
+        "price" : 340,
+        "actor" : "['Anil kapoor']"
+}
+{
+        "_id" : ObjectId("5bf6a36f57b2d4cc676c7a95"),
+        "name" : "Andhadhund",
+        "price" : 400,
+        "actor" : [
+                "Ayushman",
+                "radhika"
+        ],
+        "rating" : 4
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a881"),
+        "name" : "sholay",
+        "actor" : [
+                "Dharamendra",
+                "Amitabh",
+                "Sachin Pilgaokar",
+                "Dharamendra",
+                "Dharamendra",
+                "Mr. Khote",
+                "jaya bacchan",
+                "sanjiv kapoor"
+        ],
+        "rating" : 6,
+        "ticket_no" : 550,
+        "price" : 350,
+        "position" : [
+                2,
+                2
+        ]
+}
+> db.movie.find({actor:'Amitabh'}).pretty();
+{
+        "_id" : ObjectId("5ca456072952ebdd7ae2a930"),
+        "name" : "paa",
+        "actor" : [
+                "Amitabh",
+                "vidya balan",
+                "Abhishek"
+        ],
+        "rating" : 2,
+        "price" : 270,
+        "ticket_no" : 210,
+        "rdate" : ISODate("2019-01-23T00:00:00Z"),
+        "others" : {
+                "director" : "R Balki",
+                "songs" : "Amit trivedi"
+        }
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a881"),
+        "name" : "sholay",
+        "actor" : [
+                "Dharamendra",
+                "Amitabh",
+                "Sachin Pilgaokar",
+                "Dharamendra",
+                "Dharamendra",
+                "Mr. Khote",
+                "jaya bacchan",
+                "sanjiv kapoor"
+        ],
+        "rating" : 6,
+        "ticket_no" : 550,
+        "price" : 350,
+        "position" : [
+                2,
+                2
+        ]
+}
+> db.movie.find({'actor.0':'Amitabh'}).pretty();
+{
+        "_id" : ObjectId("5ca456072952ebdd7ae2a930"),
+        "name" : "paa",
+        "actor" : [
+                "Amitabh",
+                "vidya balan",
+                "Abhishek"
+        ],
+        "rating" : 2,
+        "price" : 270,
+        "ticket_no" : 210,
+        "rdate" : ISODate("2019-01-23T00:00:00Z"),
+        "others" : {
+                "director" : "R Balki",
+                "songs" : "Amit trivedi"
+        }
+}
+> db.restaurent.findOne();
+{
+        "_id" : ObjectId("61a460efee84e28e0bee1841"),
+        "address" : {
+                "building" : "7715",
+                "coord" : [
+                        -73.9973325,
+                        40.61174889999999
+                ],
+                "street" : "18 Avenue",
+                "zipcode" : "11214"
+        },
+        "borough" : "Brooklyn",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-04-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2013-04-23T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-04-24T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2011-12-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                }
+        ],
+        "name" : "C & C Catering Service",
+        "restaurant_id" : "40357437"
+}
+> db.restaurent.find({'grades.1.score':2});
+{ "_id" : ObjectId("61a460efee84e28e0bee1841"), "address" : { "building" : "7715", "coord" : [ -73.9973325, 40.61174889999999 ], "street" : "18 Avenue", "zipcode" : "11214" }, "borough" : "Brooklyn", "cuisine" : "American", "grades" : [ { "date" : ISODate("2014-04-16T00:00:00Z"), "grade" : "A", "score" : 5 }, { "date" : ISODate("2013-04-23T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-04-24T00:00:00Z"), "grade" : "A", "score" : 5 }, { "date" : ISODate("2011-12-16T00:00:00Z"), "grade" : "A", "score" : 2 } ], "name" : "C & C Catering Service", "restaurant_id" : "40357437" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1851"), "address" : { "building" : "284", "coord" : [ -73.9829239, 40.6580753 ], "street" : "Prospect Park West", "zipcode" : "11215" }, "borough" : "Brooklyn", "cuisine" : "American", "grades" : [ { "date" : ISODate("2014-11-19T00:00:00Z"), "grade" : "A", "score" : 11 }, { "date" : ISODate("2013-11-14T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-12-05T00:00:00Z"), "grade" : "A", "score" : 13 }, { "date" : ISODate("2012-05-17T00:00:00Z"), "grade" : "A", "score" : 11 } ], "name" : "The Movable Feast", "restaurant_id" : "40361606" }
+{ "_id" : ObjectId("61a460efee84e28e0bee187d"), "address" : { "building" : "657", "coord" : [ -73.9056678, 40.7066898 ], "street" : "Fairview Avenue", "zipcode" : "11385" }, "borough" : "Queens", "cuisine" : "German", "grades" : [ { "date" : ISODate("2014-03-15T00:00:00Z"), "grade" : "A", "score" : 11 }, { "date" : ISODate("2013-03-12T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-07-21T00:00:00Z"), "grade" : "B", "score" : 27 }, { "date" : ISODate("2011-11-25T00:00:00Z"), "grade" : "B", "score" : 24 }, { "date" : ISODate("2011-06-22T00:00:00Z"), "grade" : "B", "score" : 20 } ], "name" : "Gottscheer Hall", "restaurant_id" : "40364449" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1898"), "address" : { "building" : "67", "coord" : [ -74.0707363, 40.59321569999999 ], "street" : "Olympia Boulevard", "zipcode" : "10305" }, "borough" : "Staten Island", "cuisine" : "Italian", "grades" : [ { "date" : ISODate("2014-04-24T00:00:00Z"), "grade" : "A", "score" : 13 }, { "date" : ISODate("2013-04-04T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-02-02T00:00:00Z"), "grade" : "A", "score" : 5 }, { "date" : ISODate("2011-07-23T00:00:00Z"), "grade" : "A", "score" : 11 } ], "name" : "Crystal Room", "restaurant_id" : "40365013" }
+{ "_id" : ObjectId("61a460efee84e28e0bee18ac"), "address" : { "building" : "842", "coord" : [ -73.97063700000001, 40.751495 ], "street" : "2 Avenue", "zipcode" : "10017" }, "borough" : "Manhattan", "cuisine" : "American", "grades" : [ { "date" : ISODate("2014-07-22T00:00:00Z"), "grade" : "A", "score" : 6 }, { "date" : ISODate("2013-05-28T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-05-29T00:00:00Z"), "grade" : "A", "score" : 8 }, { "date" : ISODate("2012-01-05T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2011-08-10T00:00:00Z"), "grade" : "B", "score" : 24 } ], "name" : "Keats Restaurant", "restaurant_id" : "40365288" }
+{ "_id" : ObjectId("61a460efee84e28e0bee18af"), "address" : { "building" : "203", "coord" : [ -73.99987229999999, 40.7386361 ], "street" : "West   14 Street", "zipcode" : "10011" }, "borough" : "Manhattan", "cuisine" : "Donuts", "grades" : [ { "date" : ISODate("2014-02-11T00:00:00Z"), "grade" : "A", "score" : 12 }, { "date" : ISODate("2013-02-08T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-07-05T00:00:00Z"), "grade" : "B", "score" : 18 }, { "date" : ISODate("2012-02-22T00:00:00Z"), "grade" : "B", "score" : 16 }, { "date" : ISODate("2011-08-08T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2011-03-16T00:00:00Z"), "grade" : "A", "score" : 12 } ], "name" : "Donut Pub", "restaurant_id" : "40365525" }
+{ "_id" : ObjectId("61a460efee84e28e0bee18ed"), "address" : { "building" : "12402", "coord" : [ -73.82629709999999, 40.700598 ], "street" : "Jamaica Avenue", "zipcode" : "11418" }, "borough" : "Queens", "cuisine" : "American", "grades" : [ { "date" : ISODate("2014-12-17T00:00:00Z"), "grade" : "A", "score" : 12 }, { "date" : ISODate("2014-06-27T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2013-06-20T00:00:00Z"), "grade" : "A", "score" : 11 }, { "date" : ISODate("2013-01-17T00:00:00Z"), "grade" : "A", "score" : 13 }, { "date" : ISODate("2012-12-27T00:00:00Z"), "grade" : "P", "score" : 6 }, { "date" : ISODate("2011-12-22T00:00:00Z"), "grade" : "A", "score" : 11 } ], "name" : "Little Brown Jug", "restaurant_id" : "40366929" }
+{ "_id" : ObjectId("61a460efee84e28e0bee18ee"), "address" : { "building" : "617", "coord" : [ -73.9681178, 40.678776 ], "street" : "Vanderbilt Avenue", "zipcode" : "11238" }, "borough" : "Brooklyn", "cuisine" : "Soul Food", "grades" : [ { "date" : ISODate("2014-08-28T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2014-03-27T00:00:00Z"), "grade" : "C", "score" : 2 }, { "date" : ISODate("2013-07-17T00:00:00Z"), "grade" : "B", "score" : 25 }, { "date" : ISODate("2012-05-17T00:00:00Z"), "grade" : "A", "score" : 13 }, { "date" : ISODate("2011-12-21T00:00:00Z"), "grade" : "A", "score" : 8 } ], "name" : "Mitchell'S Restaurant", "restaurant_id" : "40366961" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1900"), "address" : { "building" : "459", "coord" : [ -73.979839, 40.739796 ], "street" : "2 Avenue", "zipcode" : "10010" }, "borough" : "Manhattan", "cuisine" : "Mexican", "grades" : [ { "date" : ISODate("2014-10-30T00:00:00Z"), "grade" : "A", "score" : 5 }, { "date" : ISODate("2013-11-07T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-10-23T00:00:00Z"), "grade" : "A", "score" : 10 }, { "date" : ISODate("2012-05-07T00:00:00Z"), "grade" : "A", "score" : 10 } ], "name" : "Mexico Lindo Restaurant", "restaurant_id" : "40367038" }
+{ "_id" : ObjectId("61a460efee84e28e0bee190a"), "address" : { "building" : "984", "coord" : [ -73.9672945, 40.7561212 ], "street" : "Second Avenue", "zipcode" : "10022" }, "borough" : "Manhattan", "cuisine" : "Italian", "grades" : [ { "date" : ISODate("2014-05-20T00:00:00Z"), "grade" : "A", "score" : 13 }, { "date" : ISODate("2013-03-08T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-02-13T00:00:00Z"), "grade" : "A", "score" : 12 } ], "name" : "Mimis Restaurant & Bar", "restaurant_id" : "40367728" }
+{ "_id" : ObjectId("61a460efee84e28e0bee190e"), "address" : { "building" : "521", "coord" : [ -73.9542568, 40.7641379 ], "street" : "East   68 Street", "zipcode" : "10065" }, "borough" : "Manhattan", "cuisine" : "American", "grades" : [ { "date" : ISODate("2014-06-10T00:00:00Z"), "grade" : "A", "score" : 12 }, { "date" : ISODate("2013-06-17T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2013-01-24T00:00:00Z"), "grade" : "A", "score" : 7 }, { "date" : ISODate("2012-01-04T00:00:00Z"), "grade" : "A", "score" : 9 } ], "name" : "Griffis Faculty Club", "restaurant_id" : "40367752" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1914"), "address" : { "building" : "1900", "coord" : [ -73.9819129, 40.77151449999999 ], "street" : "Broadway", "zipcode" : "10023" }, "borough" : "Manhattan", "cuisine" : "Italian", "grades" : [ { "date" : ISODate("2014-09-04T00:00:00Z"), "grade" : "A", "score" : 6 }, { "date" : ISODate("2014-04-01T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2013-03-14T00:00:00Z"), "grade" : "A", "score" : 7 }, { "date" : ISODate("2012-09-17T00:00:00Z"), "grade" : "A", "score" : 12 }, { "date" : ISODate("2011-09-07T00:00:00Z"), "grade" : "A", "score" : 7 } ], "name" : "Fiorellos", "restaurant_id" : "40367841" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1918"), "address" : { "building" : "4280", "coord" : [ -73.86697, 40.89794699999999 ], "street" : "Katonah Ave", "zipcode" : "10470" }, "borough" : "Bronx", "cuisine" : "Not Listed/Not Applicable", "grades" : [ { "date" : ISODate("2014-06-04T00:00:00Z"), "grade" : "A", "score" : 5 }, { "date" : ISODate("2013-06-07T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-06-27T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2011-07-13T00:00:00Z"), "grade" : "A", "score" : 10 } ], "name" : "The Lark'S Nest", "restaurant_id" : "40367946" }
+{ "_id" : ObjectId("61a460efee84e28e0bee193d"), "address" : { "building" : "252", "coord" : [ -73.9873049, 40.7592843 ], "street" : "West   46 Street", "zipcode" : "10036" }, "borough" : "Manhattan", "cuisine" : "French", "grades" : [ { "date" : ISODate("2014-03-05T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2013-02-22T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-02-01T00:00:00Z"), "grade" : "A", "score" : 8 } ], "name" : "Pergola Des Artistes", "restaurant_id" : "40369139" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1943"), "address" : { "building" : "372", "coord" : [ -74.1018239, 40.630788 ], "street" : "Forest Avenue", "zipcode" : "10301" }, "borough" : "Staten Island", "cuisine" : "American", "grades" : [ { "date" : ISODate("2014-03-08T00:00:00Z"), "grade" : "A", "score" : 10 }, { "date" : ISODate("2013-09-17T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2013-02-14T00:00:00Z"), "grade" : "A", "score" : 11 }, { "date" : ISODate("2012-07-14T00:00:00Z"), "grade" : "A", "score" : 13 }, { "date" : ISODate("2011-12-14T00:00:00Z"), "grade" : "A", "score" : 13 }, { "date" : ISODate("2011-07-11T00:00:00Z"), "grade" : "A", "score" : 9 } ], "name" : "Jody'S Club", "restaurant_id" : "40369158" }
+{ "_id" : ObjectId("61a460efee84e28e0bee1995"), "address" : { "building" : "3660", "coord" : [ -73.82339809999999, 40.8276846 ], "street" : "East Tremont Avenue", "zipcode" : "10465" }, "borough" : "Bronx", "cuisine" : "Hamburgers", "grades" : [ { "date" : ISODate("2014-04-28T00:00:00Z"), "grade" : "A", "score" : 13 }, { "date" : ISODate("2013-04-30T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-04-26T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2011-10-11T00:00:00Z"), "grade" : "B", "score" : 20 }, { "date" : ISODate("2011-05-26T00:00:00Z"), "grade" : "A", "score" : 10 } ], "name" : "Mcdonald'S", "restaurant_id" : "40372196" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19a8"), "address" : { "building" : "1599", "coord" : [ -73.87575, 40.8294396 ], "street" : "Westchester Avenue", "zipcode" : "10472" }, "borough" : "Bronx", "cuisine" : "Pizza", "grades" : [ { "date" : ISODate("2015-01-13T00:00:00Z"), "grade" : "Z", "score" : 17 }, { "date" : ISODate("2014-08-04T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2014-07-21T00:00:00Z"), "grade" : "P", "score" : 12 }, { "date" : ISODate("2014-02-20T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2013-08-15T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2013-03-13T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2012-01-17T00:00:00Z"), "grade" : "A", "score" : 10 } ], "name" : "Yankee Jz Pizza", "restaurant_id" : "40372631" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19cc"), "address" : { "building" : "222", "coord" : [ -73.96607999999999, 40.7602774 ], "street" : "East   58 Street", "zipcode" : "10022" }, "borough" : "Manhattan", "cuisine" : "Italian", "grades" : [ { "date" : ISODate("2014-05-20T00:00:00Z"), "grade" : "A", "score" : 11 }, { "date" : ISODate("2013-12-12T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2013-06-27T00:00:00Z"), "grade" : "A", "score" : 13 }, { "date" : ISODate("2012-06-25T00:00:00Z"), "grade" : "A", "score" : 12 }, { "date" : ISODate("2012-01-27T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2011-09-22T00:00:00Z"), "grade" : "A", "score" : 9 } ], "name" : "Bar Vetro", "restaurant_id" : "40374559" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19cf"), "address" : { "building" : "59", "coord" : [ -74.0095812, 40.71463749999999 ], "street" : "Warren Street", "zipcode" : "10007" }, "borough" : "Manhattan", "cuisine" : "American", "grades" : [ { "date" : ISODate("2014-05-12T00:00:00Z"), "grade" : "A", "score" : 12 }, { "date" : ISODate("2013-12-06T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-12-03T00:00:00Z"), "grade" : "A", "score" : 8 }, { "date" : ISODate("2012-07-23T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2012-03-02T00:00:00Z"), "grade" : "A", "score" : 10 }, { "date" : ISODate("2011-08-10T00:00:00Z"), "grade" : "B", "score" : 20 } ], "name" : "Raccoon Lodge", "restaurant_id" : "40374968" }
+{ "_id" : ObjectId("61a460efee84e28e0bee19fa"), "address" : { "building" : "7002", "coord" : [ -73.8803351, 40.7017284 ], "street" : "Copper Avenue", "zipcode" : "11385" }, "borough" : "Queens", "cuisine" : "Hamburgers", "grades" : [ { "date" : ISODate("2014-12-17T00:00:00Z"), "grade" : "A", "score" : 9 }, { "date" : ISODate("2014-07-09T00:00:00Z"), "grade" : "A", "score" : 2 }, { "date" : ISODate("2014-01-28T00:00:00Z"), "grade" : "A", "score" : 3 }, { "date" : ISODate("2013-08-07T00:00:00Z"), "grade" : "A", "score" : 11 }, { "date" : ISODate("2013-02-13T00:00:00Z"), "grade" : "A", "score" : 4 }, { "date" : ISODate("2012-07-23T00:00:00Z"), "grade" : "A", "score" : 5 }, { "date" : ISODate("2012-02-08T00:00:00Z"), "grade" : "A", "score" : 8 } ], "name" : "Mcdonald'S", "restaurant_id" : "40377294" }
+Type "it" for more
+> db.restaurent.find({'grades.1.score':2}).limit(3).pretty()
+{
+        "_id" : ObjectId("61a460efee84e28e0bee1841"),
+        "address" : {
+                "building" : "7715",
+                "coord" : [
+                        -73.9973325,
+                        40.61174889999999
+                ],
+                "street" : "18 Avenue",
+                "zipcode" : "11214"
+        },
+        "borough" : "Brooklyn",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-04-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2013-04-23T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-04-24T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2011-12-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                }
+        ],
+        "name" : "C & C Catering Service",
+        "restaurant_id" : "40357437"
+}
+{
+        "_id" : ObjectId("61a460efee84e28e0bee1851"),
+        "address" : {
+                "building" : "284",
+                "coord" : [
+                        -73.9829239,
+                        40.6580753
+                ],
+                "street" : "Prospect Park West",
+                "zipcode" : "11215"
+        },
+        "borough" : "Brooklyn",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-11-19T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2013-11-14T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-12-05T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 13
+                },
+                {
+                        "date" : ISODate("2012-05-17T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                }
+        ],
+        "name" : "The Movable Feast",
+        "restaurant_id" : "40361606"
+}
+{
+        "_id" : ObjectId("61a460efee84e28e0bee187d"),
+        "address" : {
+                "building" : "657",
+                "coord" : [
+                        -73.9056678,
+                        40.7066898
+                ],
+                "street" : "Fairview Avenue",
+                "zipcode" : "11385"
+        },
+        "borough" : "Queens",
+        "cuisine" : "German",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-03-15T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2013-03-12T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-07-21T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 27
+                },
+                {
+                        "date" : ISODate("2011-11-25T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 24
+                },
+                {
+                        "date" : ISODate("2011-06-22T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 20
+                }
+        ],
+        "name" : "Gottscheer Hall",
+        "restaurant_id" : "40364449"
+}
+> db.restaurent.find({'grades.1.score':2}).limit(3).pretty()
+{
+        "_id" : ObjectId("61a460efee84e28e0bee1841"),
+        "address" : {
+                "building" : "7715",
+                "coord" : [
+                        -73.9973325,
+                        40.61174889999999
+                ],
+                "street" : "18 Avenue",
+                "zipcode" : "11214"
+        },
+        "borough" : "Brooklyn",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-04-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2013-04-23T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-04-24T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 5
+                },
+                {
+                        "date" : ISODate("2011-12-16T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                }
+        ],
+        "name" : "C & C Catering Service",
+        "restaurant_id" : "40357437"
+}
+{
+        "_id" : ObjectId("61a460efee84e28e0bee1851"),
+        "address" : {
+                "building" : "284",
+                "coord" : [
+                        -73.9829239,
+                        40.6580753
+                ],
+                "street" : "Prospect Park West",
+                "zipcode" : "11215"
+        },
+        "borough" : "Brooklyn",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-11-19T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2013-11-14T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-12-05T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 13
+                },
+                {
+                        "date" : ISODate("2012-05-17T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                }
+        ],
+        "name" : "The Movable Feast",
+        "restaurant_id" : "40361606"
+}
+{
+        "_id" : ObjectId("61a460efee84e28e0bee187d"),
+        "address" : {
+                "building" : "657",
+                "coord" : [
+                        -73.9056678,
+                        40.7066898
+                ],
+                "street" : "Fairview Avenue",
+                "zipcode" : "11385"
+        },
+        "borough" : "Queens",
+        "cuisine" : "German",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-03-15T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2013-03-12T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 2
+                },
+                {
+                        "date" : ISODate("2012-07-21T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 27
+                },
+                {
+                        "date" : ISODate("2011-11-25T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 24
+                },
+                {
+                        "date" : ISODate("2011-06-22T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 20
+                }
+        ],
+        "name" : "Gottscheer Hall",
+        "restaurant_id" : "40364449"
+}
+> db.movie.find({actor:{$size:3}}).limit(3).pretty()
+{
+        "_id" : ObjectId("5c8283789eb55675f0272933"),
+        "name" : "uri",
+        "rating" : 5,
+        "actor" : [
+                "vicky kaushal",
+                "yami",
+                "Paresh Rawal"
+        ]
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a882"),
+        "name" : "aradhana",
+        "actor" : [
+                "amitabh",
+                "prem",
+                "rajesh khanna"
+        ],
+        "rating" : 3,
+        "ticket_no" : 550,
+        "price" : 260
+}
+{
+        "_id" : ObjectId("5ca456072952ebdd7ae2a930"),
+        "name" : "paa",
+        "actor" : [
+                "Amitabh",
+                "vidya balan",
+                "Abhishek"
+        ],
+        "rating" : 2,
+        "price" : 270,
+        "ticket_no" : 210,
+        "rdate" : ISODate("2019-01-23T00:00:00Z"),
+        "others" : {
+                "director" : "R Balki",
+                "songs" : "Amit trivedi"
+        }
+}
+> db.movie.insert({name:'pakija',rating:"two",price:300})
+WriteResult({ "nInserted" : 1 })
+> db.movie.insert({name:'hum tum',rating:"four",price:300})
+WriteResult({ "nInserted" : 1 })
+> db.movie.find({rating:{$type:'string'}}).limit(3).pretty()
+{
+        "_id" : ObjectId("61a47bdc510cd8e3d921bd89"),
+        "name" : "pakija",
+        "rating" : "two",
+        "price" : 300
+}
+{
+        "_id" : ObjectId("61a47bf5510cd8e3d921bd8a"),
+        "name" : "hum tum",
+        "rating" : "four",
+        "price" : 300
+}
+> db.movies.find(actor:/[Aa]mitabh/)
+uncaught exception: SyntaxError: missing ) after argument list :
+@(shell):1:20
+> db.movie.find({actor:/[Aa]mitabh/})
+{ "_id" : ObjectId("5aaa3334639395f86922a882"), "name" : "aradhana", "actor" : [ "amitabh", "prem", "rajesh khanna" ], "rating" : 3, "ticket_no" : 550, "price" : 260 }
+{ "_id" : ObjectId("5ca456072952ebdd7ae2a930"), "name" : "paa", "actor" : [ "Amitabh", "vidya balan", "Abhishek" ], "rating" : 2, "price" : 270, "ticket_no" : 210, "rdate" : ISODate("2019-01-23T00:00:00Z"), "others" : { "director" : "R Balki", "songs" : "Amit trivedi" } }
+{ "_id" : ObjectId("5aaa3334639395f86922a881"), "name" : "sholay", "actor" : [ "Dharamendra", "Amitabh", "Sachin Pilgaokar", "Dharamendra", "Dharamendra", "Mr. Khote", "jaya bacchan", "sanjiv kapoor" ], "rating" : 6, "ticket_no" : 550, "price" : 350, "position" : [ 2, 2 ] }
+> db.movie.find({actor:/[Aa]mitabh/}).pretty()
+{
+        "_id" : ObjectId("5aaa3334639395f86922a882"),
+        "name" : "aradhana",
+        "actor" : [
+                "amitabh",
+                "prem",
+                "rajesh khanna"
+        ],
+        "rating" : 3,
+        "ticket_no" : 550,
+        "price" : 260
+}
+{
+        "_id" : ObjectId("5ca456072952ebdd7ae2a930"),
+        "name" : "paa",
+        "actor" : [
+                "Amitabh",
+                "vidya balan",
+                "Abhishek"
+        ],
+        "rating" : 2,
+        "price" : 270,
+        "ticket_no" : 210,
+        "rdate" : ISODate("2019-01-23T00:00:00Z"),
+        "others" : {
+                "director" : "R Balki",
+                "songs" : "Amit trivedi"
+        }
+}
+{
+        "_id" : ObjectId("5aaa3334639395f86922a881"),
+        "name" : "sholay",
+        "actor" : [
+                "Dharamendra",
+                "Amitabh",
+                "Sachin Pilgaokar",
+                "Dharamendra",
+                "Dharamendra",
+                "Mr. Khote",
+                "jaya bacchan",
+                "sanjiv kapoor"
+        ],
+        "rating" : 6,
+        "ticket_no" : 550,
+        "price" : 350,
+        "position" : [
+                2,
+                2
+        ]
+}
+>
+> db.movie.find({name:/t$/})
+{ "_id" : ObjectId("5ca47e5b2952ebdd7ae2a931"), "name" : "padmavat", "rating" : 4, "price" : 250, "ticket_no" : 300, "actor" : [ "Deepika", "shahid kapoor", "ranveer singh", "aditi Rao", "aaaaa" ], "cancellation" : { "date" : Timestamp(1567175239, 1) } }
+> db.movie.find({name:/^[0-9]/})
+{ "_id" : ObjectId("5aaa31ee639395f86922a87f"), "name" : "3 idiots", "actor" : [ "Kareena Kapoor", "amir", "kareena", "mahadavan", "sharman" ], "rating" : 3, "ticket_no" : 150, "price" : 200 }
+> db.movie.find({name:/^\d/})
+{ "_id" : ObjectId("5aaa31ee639395f86922a87f"), "name" : "3 idiots", "actor" : [ "Kareena Kapoor", "amir", "kareena", "mahadavan", "sharman" ], "rating" : 3, "ticket_no" : 150, "price" : 200 }
+> db.movie.find({name:/^K/})
+{ "_id" : ObjectId("5ca453ef2952ebdd7ae2a92f"), "name" : "Kesari", "actor" : [ "Akshay Kumar", "Pariniti chopra" ], "rating" : 6, "price" : 350, "ticket_no" : 270, "rdate" : ISODate("2019-01-23T00:00:00Z") }
+> db.movie.insert({name:'Kahani 2',rating:3,price:200,actor:['vidya balan']})
+WriteResult({ "nInserted" : 1 })
+> db.movie.find({name:/^K/})
+{ "_id" : ObjectId("5ca453ef2952ebdd7ae2a92f"), "name" : "Kesari", "actor" : [ "Akshay Kumar", "Pariniti chopra" ], "rating" : 6, "price" : 350, "ticket_no" : 270, "rdate" : ISODate("2019-01-23T00:00:00Z") }
+{ "_id" : ObjectId("61a47eff510cd8e3d921bd8b"), "name" : "Kahani 2", "rating" : 3, "price" : 200, "actor" : [ "vidya balan" ] }
+> db.movie.find({name:/^K.*\d$/})
+{ "_id" : ObjectId("61a47eff510cd8e3d921bd8b"), "name" : "Kahani 2", "rating" : 3, "price" : 200, "actor" : [ "vidya balan" ] }
+> db.movie.find({rating:null})
+{ "_id" : ObjectId("5ca47ef82952ebdd7ae2a932"), "name" : "newton", "ticket_no" : 690, "actor" : [ "Rajkumar Rao", "Pankaj Tripathi" ], "price" : 310, "lastmodified" : ISODate("2019-09-28T14:47:49.204Z") }
+{ "_id" : ObjectId("5d8f6eec620d2353221b91dd"), "price" : 280 }
+{ "_id" : ObjectId("5d8f51ce065d3e2aa902aa22"), "name" : "dream girl", "actor" : [ "ayushman", "nushrat bharucha" ], "price" : 250, "rating" : null }
+> db.movie.find({rating:null}).pretty()
+{
+        "_id" : ObjectId("5ca47ef82952ebdd7ae2a932"),
+        "name" : "newton",
+        "ticket_no" : 690,
+        "actor" : [
+                "Rajkumar Rao",
+                "Pankaj Tripathi"
+        ],
+        "price" : 310,
+        "lastmodified" : ISODate("2019-09-28T14:47:49.204Z")
+}
+{ "_id" : ObjectId("5d8f6eec620d2353221b91dd"), "price" : 280 }
+{
+        "_id" : ObjectId("5d8f51ce065d3e2aa902aa22"),
+        "name" : "dream girl",
+        "actor" : [
+                "ayushman",
+                "nushrat bharucha"
+        ],
+        "price" : 250,
+        "rating" : null
+}
+> db.movie.find({rating:{$in:[null],$exists:true}}).pretty()
+{
+        "_id" : ObjectId("5d8f51ce065d3e2aa902aa22"),
+        "name" : "dream girl",
+        "actor" : [
+                "ayushman",
+                "nushrat bharucha"
+        ],
+        "price" : 250,
+        "rating" : null
+}
+> db.movie.find({rating:{$exists:false}}).pretty()
+{
+        "_id" : ObjectId("5ca47ef82952ebdd7ae2a932"),
+        "name" : "newton",
+        "ticket_no" : 690,
+        "actor" : [
+                "Rajkumar Rao",
+                "Pankaj Tripathi"
+        ],
+        "price" : 310,
+        "lastmodified" : ISODate("2019-09-28T14:47:49.204Z")
+}
+{ "_id" : ObjectId("5d8f6eec620d2353221b91dd"), "price" : 280 }
+>

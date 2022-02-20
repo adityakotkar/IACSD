@@ -1,0 +1,224 @@
+------Alter table  is used to modify structure of the table
+1. add column  ---- new column can be added in the table
+2. drop column----existing column can be delete from the table 
+3. modify column---- existing column datatype can be modified
+4. rename column----- to change name of existing column
+5. add constraint----- a new constraint can be added
+6. drop constraint---- existing constraint can be dropped
+7. rename the table--- change the name of the table
+
+
+update --- to modify data in existing row use update, its a Data manipulation statement
+Alter table---- if you want to modify structure of the table then you can use alter table
+
+---- to drop primary key constraint, since primary key is only one so we don't 
+give any name to primary key constraint
+
+Alter table testdata drop primary key
+
+---- to drop foreign key constraint
+every foreign key constraint has name given at the time of creation table
+
+step 1: check the name of constraint in information_schema
+step 2: delete foreign key constraint by using name 
+
+ SELECT
+     TABLE_NAME,
+    COLUMN_NAME,
+    CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+    FROM
+         INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+    WHERE
+      REFERENCED_TABLE_SCHEMA = 'iacsd2111'
+      AND REFERENCED_TABLE_NAME = 'faculty';
+
+Alter table course drop foreign key course_ibfk_1;  # course_ibfk_1 is there in information schema
+
+------ to add new constraint
+
+alter table course add constraint fk_fid1
+foreign key(faid) references faculty(fid) on delete set null on update cascade
+
+---- add primary key constraint
+alter table testdata add constraint primary key(id);
+
+---to add column desg,sal
+
+alter table testdata
+add desg varchar(20) first ,add sal decimal after id;
+
+---modify column
+you can change data type or you can add constrints like default, not null, unique
+
+alter table testdata
+modify desg varchar(30) not null;
+
+
+----to drop column from table
+
+alter table testdata
+drop column sal
+
+---to rename column
+alter table testdata
+rename column desg to desg_nm
+
+---- to rename the table
+alter table testdata
+rename to empdata
+
+
+constraints are of 2 types
+table level constraint ---- primary key, foreign key, unique
+column level constraints---- not null, default, check
+
+
+------case statement
+comm
+comm is null  'need improvement'
+comm <=300 ok
+comm> 300  <1000 good
+comm >=1000 excellent
+
+select empno,ename,sal,comm,case when comm is null then 'need improvement'
+when comm <=300 then 'ok'
+when comm <1000 then 'good'
+else 'excellent' end Remark
+from emp;
+
+or 
+
+select empno EmpId,ename Name,sal Salary, if(comm >= 600,"excellent keep it up",
+    if(comm is null,"Need Improvement","good")) Remark
+    from emp;
+
+-----display department name
+deptno    name
+10         HR
+20         purchase
+30         sales
+
+select empno,ename,sal,deptno,case when deptno=10 then 'HR'
+when deptno=20 then 'purchase'
+else 'sales' end dname
+from emp;
+
+select empno,ename,sal,deptno,case deptno when 10 then 'HR'
+when 20 then 'purchase'
+else 'sales' end dname
+from emp;
+
+
+-----nested queries joins
+---to find all employees with sal > 2000
+select * from emp
+where sal >2000
+
+---to find all employees with sal > avg(sal) of dept 10
+
+select avg(sal)
+from emp
+where deptno=10;
+
+----list all employees with sal > average sal of dept 20 and working in dept 10
+select * from emp
+where sal >(select avg(sal)
+            from emp
+             where deptno=20) and deptno=10;
+
+
+-----list all employees who work in Smith or CLARK department
+  select *
+ from emp
+ where deptno in (select deptno from emp where ename in ('SMITH','CLARK'));
+
+----list all employees with sal > 'SMITH' salary
+
+---emp table has 10 rows but child query will work only once
+
+select *
+from emp
+where sal > (select sal
+	from emp
+	where ename='SMITH')
+
+---display all employees with sal >= smith's salary and <= ford's sal
+                                       800                   3000
+select *
+from emp 
+where sal between 800 and 
+3000
+
+
+select *
+from emp 
+where sal between (select sal from emp where ename='SMITH') and 
+(select sal from emp where ename='FORD')
+
+
+-----list all employees who are working under same manager of ALLEN;
+select * from emp
+where mgr=(select mgr from emp where ename='ALLEN');
+
+
+----display all course names which have been opt by Deven
+select cname
+from course
+where cid in (select cid
+              from student_course
+              where sid=(select sid from student where sname='Deven'));
+
+
+---- display all employees whose job is sames as jones;
+select *
+from emp
+where job in (select job from emp where ename='jones')
+
+----display all employees with sal > both smith and jones;
+
+select *
+    -> from emp
+    -> where sal > all (select sal from emp where ename in ('SMITH','WARD'));
+
+----display all employees with sal > any one's smith and jones salary;
+
+select *
+    -> from emp
+    -> where sal > any (select sal from emp where ename in ('SMITH','WARD'));
+
+-----list all employees with sal > average sal of dept 10
+select *
+from emp
+where sal > (select avg(sal) from emp where deptno=10)
+
+----- corelated query
+
+
+
+-----list all employees with sal > average sal of their own department
+emp 10 rows then child query will run 10 times
+
+select *
+from emp e
+where sal > (select avg(sal) from emp a where a.deptno=e.deptno)
+
+
+------ find all employees with sal <= salary of its own mgr;
+ select *
+ from emp e
+ where sal <= (select sal from emp m where m.empno=e.mgr);
+
+---- in corelated query there are 2 more operators exists
+not exists
+
+
+
+
+
+
+
+
+
+

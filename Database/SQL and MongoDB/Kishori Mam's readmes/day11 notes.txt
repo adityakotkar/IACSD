@@ -1,0 +1,336 @@
+-----use into claues in procedure only if select statement returns single row
+------if query returns multiple rows as o/p , then you cannot use 
+into clause in select statement otherwise it gives exception
+
+create procedure deptwiseDetails()
+begin
+   select deptno,count(*),min(sal),max(sal),avg(sal) into 
+   from emp
+   group by deptno;
+end;
+
+call deptwiseDetails()
+
+drop procedure if exists deptwiseDetails;
+
+
+---to declare variable
+declare <variable_name> <data_type>
+declare str varchar(20) default '';
+declare a,b int default 0;
+
+-----to assign the value to variable
+set cnt=1;
+
+select count(*) into cnt
+from emp;
+
+in oracle 
+
+cnt:=1;
+
+---write a query to display all employees whose name starts with specific character
+delimiter //
+drop procedure checkPattern//
+create procedure checkPattern(pattern varchar(20))
+begin
+        declare str varchar(20) default '';
+        declare a,b int default 0;
+        set str=concat(pattern,'%'); 
+	select ename
+	from emp
+	where ename like str;
+end//
+delimiter ;
+call checkPattern('J')
+
+
+
+-----if statement in procedure
+if expression then
+    statenments;
+else
+    statements;
+end if;
+
+----- if...elseif....else end if
+if expression then
+  statements;'
+elseif expression then
+   statements
+elseif expression then
+   statements
+......
+else
+    statements;
+end if;
+
+
+delimiter //
+create procedure getEmpLevel(p_empno int(11),out p_emplevel varchar(20))
+begin
+  declare v_sal int;    -- select sal into v_sal
+  select sal into v_sal
+  from emp
+  where empno=p_empno;
+
+  if v_sal>2500 then
+     set p_emplevel='platinum';
+  elseif (v_sal <=2500 and v_sal>2000) then
+     set p_emplevel='Gold';
+  elseif v_sal<=2000 then
+     set p_emplevel='silver';
+  end if;
+end//
+delimiter ;
+call getEmpLevel(7902,@emplevel);
+
+if comm <300   need improvment
+else if comm>=300 and <500  'ok'
+else  if comm>=500 and <1000  'good'
+othewise 'excellent'
+
+delimiter //
+
+create procedure getcomm(c_empno int, out c_remark varchar(30))
+begin 
+    declare c_com decimal(12,2); 
+    select ifnull(comm,0) into c_com  
+    from emp 
+    where empno=c_empno;
+    if c_com < 300 then 
+         set c_remark='need improvement';
+    elseif c_com>=300 and c_com<500 then 
+         set c_remark='ok';
+    elseif c_com>=500 and c_com<1000 then
+        set c_remark='good';  
+    else 
+        set c_remark='excellent'; 
+    end if; 
+end//
+
+delimiter ;
+call getcomm(7902,@remark);
+select @remark;
+
+
+create procedure checkRemark()
+begin
+   call getcomm(7902,@remark);
+   select @remark;
+end//
+
+
+----loops 
+while
+Repeate until
+loop leave iterate
+while expression do
+   statements;
+end while;
+
+----- to write a procedure to display 1,6,11,16,22
+if we pass 1000
+1000,1005,1010,1015,1020
+
+delimiter //
+create procedure test_while(inout v_num int)
+begin
+   declare cnt int default 1;
+   declare str varchar(20);
+   set str='';
+    while cnt<=5 do
+       set str=concat_ws(',',str,v_num);
+       set cnt=cnt+1;                   
+       set v_num=v_num+5;                
+    end while; 
+    select str;  
+    
+end//
+delimiter ;
+set @cnt=10
+call test_while(@cnt);
+
+----Repeat  until ---- loop repeats until the given condition  is false
+and terminates when the condition is true
+---it is bottom tested loop so the statement gets executed atleast once
+repeat
+   statements
+   until expression;
+end repeat;
+
+delimiter //
+create procedure test_repeat(inout v_num int)
+begin
+   declare cnt int default 1;
+   declare str varchar(20);
+   set str='';
+    Repeat
+       set str=concat_ws(',',str,v_num);
+       set cnt=cnt+1;                   
+       set v_num=v_num+5; 
+       until cnt>5          
+    end repeat; 
+    select str;  
+    
+end//
+delimiter ;
+set @cnt=10
+call test_repeat(@cnt);
+
+3. loop ....end loop; 
+1.this loop is infinit loop
+2.to stop the loop we use leave <label> ---- leave statement stops the forcefully and 
+jumps to the line where <label>
+leave statement is equivalent to break
+3. Iterate it is similar to continue
+   Iterate <label> will skip the iteration and control will jum to the statement where 
+   label is used
+
+delimiter //
+create procedure test_loop1(inout v_num int)
+begin
+   declare cnt int default 1;
+   declare str varchar(20);
+   set str='';
+    label1:loop
+       if cnt > 5 then
+           leave label1;
+       end if;
+       if (v_num mod 3=0) then
+           set v_num=v_num+7;
+           iterate label1;
+       else 
+           set str=concat_ws(',',str,v_num);
+           set cnt=cnt+1;                   
+           set v_num=v_num+7;
+       end if;  
+    end loop;
+    select str;  
+    
+end//
+delimiter ;
+set @cnt=10;
+call test_loop1(@cnt);
+
+select * from emp;
+
+---display ename--job as comma separated list
+when you want to navigate through table line by line and do some process then always use
+cursor
+cursor is similar to array, which is buffer to hold data of select statement and 
+it allows to navigate records one by one 
+----to use cursor follow the given steps
+
+
+1. declare cursor
+declare emp-cur cursor for select empno,ename,job from emp; 
+
+2. declare continue handler for stopping loop
+   declare continue handler for NOT FOUND set v_stop=1;
+
+3. open cursor 
+----- it execute the query associated with cursor and populate data in RAM
+    open emp_cur 
+4. read the data from the cursor
+      fetch emp_cur into v_eno,v_ename,v_job
+      
+
+5. whether reached to end the leave the loop
+     if v_stop=1 then
+        leave the loop
+      end loop;
+6. process data
+     cocatenate the data to str
+     set str=concat(.......)
+     
+7. repeate steps 4 to 6 
+6. close the cursor
+
+close emp_cur;
+
+---write a procedure which will display comma separate list of 
+ename--job for all employees
+
+drop procedure if exists concat_nm_job;
+delimiter //
+
+create procedure concat_nm_job()
+begin
+declare v_eno int;
+declare v_ename varchar(20);
+declare v_job varchar(20);
+declare v_stop int default 0;
+declare v_str varchar(500) default '';
+declare emp_cur cursor for select empno,ename,job from emp where deptno=10 ;
+declare continue handler for NOT FOUND set v_stop=1;
+open emp_cur;
+label1: loop
+	fetch emp_cur into v_eno,v_ename,v_job;
+        if (v_stop=1)  then 
+           leave label1;
+        end if;
+        /*build the list of ename and job*/ 
+        set v_str=concat(v_str,v_ename,'-->',v_job,',');
+end loop;
+close emp_cur;
+select v_str;
+
+end//
+
+
+----update salary of employee 
+10% if job is manager
+15% if job is clerk
+20% if job is Analyst
+else 25%
+
+drop procedure if exists update_sal();
+delimiter //
+
+create procedure update_sal()
+begin
+declare v_empno int;
+declare v_job varchar(30);
+declare v_sal decimal(12,2);
+declare v_stop int default 0;
+declare emp_cur cursor for select empno,sal,job from emp;
+declare continue handler for NOT Found set v_stop=1;
+open emp_cur;
+label1: loop
+   fetch emp_cur into v_empno,v_sal,v_job;
+   if v_stop=1 then
+       leave label1;
+   end if;
+   if v_job='MANAGER' then
+       update emp
+       set sal=1.10*v_sal
+       where empno=v_empno;   
+    elseif v_job='CLERK' then
+       update emp
+       set sal=1.15*v_sal
+       where empno=v_empno;
+    elseif v_job='ANALYST' then
+       update emp
+       set sal=1.20*v_sal
+       where empno=v_empno;
+    else
+        update emp
+        set sal=1.25*v_sal
+       where empno=v_empno;
+    end if;
+end loop;
+close emp_cur;
+end//
+
+delimiter ;
+
+
+
+
+
+ 
+
+
+ 
+

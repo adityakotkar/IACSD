@@ -1,0 +1,118 @@
+PL SQL----Procedural Language SQL
+if statement, loops ,cursors, exception handling,triggers
+
+Procedures
+
+----group of statements to perform some task, but it doesnot return anything
+why to procedure and function
+1. It hides table names and increase security
+2. It reduces the network traffic
+3. Java developer will work only on java program and database person will take cate of data bse
+4. hide complexity of query
+
+
+select count(*)
+from emp
+where deptno=20;
+
+
+select count(*)
+from emp
+where deptno=10;
+
+
+select count(*)
+from emp
+where deptno=30;
+
+The parameter we pass to a procedure or a function
+are of 3 types
+
+in----- readonly parameters, by default the parameter is of in type
+
+out---- writeonly parameter, 
+
+
+inout
+delimiter //
+
+
+---create a procedure
+create procedure getdata(in dno int,out cnt int,out msal int )
+begin
+   select count(*),max(sal) into cnt,msal
+   from emp
+   where deptno=dno;
+
+end//
+
+delimiter ;
+
+
+-----to call a procedure
+call getdata(10,@c,@ms)
+
+---to display output
+select @c,@ms;
+
+-----to see the code of procedure
+SELECT ROUTINE_DEFINITION 
+FROM information_schema.ROUTINES WHERE 
+SPECIFIC_NAME='procedurename'
+
+SHOW FUNCTION STATUS WHERE Db = 'db_name';
+SHOW procedure STATUS WHERE Db = 'db_name';
+---to drop a procedure
+drop procedure getdata;
+
+
+---to modify procedure
+replace procedure getdata(in dno int,out cnt int,out msal int )
+begin
+   
+   select count(*),max(sal) into cnt,msal
+   from emp
+   where deptno=dno;
+   set cnt=cnt+1;
+
+end//
+
+
+-----write a procedure to add data into department table
+
+delimiter //
+create procedure addDept(in dno int,in dnm varchar(20),dl varchar(20))
+begin
+    insert into dept values(dno,dnm,dl);
+end//
+
+delimiter ;
+
+call addDept(12,'hr','mumbai')
+
+create procedure setcounter(inout counter int,in inc int)
+begin
+    set counter=counter+inc;
+    select counter;
+end//
+delimiter ;
+
+set @counter=1;
+call setcounter(@counter,10);
+
+select @counter;
+
+
+1. write procedure for follwing
+
+to delete a record from emp
+to find count,min,maximum,average sal for each department
+
+to find count,min,maximum,average sal for Jones department
+
+
+
+
+
+
+

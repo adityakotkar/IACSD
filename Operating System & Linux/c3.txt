@@ -1,0 +1,21 @@
+#!/bin/bash
+
+read -p "enter two numbers= " a b
+echo "enter + for add , - for sub x for multi / for div"
+read -p "enter choice= " c
+
+case $c in
++)  add=`echo "$a+$b" | bc`
+        echo "Add=$add"
+        ;;
+-) sub=`echo "$a-$b" | bc`
+        echo "Sub=$sub"
+        ;;
+x) mul=`echo "$a*$b" | bc`
+        echo "Mul=$mul"
+        ;;
+/) div=`echo "scale=2;$a/$b" | bc`
+        echo "Div=$div"
+        ;;
+esac
+

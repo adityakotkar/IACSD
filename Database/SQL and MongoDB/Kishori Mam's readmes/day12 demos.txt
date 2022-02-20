@@ -1,0 +1,797 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 97
+Server version: 8.0.22 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use iacsd2111;
+Database changed
+mysql> select * from course;
++------+------------------+------------+------+------------------------------------------------+
+| cid  | cname            | start_date | faid | description                                    |
++------+------------------+------------+------+------------------------------------------------+
+| 1000 | java             | 2021-02-11 |  100 | java is very useful                            |
+| 1001 | python           | 2021-02-11 |  602 | python is very useful for machine learning, AI |
+| 1002 | python Django    | 2020-03-02 | NULL | python is very useful for machine learning, AI |
+| 1003 | Web programming  | 2020-05-02 |  301 | all these courses are in demand                |
+| 1004 | Databases        | 2020-05-02 |  301 | all these courses are in demand                |
+| 1008 | AI               | 2021-11-11 |  602 | all these courses are in demand                |
+| 1009 | Machine learning | 2021-02-13 |  700 | all these courses are in demand                |
++------+------------------+------------+------+------------------------------------------------+
+7 rows in set (0.01 sec)
+
+mysql> insert into course values(1008,'ccc','2000-03-01',100,'jshdjhas');
+ERROR 1062 (23000): Duplicate entry '1008' for key 'course.PRIMARY'
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
+| 700 | Rahul    | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> insert into course values(1020,'ccc','2000-03-01',619,'jshdjhas');
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`iacsd2111`.`course`, CONSTRAINT `fk_fid1` FOREIGN KEY (`faid`) REFERENCES `faculty` (`fid`) ON DELETE SET NULL ON UPDATE CASCADE)
+mysql> delimiter //
+mysql>
+mysql> create procedure insert_rec(p_cid int,p_cnm varchar(20),p_sdt date,p_fid int,p_desc varchar(20))
+    -> begin
+    ->
+    ->  declare continue handler for SQLEXCEPTION select "error occured";
+    ->  insert into course values(p_cid,p_cnm,p_sdt,p_fid,p_desc);
+    ->  select count(*) from course;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into course values(1008,'ccc','2000-03-01',100,'jshdjhas');
+    -> //
+ERROR 1062 (23000): Duplicate entry '1008' for key 'course.PRIMARY'
+mysql> call insert_rec(1008,'ccc','2000-03-01',100,'sdfsdf');
+    -> //
++---------------+
+| error occured |
++---------------+
+| error occured |
++---------------+
+1 row in set (0.00 sec)
+
++----------+
+| count(*) |
++----------+
+|        7 |
++----------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> error occured |
+    -> +---------------+
+    -> ^C
+mysql> delimiter ;
+mysql> drop procedure if exists insert_rec;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter //
+mysql>
+mysql> create procedure insert_rec(p_cid int,p_cnm varchar(20),p_sdt date,p_fid int,p_desc varchar(20))
+    -> begin
+    ->
+    ->  declare exit handler for SQLEXCEPTION select "error occured";
+    ->  insert into course values(p_cid,p_cnm,p_sdt,p_fid,p_desc);
+    ->  select count(*) from course;
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call insert_rec(1008,'ccc','2000-03-01',100,'sdfsdf');
+    -> //
++---------------+
+| error occured |
++---------------+
+| error occured |
++---------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call insert_rec(1030,'ccc','2000-03-01',619,'sdfsdf');
+    -> //
++---------------+
+| error occured |
++---------------+
+| error occured |
++---------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> drop procedure if exists insert_rec;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter //
+mysql>
+mysql> create procedure insert_rec(p_cid int,p_cnm varchar(20),p_sdt date,p_fid int,p_desc varchar(20))
+    -> begin
+    ->  declare continue handle for 1062 select 'duplicate entry';
+    ->  declare exit handler for SQLEXCEPTION select "error occured";
+    ->  insert into course values(p_cid,p_cnm,p_sdt,p_fid,p_desc);
+    ->  select count(*) from course;
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'handle for 1062 select 'duplicate entry';
+ declare exit handler for SQLEXCEPTIO' at line 3
+mysql> delimiter ;
+mysql> drop procedure if exists insert_rec;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> delimiter //
+mysql>
+mysql> create procedure insert_rec(p_cid int,p_cnm varchar(20),p_sdt date,p_fid int,p_desc varchar(20))
+    -> begin
+    ->  declare continue handler for 1062 select 'duplicate entry';
+    ->  declare exit handler for SQLEXCEPTION select "error occured";
+    ->  insert into course values(p_cid,p_cnm,p_sdt,p_fid,p_desc);
+    ->  select count(*) from course;
+    -> end//
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> call insert_rec(1030,'ccc','2000-03-01',100,'sdfsdf');
+    -> ;//
++----------+
+| count(*) |
++----------+
+|        8 |
++----------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from course;
+    -> //
++------+------------------+------------+------+------------------------------------------------+
+| cid  | cname            | start_date | faid | description                                    |
++------+------------------+------------+------+------------------------------------------------+
+| 1000 | java             | 2021-02-11 |  100 | java is very useful                            |
+| 1001 | python           | 2021-02-11 |  602 | python is very useful for machine learning, AI |
+| 1002 | python Django    | 2020-03-02 | NULL | python is very useful for machine learning, AI |
+| 1003 | Web programming  | 2020-05-02 |  301 | all these courses are in demand                |
+| 1004 | Databases        | 2020-05-02 |  301 | all these courses are in demand                |
+| 1008 | AI               | 2021-11-11 |  602 | all these courses are in demand                |
+| 1009 | Machine learning | 2021-02-13 |  700 | all these courses are in demand                |
+| 1030 | ccc              | 2000-03-01 |  100 | sdfsdf                                         |
++------+------------------+------------+------+------------------------------------------------+
+8 rows in set (0.00 sec)
+
+mysql> call insert_rec(1008,'ccc','2000-03-01',100,'sdfsdf');
+    -> //
++-----------------+
+| duplicate entry |
++-----------------+
+| duplicate entry |
++-----------------+
+1 row in set (0.00 sec)
+
++----------+
+| count(*) |
++----------+
+|        8 |
++----------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call insert_rec(1031,'ccc','2000-03-01',619,'sdfsdf');
+    -> //
++---------------+
+| error occured |
++---------------+
+| error occured |
++---------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call insert_rec(1008,'ccc','2000-03-01',619,'sdfsdf');
+    -> //
++-----------------+
+| duplicate entry |
++-----------------+
+| duplicate entry |
++-----------------+
+1 row in set (0.00 sec)
+
++----------+
+| count(*) |
++----------+
+|        8 |
++----------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table course_audit(
+    -> old_cid int,
+    -> new_cid int,
+    -> chdate date,
+    -> old_fees decimal(12,2),
+    -> new_fees decimal(12,2),
+    -> user_nm varchar(20)
+    -> );
+    -> //
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> delimiter ;
+mysql> desc course_audit;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| old_cid  | int           | YES  |     | NULL    |       |
+| new_cid  | int           | YES  |     | NULL    |       |
+| chdate   | date          | YES  |     | NULL    |       |
+| old_fees | decimal(12,2) | YES  |     | NULL    |       |
+| new_fees | decimal(12,2) | YES  |     | NULL    |       |
+| user_nm  | varchar(20)   | YES  |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+mysql> create trigger ch_course before update on coures
+    -> for each row
+    -> begin
+    ->   ^C
+mysql> select * from course;
++------+------------------+------------+------+------------------------------------------------+
+| cid  | cname            | start_date | faid | description                                    |
++------+------------------+------------+------+------------------------------------------------+
+| 1000 | java             | 2021-02-11 |  100 | java is very useful                            |
+| 1001 | python           | 2021-02-11 |  602 | python is very useful for machine learning, AI |
+| 1002 | python Django    | 2020-03-02 | NULL | python is very useful for machine learning, AI |
+| 1003 | Web programming  | 2020-05-02 |  301 | all these courses are in demand                |
+| 1004 | Databases        | 2020-05-02 |  301 | all these courses are in demand                |
+| 1008 | AI               | 2021-11-11 |  602 | all these courses are in demand                |
+| 1009 | Machine learning | 2021-02-13 |  700 | all these courses are in demand                |
+| 1030 | ccc              | 2000-03-01 |  100 | sdfsdf                                         |
++------+------------------+------------+------+------------------------------------------------+
+8 rows in set (0.00 sec)
+
+mysql> delimiter //
+mysql>
+mysql> create trigger ch_course before update on course
+    -> for each row
+    -> begin
+    ->     insert into course_audit(Old.cid,NEW.cid,curdate(),OLD.faid,NEW.faid,user());
+    ->
+    -> end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'curdate(),OLD.faid,NEW.faid,user());
+
+end' at line 4
+mysql> delimiter //
+mysql>
+mysql> create trigger ch_course before update on course
+    -> for each row
+    -> begin
+    ->     insert into course_audit values(Old.cid,NEW.cid,curdate(),OLD.faid,NEW.faid,user());
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> update course
+    -> set cid=1111,faid=100
+    -> where cid=1008;
+    -> //
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from course;
+    -> //
++------+------------------+------------+------+------------------------------------------------+
+| cid  | cname            | start_date | faid | description                                    |
++------+------------------+------------+------+------------------------------------------------+
+| 1000 | java             | 2021-02-11 |  100 | java is very useful                            |
+| 1001 | python           | 2021-02-11 |  602 | python is very useful for machine learning, AI |
+| 1002 | python Django    | 2020-03-02 | NULL | python is very useful for machine learning, AI |
+| 1003 | Web programming  | 2020-05-02 |  301 | all these courses are in demand                |
+| 1004 | Databases        | 2020-05-02 |  301 | all these courses are in demand                |
+| 1009 | Machine learning | 2021-02-13 |  700 | all these courses are in demand                |
+| 1030 | ccc              | 2000-03-01 |  100 | sdfsdf                                         |
+| 1111 | AI               | 2021-11-11 |  100 | all these courses are in demand                |
++------+------------------+------------+------+------------------------------------------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from course_audit;
+    -> //
++---------+---------+------------+----------+----------+----------------+
+| old_cid | new_cid | chdate     | old_fees | new_fees | user_nm        |
++---------+---------+------------+----------+----------+----------------+
+|    1008 |    1111 | 2021-11-27 |   602.00 |   100.00 | root@localhost |
++---------+---------+------------+----------+----------+----------------+
+1 row in set (0.00 sec)
+
+mysql> alter table course_audit
+    -> rename old_fees to old_faid;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'to old_faid' at line 2
+mysql> alter table course_audit
+    -> rename column old_fees to old_faid;
+    -> //
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table course_audit
+    -> rename column new_fees to new_faid;
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from course_audit;
+    -> //
++---------+---------+------------+----------+----------+----------------+
+| old_cid | new_cid | chdate     | old_faid | new_faid | user_nm        |
++---------+---------+------------+----------+----------+----------------+
+|    1008 |    1111 | 2021-11-27 |   602.00 |   100.00 | root@localhost |
++---------+---------+------------+----------+----------+----------------+
+1 row in set (0.00 sec)
+
+mysql> select * from course;
+    -> //
++------+------------------+------------+------+------------------------------------------------+
+| cid  | cname            | start_date | faid | description                                    |
++------+------------------+------------+------+------------------------------------------------+
+| 1000 | java             | 2021-02-11 |  100 | java is very useful                            |
+| 1001 | python           | 2021-02-11 |  602 | python is very useful for machine learning, AI |
+| 1002 | python Django    | 2020-03-02 | NULL | python is very useful for machine learning, AI |
+| 1003 | Web programming  | 2020-05-02 |  301 | all these courses are in demand                |
+| 1004 | Databases        | 2020-05-02 |  301 | all these courses are in demand                |
+| 1009 | Machine learning | 2021-02-13 |  700 | all these courses are in demand                |
+| 1030 | ccc              | 2000-03-01 |  100 | sdfsdf                                         |
+| 1111 | AI               | 2021-11-11 |  100 | all these courses are in demand                |
++------+------------------+------------+------+------------------------------------------------+
+8 rows in set (0.01 sec)
+
+mysql> update course
+    -> set faid=301
+    -> where cid>1008;
+    -> //
+Query OK, 3 rows affected (0.01 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select * from course;
+    -> //
++------+------------------+------------+------+------------------------------------------------+
+| cid  | cname            | start_date | faid | description                                    |
++------+------------------+------------+------+------------------------------------------------+
+| 1000 | java             | 2021-02-11 |  100 | java is very useful                            |
+| 1001 | python           | 2021-02-11 |  602 | python is very useful for machine learning, AI |
+| 1002 | python Django    | 2020-03-02 | NULL | python is very useful for machine learning, AI |
+| 1003 | Web programming  | 2020-05-02 |  301 | all these courses are in demand                |
+| 1004 | Databases        | 2020-05-02 |  301 | all these courses are in demand                |
+| 1009 | Machine learning | 2021-02-13 |  301 | all these courses are in demand                |
+| 1030 | ccc              | 2000-03-01 |  301 | sdfsdf                                         |
+| 1111 | AI               | 2021-11-11 |  301 | all these courses are in demand                |
++------+------------------+------------+------+------------------------------------------------+
+8 rows in set (0.00 sec)
+
+mysql> select * from course_audit;
+    -> //
++---------+---------+------------+----------+----------+----------------+
+| old_cid | new_cid | chdate     | old_faid | new_faid | user_nm        |
++---------+---------+------------+----------+----------+----------------+
+|    1008 |    1111 | 2021-11-27 |   602.00 |   100.00 | root@localhost |
+|    1009 |    1009 | 2021-11-27 |   700.00 |   301.00 | root@localhost |
+|    1030 |    1030 | 2021-11-27 |   100.00 |   301.00 | root@localhost |
+|    1111 |    1111 | 2021-11-27 |   100.00 |   301.00 | root@localhost |
++---------+---------+------------+----------+----------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> alter course_audit
+    -> add action varchar(20);
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'course_audit
+add action varchar(20)' at line 1
+mysql> alter course_audit
+    -> add colimn action varchar(20);
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'course_audit
+add colimn action varchar(20)' at line 1
+mysql> alter course_audit
+    -> add column action varchar(20);
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'course_audit
+add column action varchar(20)' at line 1
+mysql> alter table course_audit
+    -> add column action varchar(20);
+    -> //
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from course_audit;
+    -> //
++---------+---------+------------+----------+----------+----------------+--------+
+| old_cid | new_cid | chdate     | old_faid | new_faid | user_nm        | action |
++---------+---------+------------+----------+----------+----------------+--------+
+|    1008 |    1111 | 2021-11-27 |   602.00 |   100.00 | root@localhost | NULL   |
+|    1009 |    1009 | 2021-11-27 |   700.00 |   301.00 | root@localhost | NULL   |
+|    1030 |    1030 | 2021-11-27 |   100.00 |   301.00 | root@localhost | NULL   |
+|    1111 |    1111 | 2021-11-27 |   100.00 |   301.00 | root@localhost | NULL   |
++---------+---------+------------+----------+----------+----------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> update course_audit
+    -> set action='update';
+    -> //
+Query OK, 4 rows affected (0.00 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> select * from course_audit;
+    -> //
++---------+---------+------------+----------+----------+----------------+--------+
+| old_cid | new_cid | chdate     | old_faid | new_faid | user_nm        | action |
++---------+---------+------------+----------+----------+----------------+--------+
+|    1008 |    1111 | 2021-11-27 |   602.00 |   100.00 | root@localhost | update |
+|    1009 |    1009 | 2021-11-27 |   700.00 |   301.00 | root@localhost | update |
+|    1030 |    1030 | 2021-11-27 |   100.00 |   301.00 | root@localhost | update |
+|    1111 |    1111 | 2021-11-27 |   100.00 |   301.00 | root@localhost | update |
++---------+---------+------------+----------+----------+----------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> drop trigger if exists ch_course;
+    -> delimiter //
+Query OK, 0 rows affected (0.01 sec)
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter' at line 1
+mysql>
+mysql> create trigger ch_course before update on course
+    -> for each row
+    -> begin
+    ->     insert into course_audit values(Old.cid,NEW.cid,curdate(),OLD.faid,NEW.faid,user(),'update');
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from course;
+    -> //
++------+------------------+------------+------+------------------------------------------------+
+| cid  | cname            | start_date | faid | description                                    |
++------+------------------+------------+------+------------------------------------------------+
+| 1000 | java             | 2021-02-11 |  100 | java is very useful                            |
+| 1001 | python           | 2021-02-11 |  602 | python is very useful for machine learning, AI |
+| 1002 | python Django    | 2020-03-02 | NULL | python is very useful for machine learning, AI |
+| 1003 | Web programming  | 2020-05-02 |  301 | all these courses are in demand                |
+| 1004 | Databases        | 2020-05-02 |  301 | all these courses are in demand                |
+| 1009 | Machine learning | 2021-02-13 |  301 | all these courses are in demand                |
+| 1030 | ccc              | 2000-03-01 |  301 | sdfsdf                                         |
+| 1111 | AI               | 2021-11-11 |  301 | all these courses are in demand                |
++------+------------------+------------+------+------------------------------------------------+
+8 rows in set (0.00 sec)
+
+mysql> update course
+    -> set cid=1008,cname='Artifitial Intte',faid=100
+    -> where cid=1111;
+    -> //
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from course_audit;
+    -> //
++---------+---------+------------+----------+----------+----------------+--------+
+| old_cid | new_cid | chdate     | old_faid | new_faid | user_nm        | action |
++---------+---------+------------+----------+----------+----------------+--------+
+|    1008 |    1111 | 2021-11-27 |   602.00 |   100.00 | root@localhost | update |
+|    1009 |    1009 | 2021-11-27 |   700.00 |   301.00 | root@localhost | update |
+|    1030 |    1030 | 2021-11-27 |   100.00 |   301.00 | root@localhost | update |
+|    1111 |    1111 | 2021-11-27 |   100.00 |   301.00 | root@localhost | update |
+|    1111 |    1008 | 2021-11-27 |   301.00 |   100.00 | root@localhost | update |
++---------+---------+------------+----------+----------+----------------+--------+
+5 rows in set (0.01 sec)
+
+mysql> create trigger del_course after delete on course
+    -> for each row
+    -> begin
+    ->     insert into course_audit values(Old.cid,NEW.cid,curdate(),OLD.faid,NEW.faid,user(),'delete');
+    ->
+    -> end//
+ERROR 1363 (HY000): There is no NEW row in on DELETE trigger
+mysql> create trigger del_course after delete on course
+    -> for each row
+    -> begin
+    ->     insert into course_audit values(Old.cid,null,curdate(),OLD.faid,null,user(),'delete');
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create trigger ins_course before insert on course
+    -> for each row
+    -> begin
+    ->     insert into course_audit values(null,NEW.cid,curdate(),null,NEW.faid,user(),'insert');
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from course;
+    -> //
++------+------------------+------------+------+------------------------------------------------+
+| cid  | cname            | start_date | faid | description                                    |
++------+------------------+------------+------+------------------------------------------------+
+| 1000 | java             | 2021-02-11 |  100 | java is very useful                            |
+| 1001 | python           | 2021-02-11 |  602 | python is very useful for machine learning, AI |
+| 1002 | python Django    | 2020-03-02 | NULL | python is very useful for machine learning, AI |
+| 1003 | Web programming  | 2020-05-02 |  301 | all these courses are in demand                |
+| 1004 | Databases        | 2020-05-02 |  301 | all these courses are in demand                |
+| 1008 | Artifitial Intte | 2021-11-11 |  100 | all these courses are in demand                |
+| 1009 | Machine learning | 2021-02-13 |  301 | all these courses are in demand                |
+| 1030 | ccc              | 2000-03-01 |  301 | sdfsdf                                         |
++------+------------------+------------+------+------------------------------------------------+
+8 rows in set (0.00 sec)
+
+mysql> delete
+    -> from course
+    -> where faid is null or faid=602;
+    -> //
+Query OK, 2 rows affected (0.01 sec)
+
+mysql> select * from course_audit;
+    -> //
++---------+---------+------------+----------+----------+----------------+--------+
+| old_cid | new_cid | chdate     | old_faid | new_faid | user_nm        | action |
++---------+---------+------------+----------+----------+----------------+--------+
+|    1008 |    1111 | 2021-11-27 |   602.00 |   100.00 | root@localhost | update |
+|    1009 |    1009 | 2021-11-27 |   700.00 |   301.00 | root@localhost | update |
+|    1030 |    1030 | 2021-11-27 |   100.00 |   301.00 | root@localhost | update |
+|    1111 |    1111 | 2021-11-27 |   100.00 |   301.00 | root@localhost | update |
+|    1111 |    1008 | 2021-11-27 |   301.00 |   100.00 | root@localhost | update |
+|    1002 |    NULL | 2021-11-27 |     NULL |     NULL | root@localhost | delete |
+|    1001 |    NULL | 2021-11-27 |   602.00 |     NULL | root@localhost | delete |
++---------+---------+------------+----------+----------+----------------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select * from emp;
+    -> //
++-------+---------+-----------+------+------------+---------+---------+--------+---------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO | status  |
++-------+---------+-----------+------+------------+---------+---------+--------+---------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |  920.00 |    NULL |     20 | lesser  |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 | 2000.00 |  300.00 |     30 | greater |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 | 1562.50 |  500.00 |     30 | lesser  |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 | 3272.50 |    NULL |     20 | greater |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 | 1562.50 | 1400.00 |     30 | lesser  |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 | 3135.00 |    NULL |     30 | greater |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 | 2695.00 |    NULL |     10 | lesser  |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 | 3600.00 |    NULL |     20 | greater |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 | 6250.00 |    NULL |     10 | greater |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 | 1875.00 |    0.00 |     30 | greater |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 | 1265.00 |    NULL |     20 | lesser  |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 | 1092.50 |    NULL |     30 | lesser  |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 | 3600.00 |    NULL |     20 | greater |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 | 1495.00 |    NULL |     10 | lesser  |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 4320.00 |  456.00 |     10 | greater |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 4320.00 |  456.00 |     20 | greater |
+| 12342 | xxxx111 | cccc      | 7839 | 2000-04-02 | 4320.00 |  456.00 |     10 | greater |
++-------+---------+-----------+------+------------+---------+---------+--------+---------+
+17 rows in set (0.00 sec)
+
+mysql> create table emp_history
+    -> as
+    -> select *
+    -> from emp
+    -> where 1=2;
+    -> //
+ERROR 1050 (42S01): Table 'emp_history' already exists
+mysql> drop table emp_history;
+    -> //
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table emp_history
+    -> as
+    -> select *
+    -> from emp
+    -> where 1=2;
+    -> //
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc emp;
+    -> //
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| EMPNO    | int          | NO   |     | NULL    |       |
+| ENAME    | varchar(10)  | YES  | MUL | NULL    |       |
+| JOB      | varchar(9)   | YES  |     | NULL    |       |
+| MGR      | int          | YES  |     | NULL    |       |
+| HIREDATE | date         | YES  |     | NULL    |       |
+| SAL      | decimal(7,2) | YES  |     | NULL    |       |
+| COMM     | decimal(7,2) | YES  |     | NULL    |       |
+| DEPTNO   | int          | YES  |     | NULL    |       |
+| status   | varchar(20)  | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> desc emp_history;
+    -> //
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| EMPNO    | int          | NO   |     | NULL    |       |
+| ENAME    | varchar(10)  | YES  |     | NULL    |       |
+| JOB      | varchar(9)   | YES  |     | NULL    |       |
+| MGR      | int          | YES  |     | NULL    |       |
+| HIREDATE | date         | YES  |     | NULL    |       |
+| SAL      | decimal(7,2) | YES  |     | NULL    |       |
+| COMM     | decimal(7,2) | YES  |     | NULL    |       |
+| DEPTNO   | int          | YES  |     | NULL    |       |
+| status   | varchar(20)  | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> alter table emp_history
+    -> add column new_sal decimal(12,2);
+    -> add column action varchar(20);
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add column action varchar(20)' at line 1
+mysql> alter table emp_history
+    -> add column action varchar(20),
+    -> add column uname varchar(20));
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 3
+mysql> alter table emp_history
+    -> add column action varchar(20);
+    -> //
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table emp_history
+    -> add column uname varchar(20));
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 2
+mysql> alter table emp_history
+    -> add column uname varchar(20);
+    -> //
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc emp_history;
+    -> //
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| EMPNO    | int           | NO   |     | NULL    |       |
+| ENAME    | varchar(10)   | YES  |     | NULL    |       |
+| JOB      | varchar(9)    | YES  |     | NULL    |       |
+| MGR      | int           | YES  |     | NULL    |       |
+| HIREDATE | date          | YES  |     | NULL    |       |
+| SAL      | decimal(7,2)  | YES  |     | NULL    |       |
+| COMM     | decimal(7,2)  | YES  |     | NULL    |       |
+| DEPTNO   | int           | YES  |     | NULL    |       |
+| status   | varchar(20)   | YES  |     | NULL    |       |
+| new_sal  | decimal(12,2) | YES  |     | NULL    |       |
+| action   | varchar(20)   | YES  |     | NULL    |       |
+| uname    | varchar(20)   | YES  |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+12 rows in set (0.01 sec)
+
+mysql> create trigger ch_sal after update on emp
+    -> for each row
+    -> begin
+    ->   insert into emp_history values(OLD.empno,OLD.ename,OLD.job,OLD.mgr,OLD.hiredate,OLD.sal,
+    ->         OLD.comm,OLD.deptno,OLD.status,NEW.sal,'update',user());
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from emp;
+    -> //
++-------+---------+-----------+------+------------+---------+---------+--------+---------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO | status  |
++-------+---------+-----------+------+------------+---------+---------+--------+---------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |  920.00 |    NULL |     20 | lesser  |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 | 2000.00 |  300.00 |     30 | greater |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 | 1562.50 |  500.00 |     30 | lesser  |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 | 3272.50 |    NULL |     20 | greater |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 | 1562.50 | 1400.00 |     30 | lesser  |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 | 3135.00 |    NULL |     30 | greater |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 | 2695.00 |    NULL |     10 | lesser  |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 | 3600.00 |    NULL |     20 | greater |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 | 6250.00 |    NULL |     10 | greater |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 | 1875.00 |    0.00 |     30 | greater |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 | 1265.00 |    NULL |     20 | lesser  |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 | 1092.50 |    NULL |     30 | lesser  |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 | 3600.00 |    NULL |     20 | greater |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 | 1495.00 |    NULL |     10 | lesser  |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 4320.00 |  456.00 |     10 | greater |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 4320.00 |  456.00 |     20 | greater |
+| 12342 | xxxx111 | cccc      | 7839 | 2000-04-02 | 4320.00 |  456.00 |     10 | greater |
++-------+---------+-----------+------+------------+---------+---------+--------+---------+
+17 rows in set (0.01 sec)
+
+mysql> update emp
+    -> set sal=5600
+    -> where empno>=7902;
+    -> //
+Query OK, 5 rows affected (0.01 sec)
+Rows matched: 5  Changed: 5  Warnings: 0
+
+mysql> select * from emp_history;
+    -> //
++-------+---------+---------+------+------------+---------+--------+--------+---------+---------+--------+----------------+
+| EMPNO | ENAME   | JOB     | MGR  | HIREDATE   | SAL     | COMM   | DEPTNO | status  | new_sal | action | uname          |
++-------+---------+---------+------+------------+---------+--------+--------+---------+---------+--------+----------------+
+|  7902 | FORD    | ANALYST | 7566 | 1981-12-03 | 3600.00 |   NULL |     20 | greater | 5600.00 | update | root@localhost |
+|  7934 | MILLER  | CLERK   | 7782 | 1982-01-23 | 1495.00 |   NULL |     10 | lesser  | 5600.00 | update | root@localhost |
+| 12341 | xxxx    | cccc    | 7839 | 2000-04-02 | 4320.00 | 456.00 |     10 | greater | 5600.00 | update | root@localhost |
+| 12341 | xxxx    | cccc    | 7839 | 2000-04-02 | 4320.00 | 456.00 |     20 | greater | 5600.00 | update | root@localhost |
+| 12342 | xxxx111 | cccc    | 7839 | 2000-04-02 | 4320.00 | 456.00 |     10 | greater | 5600.00 | update | root@localhost |
++-------+---------+---------+------+------------+---------+--------+--------+---------+---------+--------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> create trigger del_emp after delete on emp
+    -> for each row
+    -> begin
+    ->   insert into emp_history values(OLD.empno,OLD.ename,OLD.job,OLD.mgr,OLD.hiredate,OLD.sal,
+    ->         OLD.comm,OLD.deptno,OLD.status,null,'delete',user());
+    ->
+    -> end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from emp;
+    -> //
++-------+---------+-----------+------+------------+---------+---------+--------+---------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO | status  |
++-------+---------+-----------+------+------------+---------+---------+--------+---------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |  920.00 |    NULL |     20 | lesser  |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 | 2000.00 |  300.00 |     30 | greater |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 | 1562.50 |  500.00 |     30 | lesser  |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 | 3272.50 |    NULL |     20 | greater |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 | 1562.50 | 1400.00 |     30 | lesser  |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 | 3135.00 |    NULL |     30 | greater |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 | 2695.00 |    NULL |     10 | lesser  |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 | 3600.00 |    NULL |     20 | greater |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 | 6250.00 |    NULL |     10 | greater |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 | 1875.00 |    0.00 |     30 | greater |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 | 1265.00 |    NULL |     20 | lesser  |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 | 1092.50 |    NULL |     30 | lesser  |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 | 5600.00 |    NULL |     20 | greater |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 | 5600.00 |    NULL |     10 | lesser  |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 5600.00 |  456.00 |     10 | greater |
+| 12341 | xxxx    | cccc      | 7839 | 2000-04-02 | 5600.00 |  456.00 |     20 | greater |
+| 12342 | xxxx111 | cccc      | 7839 | 2000-04-02 | 5600.00 |  456.00 |     10 | greater |
++-------+---------+-----------+------+------------+---------+---------+--------+---------+
+17 rows in set (0.01 sec)
+
+mysql> delete
+    -> from emp
+    -> where empno=12341;
+    -> //
+Query OK, 2 rows affected (0.01 sec)
+
+mysql> select * from emp_history;
+    -> //
++-------+---------+---------+------+------------+---------+--------+--------+---------+---------+--------+----------------+
+| EMPNO | ENAME   | JOB     | MGR  | HIREDATE   | SAL     | COMM   | DEPTNO | status  | new_sal | action | uname          |
++-------+---------+---------+------+------------+---------+--------+--------+---------+---------+--------+----------------+
+|  7902 | FORD    | ANALYST | 7566 | 1981-12-03 | 3600.00 |   NULL |     20 | greater | 5600.00 | update | root@localhost |
+|  7934 | MILLER  | CLERK   | 7782 | 1982-01-23 | 1495.00 |   NULL |     10 | lesser  | 5600.00 | update | root@localhost |
+| 12341 | xxxx    | cccc    | 7839 | 2000-04-02 | 4320.00 | 456.00 |     10 | greater | 5600.00 | update | root@localhost |
+| 12341 | xxxx    | cccc    | 7839 | 2000-04-02 | 4320.00 | 456.00 |     20 | greater | 5600.00 | update | root@localhost |
+| 12342 | xxxx111 | cccc    | 7839 | 2000-04-02 | 4320.00 | 456.00 |     10 | greater | 5600.00 | update | root@localhost |
+| 12341 | xxxx    | cccc    | 7839 | 2000-04-02 | 5600.00 | 456.00 |     10 | greater |    NULL | delete | root@localhost |
+| 12341 | xxxx    | cccc    | 7839 | 2000-04-02 | 5600.00 | 456.00 |     20 | greater |    NULL | delete | root@localhost |
++-------+---------+---------+------+------------+---------+--------+--------+---------+---------+--------+----------------+
+7 rows in set (0.00 sec)
+
+mysql>

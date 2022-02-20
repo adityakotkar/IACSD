@@ -1,0 +1,181 @@
+select * from usemp;
+
+     EMPID ENAME                PNAME
+---------- -------------------- --------------------
+       300 zzzyy                p1
+       111 aaa                  p1
+       333 ppp                  p1
+
+SQL> select * from Indiaemp
+  2  union
+  3  select * from usemp;
+
+     EMPID ENAME                PNAME
+---------- -------------------- --------------------
+       100 xxx                  p1
+       111 aaa                  p1
+       200 yyy                  p1
+       300 zzzyy                p1
+       333 ppp                  p1
+
+SQL> select * from Indiaemp
+  2  union all
+  3  select * from usemp;
+
+     EMPID ENAME                PNAME
+---------- -------------------- --------------------
+       100 xxx                  p1
+       200 yyy                  p1
+       300 zzzyy                p1
+       300 zzzyy                p1
+       111 aaa                  p1
+       333 ppp                  p1
+
+6 rows selected.
+
+SQL> select * from Indiaemp
+  2  intersect
+  3  select * from usemp;
+
+
+------to create user
+root
+
+create user 'newuser'@'localhost' identified by 'password'
+
+create user 'user1'@'localhost' identified by 'user'
+
+
+-----to assign the permission
+grant All on iacsd2111.* to 'user1'@'localhost'
+
+Flush Previleges
+
+-----syntax
+
+grant previleges_name on object to user
+
+previleges_name---what access rights or permissions granted to user
+object -name of databse or table
+user --to whom you want to assign permission
+
+
+previleges
+select  -- allow to write select query
+insert  --- allow insert data
+delete  ---delete data 
+index   -create index 
+create  ---create table
+alter   ----alter table
+drop    ----delete table
+update   ----update table
+All      --- grant all permission except grant option
+grant   ---allows user to grant permission to other users
+
+
+
+
+------to give select permission on emp table to user1
+
+grant select on emp to 'user1'@'localhost';
+
+----to allw user1 to assign permission to emp table to other user
+grant grant option on mydb.* to 'user1'@'localhost';
+
+
+---to give permission for select ,inser,update
+
+grant select,insert,update on emp to 'user1'@'localhost';
+
+
+----to grant all permissions
+grant all on emp to 'user1'@'localhost'; ---mysql
+
+grant all on emp to user1  -----oracle
+
+
+---to grant permission all users
+grant select on emp to mydb.'emp*'@'localhost';
+
+grant execute on [procedure|function]  name to newuser 
+
+grant execute on function getExperience to 'user1'@'localhost';
+
+
+----to find previleges of particular user
+show grants for 'user1'@'localhost';
+
+-----to remove permission
+
+revoke  permission on object from  user;
+
+---revoke select permission from emp table from user1
+revoke select on emp from 'user1'@'localhost';
+
+---to revoke all permission
+
+revoke all on emp from 'user1'@'localhost';
+
+---to remove permission from all users
+
+revoke select on emp from '*'@'localhost';
+
+---to revoke permission from function and procedure
+revoke execute on [procedure|function]  name from newuser 
+
+revoke execute on function getExperience from 'user1'@'localhost';
+
+---after changing all require permission to update changes use flush command
+
+flush previleges;
+
+-----to connect using other user name
+
+open windows cmd prompt
+
+c:\system32>mysql -u user1 -p
+enter password : *******
+
+mysql>
+
+
+data modelling----- Entity -Relation-Digram (ERD)
+----for project deciciding how many tables to create, in each table what column to store
+what is the primary , foreign key, unique (contraints), relation
+
+conceptual----- is to find entities, attributes and their relationship
+logical ------ define the structure of data element and set of relationships between
+physical----- database specific implementation of datamodel(query)
+
+hotel booking
+customer, room, managers
+
+customer-- cid,cname,address
+room ---rid,rname,specific
+manager --- managerid, mname, mobile
+
+
+
+ERD-features      conceptual      Logical      physical
+1. Entity(name)     yes              yes         yes
+
+2. Relationships    yes              yes          yes
+
+3. column                            yes          yes
+
+
+4. column type                      optional     yes
+
+5. primary key                                    yes
+
+6. Foreign key                                    yes        
+
+
+how to decide tables and attributes and relations between
+Normalization Form ----- 1NF 2NF 3NF BCNF   codd's normalization rule
+Normalization helps to reduce the redundancy, and remove insertion,updation and deletion anamolies
+
+
+
+
+

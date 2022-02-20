@@ -1,0 +1,302 @@
+---------- if we want to find all employees with their department name who are working as analyst and 
+also wants to display department in which no employees are there
+
+select *
+from emp e right join  dept d on e.deptno=d.deptno
+where job='ANALYST'
+
+
+----if you want to find only nonmatching rows then we can use outer join as well as 
+nested query but it is good to use exists and not exists with nested query because nested queries 
+are faster than joins
+
+----if you want to use only matching rows then use inner join
+----if you want to use matching as well as non matching rows then use outer join
+
+----this will give you all departments in which no employees are there
+select *
+    -> from emp e right join  dept d on e.deptno=d.deptno
+    -> where ename is null;
+
+----this will give you all departments in which no employees are there
+select *
+from dept d
+where not exists (select * from emp where e.deptno=d.deptno);
+
+------delete all employees working in allen's department
+delete 
+from emp
+where deptno =(select deptno from (select deptno from emp where ename='ALLEN') e)
+
+
+fid  fname    spskill1 spskill2
+10   kjzhcjhz    a        b
+11   sdd          x        z
+12    lksjk        a       x
+13   ksdjlkj       a        b
+
+
+courses 
+cid   cname   rid  fid
+121    DBDA   100   10 
+131    DAC    101   
+141    DTISS  
+151    DIOT   105   12 
+
+Room 
+roomid rname  rloc
+100    jasmin  1st floor
+101    Rose    2nd floor
+105    Lotus   1st floor
+103    Mogra   1st floor 
+
+
+Q55 2. 
+select * 
+from faculty f left join course c on f.fid=c.fid 
+left join    room r on c.rid=r.roomid
+union
+select * 
+from faculty f left join course c on f.fid=c.fid 
+right join   room r on c.rid=r.roomid
+
+
+---5.	display courses and faculty assigned to those  courses whose special skill is database
+select *
+from faculty f inner join course c on f.fid=c.fid
+where f.spskill1='database' or f.spskill2='database'
+
+
+a=(12,13,14)
+b=(12,13,10)
+
+set opeartors
+
+a union b = (12,13,14,10)
+a intersection b =(12,13)
+a minus b   =(14)
+b minus a  =(10)
+
+set oerator are used with the tables
+
+employeeIndia
+empid   name  
+
+if empindia contains all employees working in India, empUSA contains all employees working in USA,
+empJapan contains all employees working in japa, there may be som employees who are common
+
+--- in union the number of columns and type of corresponding columns should match
+
+---to all employees working all over world
+select * from empIndia
+union
+select * from empUSA
+union 
+select * from empJapan;
+
+
+----to find all employee who are working at both locations Indian and JAPAN
+ 
+select * from empIndia
+intersection
+select * from empJapan;
+
+
+----to find all employee who are working only in Indian and not in JAPAN
+select * from empIndia
+minus
+select * from empJapan;
+
+
+
+-----indexes in databases
+What are Indexes
+It is a sorted list which stores the position of data.
+indexes are used for faster retrieval of data
+
+and very useful to reduce the time for searching data when size of data grows.
+
+
+types of indexes
+1. clustered index ---- there is only one clustered index, and it is stored within table
+2. non clustered index---- there can be more than one non clustered index, separate file will be ther 
+which stores ke and position
+
+In database When we create table then for primary key and for unique key indexes are automatically gets created
+When we store data in table it is usually arranged based on primary key.
+
+Advantage or benifits of indexes
+1. it helps to execute query searching faster
+2. indexes can be used to retrieve data faster from other table in case of joins
+
+---mysql automatically uses indexes when where clause is there in the quey
+
+types of indices
+1. FULL text index  ---  applied on keywords and not on entire text    This very good
+2. descending  ------ it stores the data in index in descending order 
+3. multicolumn index ---you may create index on multiple columns
+4. unique index    ---- does not allow duplicate values in the column
+
+Disadvantages
+1. It requires extra space to store the indices
+2. It increases execution time for DML (insert,delet, update)
+
+
+
+
+
+
+
+
+
+
+
+---to create index on salary, by default indexes are in ascending order
+
+
+create index sal_idx
+on emp(sal)
+create index ename_idx
+on emp(ename)
+---------to create descending index on salary, 
+create index sal_idx
+on emp(sal desc)
+
+---to create composit index
+create index sla_ename_idx
+on emp(sal desc,ename)
+
+----to create full text indexes
+create full text index description_idx
+on product(descrption)
+
+
+-----to create unique index
+create unique index passort_idx
+on emp(passportno)
+
+------ to drop index
+drop index <name of index > on <table name>
+drop index passort_idx on emp;
+
+----- to see the list of index 
+SHOW INDEX FROM emp FROM iacsd2111; 
+
+
+
+----- to check which index is used by query
+explain select * from emp where ename='ALLEN'  ---- it will use ename index
+
+explain select * from emp where sal>2000 ------ it will use sal_idx
+
+
+explain select * from emp where sal>2000 and ename='ALLEN' ------ it will use sal_idxand ename_idx both
+
+----to create full text index
+create full text index description_idx
+    -> on course(description);
+
+explain select * from course where match(description) against ('machine');
++----+-------------+--------+------------+----------+-----------------+-----------------+---------+-------+------+----------+-------------------------------+
+| id | select_type | table  | partitions | type     | possible_keys   | key             | key_len | ref   | rows | filtered | Extra                         |
++----+-------------+--------+------------+----------+-----------------+-----------------+---------+-------+------+----------+-------------------------------+
+|  1 | SIMPLE      | course | NULL       | fulltext | description_idx | description_idx | 0       | const |    1 |   100.00 | Using where; Ft_hints: sorted |
++----+-------------+--------+------------+----------+-----------------+-----------------+---------+-------+------+----------+-------------------------------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> select * from course where match(description) against ('machine');
++------+---------------+------------+------+------------------------------------------------+
+| cid  | cname         | start_date | faid | description                                    |
++------+---------------+------------+------+------------------------------------------------+
+| 1001 | python        | 2021-02-11 |  602 | python is very useful for machine learning, AI |
+| 1002 | python Django | 2020-03-02 | NULL | python is very useful for machine learning, AI |
++------+---------------+------------+------+------------------------------------------------+
+2 rows in set (0.00 sec)
+
+-----views
+
+views are virtual table and these are base on base query
+
+if you execute query on view then base query will get executed
+
+
+--if views are based on single table then these are simple view and if it contains all not null columns then only 
+you can modify data via view.
+--- if views are based on joins, group by, union, or on multiple tables then views are complex views and are always 
+read only.
+
+why use views
+1. security of data
+2. giving access to limited information
+3. hiding table name
+4. hide complecated logic of queries
+
+create view emp_dept 
+as 
+select empno,ename,e.deptno,dname from emp e right join dept d on e.deptno=d.deptno;
+
+create view emp_anlysis
+as
+select deptno,avg(sal),max(sal),min(sal),count(*)
+from emp
+group by deptno;
+
+-----
+create view mgr10
+as
+select *
+from emp
+where deptno=10
+with check option;
+---- to create read only views
+create view mgr10
+as
+select *
+from emp
+where deptno=10
+with read only;
+
+-----to drop views;
+drop view emp_anlysis;
+
+
+---to display all views
+SHOW FULL TABLES
+[{FROM | IN } database_name]
+WHERE table_type = 'VIEW';
+
+show full tables
+from iacsd2111
+where table_type='VIEW'
+
+---grant and revoke
+-----How to use workbench
+--normalization -- 1NF,2NF,3NF,4NF
+codd's rule
+conceptual model
+logical model
+physical model
+what is data modeling using E-R diagram
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

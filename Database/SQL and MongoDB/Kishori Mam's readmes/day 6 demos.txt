@@ -1,0 +1,1355 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 8.0.22 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use iacsd2111;
+Database changed
+mysql> desc mytab12
+    -> ;
+ERROR 1146 (42S02): Table 'iacsd2111.mytab12' doesn't exist
+mysql> create table mytab12()
+    -> ^C
+mysql> create table mytab12(
+    -> id primary key auto_increment,
+    -> name varchar(^C
+mysql> create table mytab12(
+    -> id int primary key auto_increment,
+    -> name varchar(25),
+    -> address varchar(25));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> alter table mytab12 auto_increment=100;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into mytab12(name,address) values('xxx','yyyy);
+    '> ^C
+mysql> insert into mytab12(name,address) values('xxx','yyyy');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab12;
++-----+------+---------+
+| id  | name | address |
++-----+------+---------+
+| 100 | xxx  | yyyy    |
++-----+------+---------+
+1 row in set (0.00 sec)
+
+mysql> create table mytab22(
+    -> pid int auto_increment,
+    -> pname varchar(20));
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> insert into mytab12(name,address) values('aaaa','bbb');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from mytab12;
++-----+------+---------+
+| id  | name | address |
++-----+------+---------+
+| 100 | xxx  | yyyy    |
+| 101 | aaaa | bbb     |
++-----+------+---------+
+2 rows in set (0.00 sec)
+
+mysql> create table mytab11(
+    -> id int primary key auto_increment) auto_increment=11;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> drop table mytab11;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table mytab11(
+    -> id int primary key auto_increment,
+    -> name varchar(20)) auto_increment=100;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into mytab11(name) values('xxx');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab11;
++-----+------+
+| id  | name |
++-----+------+
+| 100 | xxx  |
++-----+------+
+1 row in set (0.00 sec)
+
+mysql> set @@auto_increment_increment=3;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into mytab11(name) values('yyyy');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab11;
++-----+------+
+| id  | name |
++-----+------+
+| 100 | xxx  |
+| 103 | yyyy |
++-----+------+
+2 rows in set (0.00 sec)
+
+mysql> set @@auto_increment_offset=2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into mytab11(name) values('yyyy');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from mytab11;
++-----+------+
+| id  | name |
++-----+------+
+| 100 | xxx  |
+| 103 | yyyy |
+| 107 | yyyy |
++-----+------+
+3 rows in set (0.00 sec)
+
+mysql> set @@auto_increment_increment=0
+    -> ;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> set @@auto_increment_offset=2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into mytab11(name) values('ssss');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab11;
++-----+------+
+| id  | name |
++-----+------+
+| 100 | xxx  |
+| 103 | yyyy |
+| 107 | yyyy |
+| 110 | ssss |
++-----+------+
+4 rows in set (0.00 sec)
+
+mysql> create table myproduct(
+    -> pid int primary key,
+    -> pname varchar(20),
+    -> qty int check(qty>0),
+    -> mfg_date date default current_date);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'current_date)' at line 5
+mysql> create table myproduct(
+    -> pid int primary key,
+    -> pname varchar(20),
+    -> qty int check(qty>0),
+    -> mfg_date date default (current_date));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into product(pid,pname,qty) values(1,'Lays',23);
+ERROR 1054 (42S22): Unknown column 'qty' in 'field list'
+mysql> insert into myproduct(pid,pname,qty) values(1,'Lays',23);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from myproduct;
++-----+-------+------+------------+
+| pid | pname | qty  | mfg_date   |
++-----+-------+------+------------+
+|   1 | Lays  |   23 | 2021-11-20 |
++-----+-------+------+------------+
+1 row in set (0.00 sec)
+
+mysql> insert into mytab11(name) values('aaa');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab11;
++-----+------+
+| id  | name |
++-----+------+
+| 100 | xxx  |
+| 103 | yyyy |
+| 107 | yyyy |
+| 110 | ssss |
+| 111 | aaa  |
++-----+------+
+5 rows in set (0.00 sec)
+
+mysql> set @@auto_increment_increment=3;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into mytab11(name) values('aaa11');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into mytab11(name) values('aaa12');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab11;
++-----+-------+
+| id  | name  |
++-----+-------+
+| 100 | xxx   |
+| 103 | yyyy  |
+| 107 | yyyy  |
+| 110 | ssss  |
+| 111 | aaa   |
+| 113 | aaa11 |
+| 116 | aaa12 |
++-----+-------+
+7 rows in set (0.00 sec)
+
+mysql> insert into mytab11(name) values('aaa333');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into mytab11(name) values('aaa333');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from mytab11;
++-----+--------+
+| id  | name   |
++-----+--------+
+| 100 | xxx    |
+| 103 | yyyy   |
+| 107 | yyyy   |
+| 110 | ssss   |
+| 111 | aaa    |
+| 113 | aaa11  |
+| 116 | aaa12  |
+| 119 | aaa333 |
+| 122 | aaa333 |
++-----+--------+
+9 rows in set (0.00 sec)
+
+mysql> create table testdata(
+    -> id int primary key,
+    -> name varchar(20));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into testdata values(1,'xxxx');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into testdata values(1,'yyyy');
+ERROR 1062 (23000): Duplicate entry '1' for key 'testdata.PRIMARY'
+mysql> alter table testdata drop primary key;
+Query OK, 1 row affected (0.04 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> insert into testdata values(1,'yyyy');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from testdata;
++----+------+
+| id | name |
++----+------+
+|  1 | xxxx |
+|  1 | yyyy |
++----+------+
+2 rows in set (0.00 sec)
+
+mysql> desc course;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| cid        | int         | NO   | PRI | NULL    |       |
+| cname      | varchar(30) | NO   | UNI | NULL    |       |
+| start_date | date        | YES  |     | NULL    |       |
+| faid       | int         | YES  | MUL | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> desc faculty;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| fid    | int         | NO   | PRI | NULL    |       |
+| fname  | varchar(30) | NO   |     | NULL    |       |
+| sp_sub | varchar(30) | YES  |     | java    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from faculty
+    -> ;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
++-----+----------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select * from course;
++------+-----------------+------------+------+
+| cid  | cname           | start_date | faid |
++------+-----------------+------------+------+
+| 1000 | java            | 2021-02-11 |  100 |
+| 1001 | python          | 2021-02-11 |  602 |
+| 1002 | python Django   | 2020-03-02 | NULL |
+| 1003 | Web programming | 2020-05-02 |  301 |
+| 1004 | Databases       | 2020-05-02 |  301 |
++------+-----------------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> desc course;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| cid        | int         | NO   | PRI | NULL    |       |
+| cname      | varchar(30) | NO   | UNI | NULL    |       |
+| start_date | date        | YES  |     | NULL    |       |
+| faid       | int         | YES  | MUL | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into course values(1008,'AI','2021-11-11',700);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`iacsd2111`.`course`, CONSTRAINT `course_ibfk_1` FOREIGN KEY (`faid`) REFERENCES `faculty` (`fid`) ON DELETE SET NULL ON UPDATE CASCADE)
+mysql> insert into course values(1008,'AI','2021-11-11',602);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> alter table course drop foreign key 'fk_fid';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''fk_fid'' at line 1
+mysql> alter table course drop foreign key fk_fid;
+ERROR 1091 (42000): Can't DROP 'fk_fid'; check that column/key exists
+mysql> alter table course drop foreign key 'fk_fid';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''fk_fid'' at line 1
+mysql> alter table course drop foreign key 'fk_faid'
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''fk_faid'' at line 1
+mysql> SELECT
+    ->     TABLE_NAME,
+    ->     COLUMN_NAME,
+    ->     CONSTRAINT_NAME,
+    ->     REFERENCED_TABLE_NAME,
+    ->     REFERENCED_COLUMN_NAME
+    -> FROM
+    ->     INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+    -> WHERE
+    -> REFERENCED_TABLE_SCHEMA = 'iacsd2111'
+    ->     AND REFERENCED_TABLE_NAME = 'course';
++----------------+-------------+-----------------------+-----------------------+------------------------+
+| TABLE_NAME     | COLUMN_NAME | CONSTRAINT_NAME       | REFERENCED_TABLE_NAME | REFERENCED_COLUMN_NAME |
++----------------+-------------+-----------------------+-----------------------+------------------------+
+| student_course | cid         | student_course_ibfk_2 | course                | cid                    |
++----------------+-------------+-----------------------+-----------------------+------------------------+
+1 row in set (0.03 sec)
+
+mysql> SELECT
+    ->     TABLE_NAME,
+    ->     COLUMN_NAME,
+    ->     CONSTRAINT_NAME,
+    ->     REFERENCED_TABLE_NAME,
+    ->     REFERENCED_COLUMN_NAME
+    -> FROM
+    ->     INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+    -> WHERE
+    -> REFERENCED_TABLE_SCHEMA = 'iacsd2111'
+    ->     AND REFERENCED_TABLE_NAME = 'faculty';
++------------+-------------+-----------------+-----------------------+------------------------+
+| TABLE_NAME | COLUMN_NAME | CONSTRAINT_NAME | REFERENCED_TABLE_NAME | REFERENCED_COLUMN_NAME |
++------------+-------------+-----------------+-----------------------+------------------------+
+| course     | faid        | course_ibfk_1   | faculty               | fid                    |
++------------+-------------+-----------------+-----------------------+------------------------+
+1 row in set (0.01 sec)
+
+mysql> alter table course drop foreign key 'course_ibfk_1';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''course_ibfk_1'' at line 1
+mysql> alter table course drop foreign key course_ibfk_1;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
++-----+----------+--------+
+8 rows in set (0.01 sec)
+
+mysql> select * from course;
++------+-----------------+------------+------+
+| cid  | cname           | start_date | faid |
++------+-----------------+------------+------+
+| 1000 | java            | 2021-02-11 |  100 |
+| 1001 | python          | 2021-02-11 |  602 |
+| 1002 | python Django   | 2020-03-02 | NULL |
+| 1003 | Web programming | 2020-05-02 |  301 |
+| 1004 | Databases       | 2020-05-02 |  301 |
+| 1008 | AI              | 2021-11-11 |  602 |
++------+-----------------+------------+------+
+6 rows in set (0.00 sec)
+
+mysql> desc course;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| cid        | int         | NO   | PRI | NULL    |       |
+| cname      | varchar(30) | NO   | UNI | NULL    |       |
+| start_date | date        | YES  |     | NULL    |       |
+| faid       | int         | YES  | MUL | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into course values(1009,'Machine learning','2021-02-13',700);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from course;
++------+------------------+------------+------+
+| cid  | cname            | start_date | faid |
++------+------------------+------------+------+
+| 1000 | java             | 2021-02-11 |  100 |
+| 1001 | python           | 2021-02-11 |  602 |
+| 1002 | python Django    | 2020-03-02 | NULL |
+| 1003 | Web programming  | 2020-05-02 |  301 |
+| 1004 | Databases        | 2020-05-02 |  301 |
+| 1008 | AI               | 2021-11-11 |  602 |
+| 1009 | Machine learning | 2021-02-13 |  700 |
++------+------------------+------------+------+
+7 rows in set (0.00 sec)
+
+mysql> update faculty
+    -> set fid=605
+    -> where fid=602;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 603 | amit     | .NET   |
+| 605 | narendra | .NET   |
++-----+----------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select * from course;
++------+------------------+------------+------+
+| cid  | cname            | start_date | faid |
++------+------------------+------------+------+
+| 1000 | java             | 2021-02-11 |  100 |
+| 1001 | python           | 2021-02-11 |  602 |
+| 1002 | python Django    | 2020-03-02 | NULL |
+| 1003 | Web programming  | 2020-05-02 |  301 |
+| 1004 | Databases        | 2020-05-02 |  301 |
+| 1008 | AI               | 2021-11-11 |  602 |
+| 1009 | Machine learning | 2021-02-13 |  700 |
++------+------------------+------------+------+
+7 rows in set (0.00 sec)
+
+mysql> insert into faculty values(700,'Rahul','.NET');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 603 | amit     | .NET   |
+| 605 | narendra | .NET   |
+| 700 | Rahul    | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> update faculty
+    -> set fid=602
+    -> where fid=605;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from course;
++------+------------------+------------+------+
+| cid  | cname            | start_date | faid |
++------+------------------+------------+------+
+| 1000 | java             | 2021-02-11 |  100 |
+| 1001 | python           | 2021-02-11 |  602 |
+| 1002 | python Django    | 2020-03-02 | NULL |
+| 1003 | Web programming  | 2020-05-02 |  301 |
+| 1004 | Databases        | 2020-05-02 |  301 |
+| 1008 | AI               | 2021-11-11 |  602 |
+| 1009 | Machine learning | 2021-02-13 |  700 |
++------+------------------+------------+------+
+7 rows in set (0.00 sec)
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
+| 700 | Rahul    | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> alter table course add constraint fk_fid1
+    -> foreign key(faid) references faculty(fid) on delete set null on update cascade;
+Query OK, 7 rows affected (0.06 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql>  alter table testdata add constraint primary key(id);
+ERROR 1062 (23000): Duplicate entry '1' for key 'testdata.PRIMARY'
+mysql> select * from testdata;
++----+------+
+| id | name |
++----+------+
+|  1 | xxxx |
+|  1 | yyyy |
++----+------+
+2 rows in set (0.00 sec)
+
+mysql> update testdata
+    -> set id=2
+    -> where name='yyyy';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from testdata;
++----+------+
+| id | name |
++----+------+
+|  1 | xxxx |
+|  2 | yyyy |
++----+------+
+2 rows in set (0.00 sec)
+
+mysql> alter table testdata add constraint primary key(id);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into testdata values(2,'cccc');
+ERROR 1062 (23000): Duplicate entry '2' for key 'testdata.PRIMARY'
+mysql> desc testdata;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   | PRI | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc testdata;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int         | NO   | PRI | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> alter table testdata
+    -> add desg varchar2(20) first,add sal decimal(12,2) after id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varchar2(20) first,add sal decimal(12,2) after id' at line 2
+mysql> add desg varchar(20) first,add sal decimal(12,2) after id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add desg varchar(20) first,add sal decimal(12,2) after id' at line 1
+mysql> alter table testdata
+    -> add desg varchar(20) first,add sal decimal(12,2) after id;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc testdata;
++-------+---------------+------+-----+---------+-------+
+| Field | Type          | Null | Key | Default | Extra |
++-------+---------------+------+-----+---------+-------+
+| desg  | varchar(20)   | YES  |     | NULL    |       |
+| id    | int           | NO   | PRI | NULL    |       |
+| sal   | decimal(12,2) | YES  |     | NULL    |       |
+| name  | varchar(20)   | YES  |     | NULL    |       |
++-------+---------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from testdata;
++------+----+------+------+
+| desg | id | sal  | name |
++------+----+------+------+
+| NULL |  1 | NULL | xxxx |
+| NULL |  2 | NULL | yyyy |
++------+----+------+------+
+2 rows in set (0.00 sec)
+
+mysql> update testdata
+    -> set desg='clerk';
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from testdata;
++-------+----+------+------+
+| desg  | id | sal  | name |
++-------+----+------+------+
+| clerk |  1 | NULL | xxxx |
+| clerk |  2 | NULL | yyyy |
++-------+----+------+------+
+2 rows in set (0.00 sec)
+
+mysql> alter table testdata
+    -> modify desg varchar(30) not null;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc testdata;
++-------+---------------+------+-----+---------+-------+
+| Field | Type          | Null | Key | Default | Extra |
++-------+---------------+------+-----+---------+-------+
+| desg  | varchar(30)   | NO   |     | NULL    |       |
+| id    | int           | NO   | PRI | NULL    |       |
+| sal   | decimal(12,2) | YES  |     | NULL    |       |
+| name  | varchar(20)   | YES  |     | NULL    |       |
++-------+---------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table testdata
+    -> drop column sal;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc testdata;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| desg  | varchar(30) | NO   |     | NULL    |       |
+| id    | int         | NO   | PRI | NULL    |       |
+| name  | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> ---to rename column
+    -> alter table testdata
+    -> rename column desg to desg_nm
+    -> ^C
+mysql> alter table testdata
+    -> rename column desg to desg_nm
+    -> ;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc testdata;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| desg_nm | varchar(30) | NO   |     | NULL    |       |
+| id      | int         | NO   | PRI | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table testdata
+    -> rename to empdata;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> desc testdata;
+ERROR 1146 (42S02): Table 'iacsd2111.testdata' doesn't exist
+mysql> desc empdata;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| desg_nm | varchar(30) | NO   |     | NULL    |       |
+| id      | int         | NO   | PRI | NULL    |       |
+| name    | varchar(20) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> desc mytab11
+    -> ;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int         | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(20) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> alter table mytab11
+    -> drop primary key
+    -> modify id int;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'modify id int' at line 3
+mysql> alter table mytab11
+    -> modify id int;
+Query OK, 9 rows affected (0.05 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> alter table mytab11
+    -> drop primary key;
+Query OK, 9 rows affected (0.04 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> select empno,ename,sal,comm,case when comm is null then 'need improvement'
+    -> when comm <=300 then 'ok'
+    -> when comm <1000 then 'good'
+    -> else 'excellent' end Remark
+    -> from emp;
++-------+---------+----------+---------+------------------+
+| empno | ename   | sal      | comm    | Remark           |
++-------+---------+----------+---------+------------------+
+|  7369 | SMITH   |   800.00 |    NULL | need improvement |
+|  7499 | ALLEN   |  1600.00 |  300.00 | ok               |
+|  7521 | WARD    |  1250.00 |  500.00 | good             |
+|  7566 | JONES   |  2975.00 |    NULL | need improvement |
+|  7654 | MARTIN  |  1250.00 | 1400.00 | excellent        |
+|  7698 | BLAKE   |  2850.00 |    NULL | need improvement |
+|  7782 | CLARK   |  2450.00 |    NULL | need improvement |
+|  7788 | SCOTT   |  3000.00 |    NULL | need improvement |
+|  7839 | KING    |  5000.00 |    NULL | need improvement |
+|  7844 | TURNER  |  1500.00 |    0.00 | ok               |
+|  7876 | ADAMS   |  1100.00 |    NULL | need improvement |
+|  7900 | JAMES   |   950.00 |    NULL | need improvement |
+|  7902 | FORD    |  3000.00 |    NULL | need improvement |
+|  7934 | MILLER  |  1300.00 |    NULL | need improvement |
+|   111 | Kishori | 34567.00 |  345.00 | good             |
+|   200 | Rajan   | 34567.00 | 2345.00 | excellent        |
+|   201 | Revati  | 34567.00 | 2345.00 | excellent        |
++-------+---------+----------+---------+------------------+
+17 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal,comm,case when comm is null or comm=0 then 'need improvement'
+    -> when comm <=300 then 'ok'
+    -> when comm <1000 then 'good'
+    -> else 'excellent' end Remark
+    -> from emp;
++-------+---------+----------+---------+------------------+
+| empno | ename   | sal      | comm    | Remark           |
++-------+---------+----------+---------+------------------+
+|  7369 | SMITH   |   800.00 |    NULL | need improvement |
+|  7499 | ALLEN   |  1600.00 |  300.00 | ok               |
+|  7521 | WARD    |  1250.00 |  500.00 | good             |
+|  7566 | JONES   |  2975.00 |    NULL | need improvement |
+|  7654 | MARTIN  |  1250.00 | 1400.00 | excellent        |
+|  7698 | BLAKE   |  2850.00 |    NULL | need improvement |
+|  7782 | CLARK   |  2450.00 |    NULL | need improvement |
+|  7788 | SCOTT   |  3000.00 |    NULL | need improvement |
+|  7839 | KING    |  5000.00 |    NULL | need improvement |
+|  7844 | TURNER  |  1500.00 |    0.00 | need improvement |
+|  7876 | ADAMS   |  1100.00 |    NULL | need improvement |
+|  7900 | JAMES   |   950.00 |    NULL | need improvement |
+|  7902 | FORD    |  3000.00 |    NULL | need improvement |
+|  7934 | MILLER  |  1300.00 |    NULL | need improvement |
+|   111 | Kishori | 34567.00 |  345.00 | good             |
+|   200 | Rajan   | 34567.00 | 2345.00 | excellent        |
+|   201 | Revati  | 34567.00 | 2345.00 | excellent        |
++-------+---------+----------+---------+------------------+
+17 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal,deptno,case deptno when 10 then 'HR'
+    -> when 20 then 'purchase'
+    -> else 'sales' end dname
+    -> from emp;
++-------+---------+----------+--------+----------+
+| empno | ename   | sal      | deptno | dname    |
++-------+---------+----------+--------+----------+
+|  7369 | SMITH   |   800.00 |     20 | purchase |
+|  7499 | ALLEN   |  1600.00 |     30 | sales    |
+|  7521 | WARD    |  1250.00 |     30 | sales    |
+|  7566 | JONES   |  2975.00 |     20 | purchase |
+|  7654 | MARTIN  |  1250.00 |     30 | sales    |
+|  7698 | BLAKE   |  2850.00 |     30 | sales    |
+|  7782 | CLARK   |  2450.00 |     10 | HR       |
+|  7788 | SCOTT   |  3000.00 |     20 | purchase |
+|  7839 | KING    |  5000.00 |     10 | HR       |
+|  7844 | TURNER  |  1500.00 |     30 | sales    |
+|  7876 | ADAMS   |  1100.00 |     20 | purchase |
+|  7900 | JAMES   |   950.00 |     30 | sales    |
+|  7902 | FORD    |  3000.00 |     20 | purchase |
+|  7934 | MILLER  |  1300.00 |     10 | HR       |
+|   111 | Kishori | 34567.00 |     10 | HR       |
+|   200 | Rajan   | 34567.00 |     10 | HR       |
+|   201 | Revati  | 34567.00 |     10 | HR       |
++-------+---------+----------+--------+----------+
+17 rows in set (0.00 sec)
+
+mysql> select * from emp
+    -> where sal >(select avg(sal)
+    ->             from emp
+    ->              where deptno=10);
++-------+---------+----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB      | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+----------+------+------------+----------+---------+--------+
+|   111 | Kishori | Manager  | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+----------+------+------------+----------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select avg(sal)
+    -> from emp
+    -> where deptno=10;
++--------------+
+| avg(sal)     |
++--------------+
+| 18741.833333 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select * from emp
+    -> where sal >(select avg(sal)
+    ->             from emp
+    ->              where deptno=20);
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+9 rows in set (0.00 sec)
+
+mysql> select avg(sal)
+    -> from emp
+    -> where deptno=20;
++-------------+
+| avg(sal)    |
++-------------+
+| 2175.000000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select * from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where deptno in (select deptno from emp where ename in ('SMITH','CLARK'));
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+11 rows in set (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
++--------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where deptno=(select deptno from dept where dname='RESEARCH');
++-------+-------+---------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB     | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+---------+------+------------+---------+------+--------+
+|  7369 | SMITH | CLERK   | 7902 | 1980-12-17 |  800.00 | NULL |     20 |
+|  7566 | JONES | MANAGER | 7839 | 1981-04-02 | 2975.00 | NULL |     20 |
+|  7788 | SCOTT | ANALYST | 7566 | 1982-12-09 | 3000.00 | NULL |     20 |
+|  7876 | ADAMS | CLERK   | 7788 | 1983-01-12 | 1100.00 | NULL |     20 |
+|  7902 | FORD  | ANALYST | 7566 | 1981-12-03 | 3000.00 | NULL |     20 |
++-------+-------+---------+------+------------+---------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where deptno in (select deptno from dept where dname in ('RESEARCH','sales'));
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK    | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER  | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER  | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7788 | SCOTT  | ANALYST  | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK    | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK    | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST  | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
++-------+--------+----------+------+------------+---------+---------+--------+
+11 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where sal between (select sal from emp where ename='SMITH') and
+    -> (select sal from emp where ename='FORD');
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK    | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER  | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER  | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER  | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST  | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK    | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK    | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST  | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK    | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+----------+------+------------+---------+---------+--------+
+13 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where mgr=(select mgr from emp where ename='ALLEN');
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7900 | JAMES  | CLERK    | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
++-------+--------+----------+------+------------+---------+---------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from course;
++------+------------------+------------+------+
+| cid  | cname            | start_date | faid |
++------+------------------+------------+------+
+| 1000 | java             | 2021-02-11 |  100 |
+| 1001 | python           | 2021-02-11 |  602 |
+| 1002 | python Django    | 2020-03-02 | NULL |
+| 1003 | Web programming  | 2020-05-02 |  301 |
+| 1004 | Databases        | 2020-05-02 |  301 |
+| 1008 | AI               | 2021-11-11 |  602 |
+| 1009 | Machine learning | 2021-02-13 |  700 |
++------+------------------+------------+------+
+7 rows in set (0.00 sec)
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
+| 700 | Rahul    | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> -----list all courses taught by narendra
+    -> ^C
+mysql> select cname
+    -> from courses
+    -> ^C
+mysql> select cname
+    -> from course
+    -> where faid in (select fid from faculty where fname='narendra');
++--------+
+| cname  |
++--------+
+| python |
+| AI     |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student;
++-----+--------+--------+-----------+
+| sid | sname  | course | fees      |
++-----+--------+--------+-----------+
+|   1 | Rajas  | DAC    | 100000.00 |
+|   2 | Deven  | DAC    |  95000.00 |
+|   3 | Rujuta | DAC    |  95000.00 |
+|   4 | Rujuta | DBDA   |  95000.00 |
+|   5 | Gauri  | DBDA   |  85000.00 |
+|   6 | Ashish | DBDA   |  95000.00 |
++-----+--------+--------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select * from student_course;
++-----+------+-----------+------------+------------+
+| sid | cid  | fees      | start_date | end_date   |
++-----+------+-----------+------------+------------+
+|   2 | 1000 | 100000.00 | 2021-03-02 | 2021-05-02 |
+|   2 | 1001 | 100000.00 | 2021-03-02 | 2021-05-02 |
+|   2 | 1003 | 100000.00 | 2021-03-02 | 2021-05-02 |
+|   4 | 1003 | 100000.00 | 2021-03-02 | 2021-05-02 |
+|   5 | 1003 | 200000.00 | 2021-03-02 | 2021-06-02 |
++-----+------+-----------+------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> -----display all courses opt by deven
+    -> ^C
+mysql>
+mysql> select cid
+    -> from student_course
+    -> where sid=(select sid from student where sname='Deven');
++------+
+| cid  |
++------+
+| 1000 |
+| 1001 |
+| 1003 |
++------+
+3 rows in set (0.00 sec)
+
+mysql> selct * from courses;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct * from courses' at line 1
+mysql> selct * from course
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct * from course' at line 1
+mysql> select * from course;
++------+------------------+------------+------+
+| cid  | cname            | start_date | faid |
++------+------------------+------------+------+
+| 1000 | java             | 2021-02-11 |  100 |
+| 1001 | python           | 2021-02-11 |  602 |
+| 1002 | python Django    | 2020-03-02 | NULL |
+| 1003 | Web programming  | 2020-05-02 |  301 |
+| 1004 | Databases        | 2020-05-02 |  301 |
+| 1008 | AI               | 2021-11-11 |  602 |
+| 1009 | Machine learning | 2021-02-13 |  700 |
++------+------------------+------------+------+
+7 rows in set (0.00 sec)
+
+mysql> select * from smith
+    -> ;
+ERROR 1146 (42S02): Table 'iacsd2111.smith' doesn't exist
+mysql> select * from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where sal > all (select sal from emp where ename in ('SMITH','WARD'));
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where sal > any (select sal from emp where ename in ('SMITH','WARD'));
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+16 rows in set (0.00 sec)
+
+mysql> select deptno,avg(sal)
+    -> from emp
+    -> group by deptno;
++--------+--------------+
+| deptno | avg(sal)     |
++--------+--------------+
+|     20 |  2175.000000 |
+|     30 |  1566.666667 |
+|     10 | 18741.833333 |
++--------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from emp e;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select * from emp m;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where sal <= (select ^C
+mysql>
+mysql> select *
+    -> from emp e
+    -> where sal <= (select sal from emp m where m.empno=e.mgr);
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK    | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER  | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER  | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER  | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK    | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK    | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7934 | MILLER | CLERK    | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+----------+------+------------+---------+---------+--------+
+11 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> selece * from dept;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selece * from dept' at line 1
+mysql> select * from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
++--------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select *
+    -> from dept
+    -> where exists^C
+mysql> select *
+    -> from dept d
+    -> where exists (select * from emp e where e.deptno=d.deptno);
++--------+------------+----------+
+| DEPTNO | DNAME      | LOC      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
++--------+------------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select *
+    -> from dept d
+    -> where not exists (select * from emp e where e.deptno=d.deptno);
++--------+------------+--------+
+| DEPTNO | DNAME      | LOC    |
++--------+------------+--------+
+|     40 | OPERATIONS | BOSTON |
++--------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from faculty;
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 100 | Rohit    | Java   |
+| 200 | Sarika   | Java   |
+| 301 | Snehal   | java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 602 | narendra | .NET   |
+| 603 | amit     | .NET   |
+| 700 | Rahul    | .NET   |
++-----+----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> select * from course;
++------+------------------+------------+------+
+| cid  | cname            | start_date | faid |
++------+------------------+------------+------+
+| 1000 | java             | 2021-02-11 |  100 |
+| 1001 | python           | 2021-02-11 |  602 |
+| 1002 | python Django    | 2020-03-02 | NULL |
+| 1003 | Web programming  | 2020-05-02 |  301 |
+| 1004 | Databases        | 2020-05-02 |  301 |
+| 1008 | AI               | 2021-11-11 |  602 |
+| 1009 | Machine learning | 2021-02-13 |  700 |
++------+------------------+------------+------+
+7 rows in set (0.00 sec)
+
+mysql> select *
+    -> from faculty f
+    -> where not exists (select * from course c where c.faid=f.fid);
++-----+----------+--------+
+| fid | fname    | sp_sub |
++-----+----------+--------+
+| 200 | Sarika   | Java   |
+| 501 | Vidya    | C++    |
+| 502 | Ashwini  | C++    |
+| 601 | Prashant | .NET   |
+| 603 | amit     | .NET   |
++-----+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql>

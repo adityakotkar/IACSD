@@ -1,0 +1,1703 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.22 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use IACSD2111
+Database changed
+mysql> select * from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+15 rows in set (0.00 sec)
+
+mysql> select empno,ename,job,comm,concat(ename,job,comm)
+    -> from emp;
++-------+---------+-----------+---------+------------------------+
+| empno | ename   | job       | comm    | concat(ename,job,comm) |
++-------+---------+-----------+---------+------------------------+
+|  7369 | SMITH   | CLERK     |    NULL | NULL                   |
+|  7499 | ALLEN   | SALESMAN  |  300.00 | ALLENSALESMAN300.00    |
+|  7521 | WARD    | SALESMAN  |  500.00 | WARDSALESMAN500.00     |
+|  7566 | JONES   | MANAGER   |    NULL | NULL                   |
+|  7654 | MARTIN  | SALESMAN  | 1400.00 | MARTINSALESMAN1400.00  |
+|  7698 | BLAKE   | MANAGER   |    NULL | NULL                   |
+|  7782 | CLARK   | MANAGER   |    NULL | NULL                   |
+|  7788 | SCOTT   | ANALYST   |    NULL | NULL                   |
+|  7839 | KING    | PRESIDENT |    NULL | NULL                   |
+|  7844 | TURNER  | SALESMAN  |    0.00 | TURNERSALESMAN0.00     |
+|  7876 | ADAMS   | CLERK     |    NULL | NULL                   |
+|  7900 | JAMES   | CLERK     |    NULL | NULL                   |
+|  7902 | FORD    | ANALYST   |    NULL | NULL                   |
+|  7934 | MILLER  | CLERK     |    NULL | NULL                   |
+|   111 | Kishori | Manager   |  345.00 | KishoriManager345.00   |
++-------+---------+-----------+---------+------------------------+
+15 rows in set (0.00 sec)
+
+mysql> select empno,ename,job,comm,concat(ename,job,ifnull(comm,0))
+    -> from emp;
++-------+---------+-----------+---------+----------------------------------+
+| empno | ename   | job       | comm    | concat(ename,job,ifnull(comm,0)) |
++-------+---------+-----------+---------+----------------------------------+
+|  7369 | SMITH   | CLERK     |    NULL | SMITHCLERK0.00                   |
+|  7499 | ALLEN   | SALESMAN  |  300.00 | ALLENSALESMAN300.00              |
+|  7521 | WARD    | SALESMAN  |  500.00 | WARDSALESMAN500.00               |
+|  7566 | JONES   | MANAGER   |    NULL | JONESMANAGER0.00                 |
+|  7654 | MARTIN  | SALESMAN  | 1400.00 | MARTINSALESMAN1400.00            |
+|  7698 | BLAKE   | MANAGER   |    NULL | BLAKEMANAGER0.00                 |
+|  7782 | CLARK   | MANAGER   |    NULL | CLARKMANAGER0.00                 |
+|  7788 | SCOTT   | ANALYST   |    NULL | SCOTTANALYST0.00                 |
+|  7839 | KING    | PRESIDENT |    NULL | KINGPRESIDENT0.00                |
+|  7844 | TURNER  | SALESMAN  |    0.00 | TURNERSALESMAN0.00               |
+|  7876 | ADAMS   | CLERK     |    NULL | ADAMSCLERK0.00                   |
+|  7900 | JAMES   | CLERK     |    NULL | JAMESCLERK0.00                   |
+|  7902 | FORD    | ANALYST   |    NULL | FORDANALYST0.00                  |
+|  7934 | MILLER  | CLERK     |    NULL | MILLERCLERK0.00                  |
+|   111 | Kishori | Manager   |  345.00 | KishoriManager345.00             |
++-------+---------+-----------+---------+----------------------------------+
+15 rows in set (0.00 sec)
+
+mysql> select empno,ename,job,comm,concat_ws(",",ename,job,ifnull(comm,0))
+    -> from emp;
++-------+---------+-----------+---------+-----------------------------------------+
+| empno | ename   | job       | comm    | concat_ws(",",ename,job,ifnull(comm,0)) |
++-------+---------+-----------+---------+-----------------------------------------+
+|  7369 | SMITH   | CLERK     |    NULL | SMITH,CLERK,0.00                        |
+|  7499 | ALLEN   | SALESMAN  |  300.00 | ALLEN,SALESMAN,300.00                   |
+|  7521 | WARD    | SALESMAN  |  500.00 | WARD,SALESMAN,500.00                    |
+|  7566 | JONES   | MANAGER   |    NULL | JONES,MANAGER,0.00                      |
+|  7654 | MARTIN  | SALESMAN  | 1400.00 | MARTIN,SALESMAN,1400.00                 |
+|  7698 | BLAKE   | MANAGER   |    NULL | BLAKE,MANAGER,0.00                      |
+|  7782 | CLARK   | MANAGER   |    NULL | CLARK,MANAGER,0.00                      |
+|  7788 | SCOTT   | ANALYST   |    NULL | SCOTT,ANALYST,0.00                      |
+|  7839 | KING    | PRESIDENT |    NULL | KING,PRESIDENT,0.00                     |
+|  7844 | TURNER  | SALESMAN  |    0.00 | TURNER,SALESMAN,0.00                    |
+|  7876 | ADAMS   | CLERK     |    NULL | ADAMS,CLERK,0.00                        |
+|  7900 | JAMES   | CLERK     |    NULL | JAMES,CLERK,0.00                        |
+|  7902 | FORD    | ANALYST   |    NULL | FORD,ANALYST,0.00                       |
+|  7934 | MILLER  | CLERK     |    NULL | MILLER,CLERK,0.00                       |
+|   111 | Kishori | Manager   |  345.00 | Kishori,Manager,345.00                  |
++-------+---------+-----------+---------+-----------------------------------------+
+15 rows in set (0.00 sec)
+
+mysql> select empno,ename,comm,sal+ifnull(comm,10)
+    -> from emp;
++-------+---------+---------+---------------------+
+| empno | ename   | comm    | sal+ifnull(comm,10) |
++-------+---------+---------+---------------------+
+|  7369 | SMITH   |    NULL |              810.00 |
+|  7499 | ALLEN   |  300.00 |             1900.00 |
+|  7521 | WARD    |  500.00 |             1750.00 |
+|  7566 | JONES   |    NULL |             2985.00 |
+|  7654 | MARTIN  | 1400.00 |             2650.00 |
+|  7698 | BLAKE   |    NULL |             2860.00 |
+|  7782 | CLARK   |    NULL |             2460.00 |
+|  7788 | SCOTT   |    NULL |             3010.00 |
+|  7839 | KING    |    NULL |             5010.00 |
+|  7844 | TURNER  |    0.00 |             1500.00 |
+|  7876 | ADAMS   |    NULL |             1110.00 |
+|  7900 | JAMES   |    NULL |              960.00 |
+|  7902 | FORD    |    NULL |             3010.00 |
+|  7934 | MILLER  |    NULL |             1310.00 |
+|   111 | Kishori |  345.00 |            34912.00 |
++-------+---------+---------+---------------------+
+15 rows in set (0.00 sec)
+
+mysql> select empno,ename,comm,sal,sal+ifnull(comm,10)
+    -> from emp;
++-------+---------+---------+----------+---------------------+
+| empno | ename   | comm    | sal      | sal+ifnull(comm,10) |
++-------+---------+---------+----------+---------------------+
+|  7369 | SMITH   |    NULL |   800.00 |              810.00 |
+|  7499 | ALLEN   |  300.00 |  1600.00 |             1900.00 |
+|  7521 | WARD    |  500.00 |  1250.00 |             1750.00 |
+|  7566 | JONES   |    NULL |  2975.00 |             2985.00 |
+|  7654 | MARTIN  | 1400.00 |  1250.00 |             2650.00 |
+|  7698 | BLAKE   |    NULL |  2850.00 |             2860.00 |
+|  7782 | CLARK   |    NULL |  2450.00 |             2460.00 |
+|  7788 | SCOTT   |    NULL |  3000.00 |             3010.00 |
+|  7839 | KING    |    NULL |  5000.00 |             5010.00 |
+|  7844 | TURNER  |    0.00 |  1500.00 |             1500.00 |
+|  7876 | ADAMS   |    NULL |  1100.00 |             1110.00 |
+|  7900 | JAMES   |    NULL |   950.00 |              960.00 |
+|  7902 | FORD    |    NULL |  3000.00 |             3010.00 |
+|  7934 | MILLER  |    NULL |  1300.00 |             1310.00 |
+|   111 | Kishori |  345.00 | 34567.00 |            34912.00 |
++-------+---------+---------+----------+---------------------+
+15 rows in set (0.00 sec)
+
+mysql> select empno,ename,job,comm,concat(ename,",",job,"+",sal)
+    -> from emp;
++-------+---------+-----------+---------+-------------------------------+
+| empno | ename   | job       | comm    | concat(ename,",",job,"+",sal) |
++-------+---------+-----------+---------+-------------------------------+
+|  7369 | SMITH   | CLERK     |    NULL | SMITH,CLERK+800.00            |
+|  7499 | ALLEN   | SALESMAN  |  300.00 | ALLEN,SALESMAN+1600.00        |
+|  7521 | WARD    | SALESMAN  |  500.00 | WARD,SALESMAN+1250.00         |
+|  7566 | JONES   | MANAGER   |    NULL | JONES,MANAGER+2975.00         |
+|  7654 | MARTIN  | SALESMAN  | 1400.00 | MARTIN,SALESMAN+1250.00       |
+|  7698 | BLAKE   | MANAGER   |    NULL | BLAKE,MANAGER+2850.00         |
+|  7782 | CLARK   | MANAGER   |    NULL | CLARK,MANAGER+2450.00         |
+|  7788 | SCOTT   | ANALYST   |    NULL | SCOTT,ANALYST+3000.00         |
+|  7839 | KING    | PRESIDENT |    NULL | KING,PRESIDENT+5000.00        |
+|  7844 | TURNER  | SALESMAN  |    0.00 | TURNER,SALESMAN+1500.00       |
+|  7876 | ADAMS   | CLERK     |    NULL | ADAMS,CLERK+1100.00           |
+|  7900 | JAMES   | CLERK     |    NULL | JAMES,CLERK+950.00            |
+|  7902 | FORD    | ANALYST   |    NULL | FORD,ANALYST+3000.00          |
+|  7934 | MILLER  | CLERK     |    NULL | MILLER,CLERK+1300.00          |
+|   111 | Kishori | Manager   |  345.00 | Kishori,Manager+34567.00      |
++-------+---------+-----------+---------+-------------------------------+
+15 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,date_format(hiredate,"%D")
+    -> from emp;
++---------+------------+----------------------------+
+| ename   | hiredate   | date_format(hiredate,"%D") |
++---------+------------+----------------------------+
+| SMITH   | 1980-12-17 | 17th                       |
+| ALLEN   | 1981-02-20 | 20th                       |
+| WARD    | 1981-02-22 | 22nd                       |
+| JONES   | 1981-04-02 | 2nd                        |
+| MARTIN  | 1981-09-28 | 28th                       |
+| BLAKE   | 1981-05-01 | 1st                        |
+| CLARK   | 1981-06-09 | 9th                        |
+| SCOTT   | 1982-12-09 | 9th                        |
+| KING    | 1981-11-17 | 17th                       |
+| TURNER  | 1981-09-08 | 8th                        |
+| ADAMS   | 1983-01-12 | 12th                       |
+| JAMES   | 1981-12-03 | 3rd                        |
+| FORD    | 1981-12-03 | 3rd                        |
+| MILLER  | 1982-01-23 | 23rd                       |
+| Kishori | 1981-02-12 | 12th                       |
++---------+------------+----------------------------+
+15 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,date_format(hiredate,"%M")
+    -> from emp;
++---------+------------+----------------------------+
+| ename   | hiredate   | date_format(hiredate,"%M") |
++---------+------------+----------------------------+
+| SMITH   | 1980-12-17 | December                   |
+| ALLEN   | 1981-02-20 | February                   |
+| WARD    | 1981-02-22 | February                   |
+| JONES   | 1981-04-02 | April                      |
+| MARTIN  | 1981-09-28 | September                  |
+| BLAKE   | 1981-05-01 | May                        |
+| CLARK   | 1981-06-09 | June                       |
+| SCOTT   | 1982-12-09 | December                   |
+| KING    | 1981-11-17 | November                   |
+| TURNER  | 1981-09-08 | September                  |
+| ADAMS   | 1983-01-12 | January                    |
+| JAMES   | 1981-12-03 | December                   |
+| FORD    | 1981-12-03 | December                   |
+| MILLER  | 1982-01-23 | January                    |
+| Kishori | 1981-02-12 | February                   |
++---------+------------+----------------------------+
+15 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,date_format(hiredate,"%M")
+    -> from emp
+    -> where date_format(hiredate,'%M')='September';
++--------+------------+----------------------------+
+| ename  | hiredate   | date_format(hiredate,"%M") |
++--------+------------+----------------------------+
+| MARTIN | 1981-09-28 | September                  |
+| TURNER | 1981-09-08 | September                  |
++--------+------------+----------------------------+
+2 rows in set (0.00 sec)
+
+mysql> select ename,hiredate,date_format(hiredate,"%M")
+    -> from emp
+    -> where month(hiredate)=9;
++--------+------------+----------------------------+
+| ename  | hiredate   | date_format(hiredate,"%M") |
++--------+------------+----------------------------+
+| MARTIN | 1981-09-28 | September                  |
+| TURNER | 1981-09-08 | September                  |
++--------+------------+----------------------------+
+2 rows in set (0.00 sec)
+
+mysql> select empno,ename,hiredate,floor(datediff(curdate(),hiredate)/365)
+    -> from emp
+    -> where floor(datediff(curdate(),hiredate)/365)>18
+    -> order by floor(datediff(curdate(),hiredate)/365);
++-------+---------+------------+-----------------------------------------+
+| empno | ename   | hiredate   | floor(datediff(curdate(),hiredate)/365) |
++-------+---------+------------+-----------------------------------------+
+|  7788 | SCOTT   | 1982-12-09 |                                      38 |
+|  7876 | ADAMS   | 1983-01-12 |                                      38 |
+|  7900 | JAMES   | 1981-12-03 |                                      39 |
+|  7902 | FORD    | 1981-12-03 |                                      39 |
+|  7934 | MILLER  | 1982-01-23 |                                      39 |
+|  7369 | SMITH   | 1980-12-17 |                                      40 |
+|  7499 | ALLEN   | 1981-02-20 |                                      40 |
+|  7521 | WARD    | 1981-02-22 |                                      40 |
+|  7566 | JONES   | 1981-04-02 |                                      40 |
+|  7654 | MARTIN  | 1981-09-28 |                                      40 |
+|  7698 | BLAKE   | 1981-05-01 |                                      40 |
+|  7782 | CLARK   | 1981-06-09 |                                      40 |
+|  7839 | KING    | 1981-11-17 |                                      40 |
+|  7844 | TURNER  | 1981-09-08 |                                      40 |
+|   111 | Kishori | 1981-02-12 |                                      40 |
++-------+---------+------------+-----------------------------------------+
+15 rows in set (0.00 sec)
+
+mysql> select empno,ename,hiredate,floor(datediff(curdate(),hiredate)/365) experience
+    -> from emp
+    -> where floor(datediff(curdate(),hiredate)/365)>18
+    -> order by experience;
++-------+---------+------------+------------+
+| empno | ename   | hiredate   | experience |
++-------+---------+------------+------------+
+|  7788 | SCOTT   | 1982-12-09 |         38 |
+|  7876 | ADAMS   | 1983-01-12 |         38 |
+|  7900 | JAMES   | 1981-12-03 |         39 |
+|  7902 | FORD    | 1981-12-03 |         39 |
+|  7934 | MILLER  | 1982-01-23 |         39 |
+|  7369 | SMITH   | 1980-12-17 |         40 |
+|  7499 | ALLEN   | 1981-02-20 |         40 |
+|  7521 | WARD    | 1981-02-22 |         40 |
+|  7566 | JONES   | 1981-04-02 |         40 |
+|  7654 | MARTIN  | 1981-09-28 |         40 |
+|  7698 | BLAKE   | 1981-05-01 |         40 |
+|  7782 | CLARK   | 1981-06-09 |         40 |
+|  7839 | KING    | 1981-11-17 |         40 |
+|  7844 | TURNER  | 1981-09-08 |         40 |
+|   111 | Kishori | 1981-02-12 |         40 |
++-------+---------+------------+------------+
+15 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal
+    -> from emp
+    -> order by sal,ename
+    -> ;
++-------+---------+----------+
+| empno | ename   | sal      |
++-------+---------+----------+
+|  7369 | SMITH   |   800.00 |
+|  7900 | JAMES   |   950.00 |
+|  7876 | ADAMS   |  1100.00 |
+|  7654 | MARTIN  |  1250.00 |
+|  7521 | WARD    |  1250.00 |
+|  7934 | MILLER  |  1300.00 |
+|  7844 | TURNER  |  1500.00 |
+|  7499 | ALLEN   |  1600.00 |
+|  7782 | CLARK   |  2450.00 |
+|  7698 | BLAKE   |  2850.00 |
+|  7566 | JONES   |  2975.00 |
+|  7902 | FORD    |  3000.00 |
+|  7788 | SCOTT   |  3000.00 |
+|  7839 | KING    |  5000.00 |
+|   111 | Kishori | 34567.00 |
++-------+---------+----------+
+15 rows in set (0.00 sec)
+
+mysql> select empno,ename,sal
+    -> from emp
+    -> order by sal desc,ename
+    -> limit 2,1;
++-------+-------+---------+
+| empno | ename | sal     |
++-------+-------+---------+
+|  7902 | FORD  | 3000.00 |
++-------+-------+---------+
+1 row in set (0.00 sec)
+
+mysql> select empno,ename,sal
+    -> from emp
+    -> order by sal desc,ename
+    -> ;
++-------+---------+----------+
+| empno | ename   | sal      |
++-------+---------+----------+
+|   111 | Kishori | 34567.00 |
+|  7839 | KING    |  5000.00 |
+|  7902 | FORD    |  3000.00 |
+|  7788 | SCOTT   |  3000.00 |
+|  7566 | JONES   |  2975.00 |
+|  7698 | BLAKE   |  2850.00 |
+|  7782 | CLARK   |  2450.00 |
+|  7499 | ALLEN   |  1600.00 |
+|  7844 | TURNER  |  1500.00 |
+|  7934 | MILLER  |  1300.00 |
+|  7654 | MARTIN  |  1250.00 |
+|  7521 | WARD    |  1250.00 |
+|  7876 | ADAMS   |  1100.00 |
+|  7900 | JAMES   |   950.00 |
+|  7369 | SMITH   |   800.00 |
++-------+---------+----------+
+15 rows in set (0.00 sec)
+
+mysql> select ceil(123.12);
++--------------+
+| ceil(123.12) |
++--------------+
+|          124 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select ceil(123.72);
++--------------+
+| ceil(123.72) |
++--------------+
+|          124 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select distinct sal
+    ->     -> from emp
+    ->     -> order by sal desc
+    ->     -> limit 2,1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from emp
+    -> order by sal desc
+    -> limit 2,1' at line 2
+mysql> select distinct sal
+    ->     from emp
+    ->     limit 2,1;
++---------+
+| sal     |
++---------+
+| 1250.00 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> select distinct sal
+    ->     from emp
+    -> order by sal desc
+    -> limit 2,1;
++---------+
+| sal     |
++---------+
+| 3000.00 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> select *
+    -> from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+15 rows in set (0.00 sec)
+
+mysql> desc emp;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| EMPNO    | int          | NO   |     | NULL    |       |
+| ENAME    | varchar(10)  | YES  |     | NULL    |       |
+| JOB      | varchar(9)   | YES  |     | NULL    |       |
+| MGR      | int          | YES  |     | NULL    |       |
+| HIREDATE | date         | YES  |     | NULL    |       |
+| SAL      | decimal(7,2) | YES  |     | NULL    |       |
+| COMM     | decimal(7,2) | YES  |     | NULL    |       |
+| DEPTNO   | int          | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+8 rows in set (0.01 sec)
+
+mysql> insert into emp values(200,'Rajan','Designer',7902,'2011-02-27',34567,2345,10);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into emp values(201,'Revati','Designer',7902,'str_to_date('27/02/2011','%d/%m/%Y'),34567,2345,10);
+    '> ^C
+mysql> insert into emp values(201,'Revati','Designer',7902,str_to_date('27/02/2011','%d/%m/%Y'),34567,2345,10);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select *
+    -> from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where day(hiredate)=9;
++-------+-------+---------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB     | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+---------+------+------------+---------+------+--------+
+|  7782 | CLARK | MANAGER | 7839 | 1981-06-09 | 2450.00 | NULL |     10 |
+|  7788 | SCOTT | ANALYST | 7566 | 1982-12-09 | 3000.00 | NULL |     20 |
++-------+-------+---------+------+------------+---------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select date_add(curdate(),interval 3 year);
++-------------------------------------+
+| date_add(curdate(),interval 3 year) |
++-------------------------------------+
+| 2024-11-18                          |
++-------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select date_add(curdate(),interval 3 week);
++-------------------------------------+
+| date_add(curdate(),interval 3 week) |
++-------------------------------------+
+| 2021-12-09                          |
++-------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select date_sub(curdate(),interval 3 week)
+    -> ;
++-------------------------------------+
+| date_sub(curdate(),interval 3 week) |
++-------------------------------------+
+| 2021-10-28                          |
++-------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select day(curdate());
++----------------+
+| day(curdate()) |
++----------------+
+|             18 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> select month(curdate());
++------------------+
+| month(curdate()) |
++------------------+
+|               11 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select year(curdate());
++-----------------+
+| year(curdate()) |
++-----------------+
+|            2021 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select Quarter(curdate());
++--------------------+
+| Quarter(curdate()) |
++--------------------+
+|                  4 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select Quarter('2021-01-20');
++-----------------------+
+| Quarter('2021-01-20') |
++-----------------------+
+|                     1 |
++-----------------------+
+1 row in set (0.00 sec)
+
+mysql> select date_format(curdate(),'%M')
+    -> ;
++-----------------------------+
+| date_format(curdate(),'%M') |
++-----------------------------+
+| November                    |
++-----------------------------+
+1 row in set (0.00 sec)
+
+mysql> select month(curdate());
++------------------+
+| month(curdate()) |
++------------------+
+|               11 |
++------------------+
+1 row in set (0.00 sec)
+
+mysql> select empno,ename,hiredate
+    -> from emp;
++-------+---------+------------+
+| empno | ename   | hiredate   |
++-------+---------+------------+
+|  7369 | SMITH   | 1980-12-17 |
+|  7499 | ALLEN   | 1981-02-20 |
+|  7521 | WARD    | 1981-02-22 |
+|  7566 | JONES   | 1981-04-02 |
+|  7654 | MARTIN  | 1981-09-28 |
+|  7698 | BLAKE   | 1981-05-01 |
+|  7782 | CLARK   | 1981-06-09 |
+|  7788 | SCOTT   | 1982-12-09 |
+|  7839 | KING    | 1981-11-17 |
+|  7844 | TURNER  | 1981-09-08 |
+|  7876 | ADAMS   | 1983-01-12 |
+|  7900 | JAMES   | 1981-12-03 |
+|  7902 | FORD    | 1981-12-03 |
+|  7934 | MILLER  | 1982-01-23 |
+|   111 | Kishori | 1981-02-12 |
+|   200 | Rajan   | 2011-02-27 |
+|   201 | Revati  | 2011-02-27 |
++-------+---------+------------+
+17 rows in set (0.00 sec)
+
+mysql> select empno,ename,hiredate
+    -> from emp
+    -> where month(hiredate)=11;
++-------+-------+------------+
+| empno | ename | hiredate   |
++-------+-------+------------+
+|  7839 | KING  | 1981-11-17 |
++-------+-------+------------+
+1 row in set (0.00 sec)
+
+mysql> select weekday(curdate()),week(curdate),weekofyear(curadte())
+    -> ;
+ERROR 1054 (42S22): Unknown column 'curdate' in 'field list'
+mysql> select weekday(curdate()),week(curdate()),weekofyear(curadte())
+    -> ;
+ERROR 1305 (42000): FUNCTION iacsd2111.curadte does not exist
+mysql> select weekday(curdate()),week(curdate()),weekofyear(curdate())
+    -> ;
++--------------------+-----------------+-----------------------+
+| weekday(curdate()) | week(curdate()) | weekofyear(curdate()) |
++--------------------+-----------------+-----------------------+
+|                  3 |              46 |                    46 |
++--------------------+-----------------+-----------------------+
+1 row in set (0.00 sec)
+
+mysql> select weekday(curdate()),week('2021-12-31'),weekofyear('2021-12-31')
+    -> ;
++--------------------+--------------------+--------------------------+
+| weekday(curdate()) | week('2021-12-31') | weekofyear('2021-12-31') |
++--------------------+--------------------+--------------------------+
+|                  3 |                 52 |                       52 |
++--------------------+--------------------+--------------------------+
+1 row in set (0.00 sec)
+
+mysql> select weekday('2021-11-21')
+    -> ;
++-----------------------+
+| weekday('2021-11-21') |
++-----------------------+
+|                     6 |
++-----------------------+
+1 row in set (0.00 sec)
+
+mysql> select monthname(curdate());
++----------------------+
+| monthname(curdate()) |
++----------------------+
+| November             |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> select dayname(curdate());
++--------------------+
+| dayname(curdate()) |
++--------------------+
+| Thursday           |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select weekday(curday());
+ERROR 1305 (42000): FUNCTION iacsd2111.curday does not exist
+mysql> select weekday(curdate());
++--------------------+
+| weekday(curdate()) |
++--------------------+
+|                  3 |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select extract(month from curdate()),month(curdate());
++-------------------------------+------------------+
+| extract(month from curdate()) | month(curdate()) |
++-------------------------------+------------------+
+|                            11 |               11 |
++-------------------------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select sum(sal)
+    -> from emp;
++-----------+
+| sum(sal)  |
++-----------+
+| 132726.00 |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select sum(sal),min(sal),max(sal),count(*),avg(sal)
+    -> from emp;
++-----------+----------+----------+----------+-------------+
+| sum(sal)  | min(sal) | max(sal) | count(*) | avg(sal)    |
++-----------+----------+----------+----------+-------------+
+| 132726.00 |   800.00 | 34567.00 |       17 | 7807.411765 |
++-----------+----------+----------+----------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select sum(sal),min(sal),max(sal),count(*),count(comm),avg(sal)
+    -> from emp;
++-----------+----------+----------+----------+-------------+-------------+
+| sum(sal)  | min(sal) | max(sal) | count(*) | count(comm) | avg(sal)    |
++-----------+----------+----------+----------+-------------+-------------+
+| 132726.00 |   800.00 | 34567.00 |       17 |           7 | 7807.411765 |
++-----------+----------+----------+----------+-------------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select sum(comm),min(sal),max(sal),count(*),count(comm),avg(sal)
+    -> from emp;
++-----------+----------+----------+----------+-------------+-------------+
+| sum(comm) | min(sal) | max(sal) | count(*) | count(comm) | avg(sal)    |
++-----------+----------+----------+----------+-------------+-------------+
+|   7235.00 |   800.00 | 34567.00 |       17 |           7 | 7807.411765 |
++-----------+----------+----------+----------+-------------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select * from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select sum(sal),max(sal),count(*)
+    -> from emp
+    -> group by deptno;
++-----------+----------+----------+
+| sum(sal)  | max(sal) | count(*) |
++-----------+----------+----------+
+|  10875.00 |  3000.00 |        5 |
+|   9400.00 |  2850.00 |        6 |
+| 112451.00 | 34567.00 |        6 |
++-----------+----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select deptno,sum(sal),max(sal),count(*)
+    -> from emp
+    -> group by deptno;
++--------+-----------+----------+----------+
+| deptno | sum(sal)  | max(sal) | count(*) |
++--------+-----------+----------+----------+
+|     20 |  10875.00 |  3000.00 |        5 |
+|     30 |   9400.00 |  2850.00 |        6 |
+|     10 | 112451.00 | 34567.00 |        6 |
++--------+-----------+----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select job,sum(sal),max(sal),count(*),avg(sal)
+    -> from emp
+    -> group by job;
++-----------+----------+----------+----------+--------------+
+| job       | sum(sal) | max(sal) | count(*) | avg(sal)     |
++-----------+----------+----------+----------+--------------+
+| CLERK     |  4150.00 |  1300.00 |        4 |  1037.500000 |
+| SALESMAN  |  5600.00 |  1600.00 |        4 |  1400.000000 |
+| MANAGER   | 42842.00 | 34567.00 |        4 | 10710.500000 |
+| ANALYST   |  6000.00 |  3000.00 |        2 |  3000.000000 |
+| PRESIDENT |  5000.00 |  5000.00 |        1 |  5000.000000 |
+| Designer  | 69134.00 | 34567.00 |        2 | 34567.000000 |
++-----------+----------+----------+----------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where job in ('CLERK','SLAESMAN','MANAGER');
++-------+---------+---------+------+------------+----------+--------+--------+
+| EMPNO | ENAME   | JOB     | MGR  | HIREDATE   | SAL      | COMM   | DEPTNO |
++-------+---------+---------+------+------------+----------+--------+--------+
+|  7369 | SMITH   | CLERK   | 7902 | 1980-12-17 |   800.00 |   NULL |     20 |
+|  7566 | JONES   | MANAGER | 7839 | 1981-04-02 |  2975.00 |   NULL |     20 |
+|  7698 | BLAKE   | MANAGER | 7839 | 1981-05-01 |  2850.00 |   NULL |     30 |
+|  7782 | CLARK   | MANAGER | 7839 | 1981-06-09 |  2450.00 |   NULL |     10 |
+|  7876 | ADAMS   | CLERK   | 7788 | 1983-01-12 |  1100.00 |   NULL |     20 |
+|  7900 | JAMES   | CLERK   | 7698 | 1981-12-03 |   950.00 |   NULL |     30 |
+|  7934 | MILLER  | CLERK   | 7782 | 1982-01-23 |  1300.00 |   NULL |     10 |
+|   111 | Kishori | Manager | 7902 | 1981-02-12 | 34567.00 | 345.00 |     10 |
++-------+---------+---------+------+------------+----------+--------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where job in ('CLERK','SALESMAN','MANAGER');
++-------+---------+----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB      | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK    | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER  | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER  | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER  | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK    | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK    | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7934 | MILLER  | CLERK    | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager  | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
++-------+---------+----------+------+------------+----------+---------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select job,sum(sal),count(*)
+    -> from emp
+    -> where job in ('CLERK','SALESMAN','MANAGER')
+    -> group by job;
++----------+----------+----------+
+| job      | sum(sal) | count(*) |
++----------+----------+----------+
+| CLERK    |  4150.00 |        4 |
+| SALESMAN |  5600.00 |        4 |
+| MANAGER  | 42842.00 |        4 |
++----------+----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select job,sum(sal),count(*)
+    -> from emp
+    -> where job='CLERK';
++-------+----------+----------+
+| job   | sum(sal) | count(*) |
++-------+----------+----------+
+| CLERK |  4150.00 |        4 |
++-------+----------+----------+
+1 row in set (0.00 sec)
+
+mysql> select *
+    -> from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select deptno,job,sum(sal),max(sal),min(sal),count(*),avg(sal)
+    -> from emp
+    -> group by deptno,job
+    -> order by deptno;
++--------+-----------+----------+----------+----------+----------+--------------+
+| deptno | job       | sum(sal) | max(sal) | min(sal) | count(*) | avg(sal)     |
++--------+-----------+----------+----------+----------+----------+--------------+
+|     10 | CLERK     |  1300.00 |  1300.00 |  1300.00 |        1 |  1300.000000 |
+|     10 | Designer  | 69134.00 | 34567.00 | 34567.00 |        2 | 34567.000000 |
+|     10 | MANAGER   | 37017.00 | 34567.00 |  2450.00 |        2 | 18508.500000 |
+|     10 | PRESIDENT |  5000.00 |  5000.00 |  5000.00 |        1 |  5000.000000 |
+|     20 | ANALYST   |  6000.00 |  3000.00 |  3000.00 |        2 |  3000.000000 |
+|     20 | CLERK     |  1900.00 |  1100.00 |   800.00 |        2 |   950.000000 |
+|     20 | MANAGER   |  2975.00 |  2975.00 |  2975.00 |        1 |  2975.000000 |
+|     30 | CLERK     |   950.00 |   950.00 |   950.00 |        1 |   950.000000 |
+|     30 | MANAGER   |  2850.00 |  2850.00 |  2850.00 |        1 |  2850.000000 |
+|     30 | SALESMAN  |  5600.00 |  1600.00 |  1250.00 |        4 |  1400.000000 |
++--------+-----------+----------+----------+----------+----------+--------------+
+10 rows in set (0.00 sec)
+
+mysql> select deptno,count(*)
+    -> from emp
+    -> where job='CLERK'
+    -> group by deptno;
++--------+----------+
+| deptno | count(*) |
++--------+----------+
+|     20 |        2 |
+|     30 |        1 |
+|     10 |        1 |
++--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select deptno,ename,count(*)
+    -> from emp
+    -> group by deptno;
++--------+-------+----------+
+| deptno | ename | count(*) |
++--------+-------+----------+
+|     20 | SMITH |        5 |
+|     30 | ALLEN |        6 |
+|     10 | CLARK |        6 |
++--------+-------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select deptno,count(*),sum(sal),min(sal)
+    -> from emp
+    -> group by deptno
+    -> having count(*)>5;
++--------+----------+-----------+----------+
+| deptno | count(*) | sum(sal)  | min(sal) |
++--------+----------+-----------+----------+
+|     30 |        6 |   9400.00 |   950.00 |
+|     10 |        6 | 112451.00 |  1300.00 |
++--------+----------+-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select deptno,sum(sal),min(Sal)
+    -> from emp
+    -> group by deptno;
++--------+-----------+----------+
+| deptno | sum(sal)  | min(Sal) |
++--------+-----------+----------+
+|     20 |  10875.00 |   800.00 |
+|     30 |   9400.00 |   950.00 |
+|     10 | 112451.00 |  1300.00 |
++--------+-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select deptno,sum(sal),min(Sal)
+    -> from emp
+    -> group by deptno
+    -> having min(sal)>=950;
++--------+-----------+----------+
+| deptno | sum(sal)  | min(Sal) |
++--------+-----------+----------+
+|     30 |   9400.00 |   950.00 |
+|     10 | 112451.00 |  1300.00 |
++--------+-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select empno,ename,hiredate,floor(datediff(curdate(),hiredate)/365) experience
+    -> from emp;
++-------+---------+------------+------------+
+| empno | ename   | hiredate   | experience |
++-------+---------+------------+------------+
+|  7369 | SMITH   | 1980-12-17 |         40 |
+|  7499 | ALLEN   | 1981-02-20 |         40 |
+|  7521 | WARD    | 1981-02-22 |         40 |
+|  7566 | JONES   | 1981-04-02 |         40 |
+|  7654 | MARTIN  | 1981-09-28 |         40 |
+|  7698 | BLAKE   | 1981-05-01 |         40 |
+|  7782 | CLARK   | 1981-06-09 |         40 |
+|  7788 | SCOTT   | 1982-12-09 |         38 |
+|  7839 | KING    | 1981-11-17 |         40 |
+|  7844 | TURNER  | 1981-09-08 |         40 |
+|  7876 | ADAMS   | 1983-01-12 |         38 |
+|  7900 | JAMES   | 1981-12-03 |         39 |
+|  7902 | FORD    | 1981-12-03 |         39 |
+|  7934 | MILLER  | 1982-01-23 |         39 |
+|   111 | Kishori | 1981-02-12 |         40 |
+|   200 | Rajan   | 2011-02-27 |         10 |
+|   201 | Revati  | 2011-02-27 |         10 |
++-------+---------+------------+------------+
+17 rows in set (0.00 sec)
+
+mysql> select floor(datediff(curdate(),hiredate)/365)),sum(sal),count(*)
+    -> from emp
+    -> group; by floor(datediff(curdate(),hiredate)/365))
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '),sum(sal),count(*)
+from emp
+group' at line 1
+    -> ^C
+mysql> select floor(datediff(curdate(),hiredate)/365)),sum(sal),count(*)
+    -> from emp
+    -> group by floor(datediff(curdate(),hiredate)/365));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '),sum(sal),count(*)
+from emp
+group by floor(datediff(curdate(),hiredate)/365))' at line 1
+mysql> select floor(datediff(curdate(),hiredate)/365),sum(sal),count(*)
+    -> from emp
+    -> group by floor(datediff(curdate(),hiredate)/365);
++-----------------------------------------+----------+----------+
+| floor(datediff(curdate(),hiredate)/365) | sum(sal) | count(*) |
++-----------------------------------------+----------+----------+
+|                                      40 | 54242.00 |       10 |
+|                                      38 |  4100.00 |        2 |
+|                                      39 |  5250.00 |        3 |
+|                                      10 | 69134.00 |        2 |
++-----------------------------------------+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select floor(datediff(curdate(),hiredate)/365) experience,sum(sal),count(*)
+    -> from emp
+    -> group by experience;
++------------+----------+----------+
+| experience | sum(sal) | count(*) |
++------------+----------+----------+
+|         40 | 54242.00 |       10 |
+|         38 |  4100.00 |        2 |
+|         39 |  5250.00 |        3 |
+|         10 | 69134.00 |        2 |
++------------+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select floor(datediff(curdate(),hiredate)/365) experience,sum(sal),count(*)
+    -> from emp
+    -> group by floor(datediff(curdate(),hiredate)/365);
++------------+----------+----------+
+| experience | sum(sal) | count(*) |
++------------+----------+----------+
+|         40 | 54242.00 |       10 |
+|         38 |  4100.00 |        2 |
+|         39 |  5250.00 |        3 |
+|         10 | 69134.00 |        2 |
++------------+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select floor(datediff(curdate(),hiredate)/365),sum(sal),count(*)
+    -> from emp
+    -> group by floor(datediff(curdate(),hiredate)/365)
+    -> having count(*)>2;
++-----------------------------------------+----------+----------+
+| floor(datediff(curdate(),hiredate)/365) | sum(sal) | count(*) |
++-----------------------------------------+----------+----------+
+|                                      40 | 54242.00 |       10 |
+|                                      39 |  5250.00 |        3 |
++-----------------------------------------+----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select deptno,count(*)
+    -> from emp
+    -> where job=’MANAGER’
+    -> group by deptno
+    -> having count(*)>2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?MANAGER?
+group by deptno
+having count(*)>2' at line 3
+mysql> select deptno,count(*)
+    -> from emp
+    -> where job='MANAGER'
+    -> group by deptno
+    -> having count(*)>2;
+Empty set (0.00 sec)
+
+mysql> select deptno,count(*)
+    -> from emp
+    -> where job='MANAGER'
+    -> group by deptno;
++--------+----------+
+| deptno | count(*) |
++--------+----------+
+|     20 |        1 |
+|     30 |        1 |
+|     10 |        2 |
++--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select deptno,count(*)
+    -> from emp
+    -> where job='MANAGER'
+    -> group by deptno
+    -> having count(*)<2
+    -> ;
++--------+----------+
+| deptno | count(*) |
++--------+----------+
+|     20 |        1 |
+|     30 |        1 |
++--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select mgr,count(*),sum(sal)
+    -> from emp
+    -> group by mgr;
++------+----------+-----------+
+| mgr  | count(*) | sum(sal)  |
++------+----------+-----------+
+| 7902 |        4 | 104501.00 |
+| 7698 |        5 |   6550.00 |
+| 7839 |        3 |   8275.00 |
+| 7566 |        2 |   6000.00 |
+| NULL |        1 |   5000.00 |
+| 7788 |        1 |   1100.00 |
+| 7782 |        1 |   1300.00 |
++------+----------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp;
++-------+---------+-----------+------+------------+----------+---------+--------+
+| EMPNO | ENAME   | JOB       | MGR  | HIREDATE   | SAL      | COMM    | DEPTNO |
++-------+---------+-----------+------+------------+----------+---------+--------+
+|  7369 | SMITH   | CLERK     | 7902 | 1980-12-17 |   800.00 |    NULL |     20 |
+|  7499 | ALLEN   | SALESMAN  | 7698 | 1981-02-20 |  1600.00 |  300.00 |     30 |
+|  7521 | WARD    | SALESMAN  | 7698 | 1981-02-22 |  1250.00 |  500.00 |     30 |
+|  7566 | JONES   | MANAGER   | 7839 | 1981-04-02 |  2975.00 |    NULL |     20 |
+|  7654 | MARTIN  | SALESMAN  | 7698 | 1981-09-28 |  1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE   | MANAGER   | 7839 | 1981-05-01 |  2850.00 |    NULL |     30 |
+|  7782 | CLARK   | MANAGER   | 7839 | 1981-06-09 |  2450.00 |    NULL |     10 |
+|  7788 | SCOTT   | ANALYST   | 7566 | 1982-12-09 |  3000.00 |    NULL |     20 |
+|  7839 | KING    | PRESIDENT | NULL | 1981-11-17 |  5000.00 |    NULL |     10 |
+|  7844 | TURNER  | SALESMAN  | 7698 | 1981-09-08 |  1500.00 |    0.00 |     30 |
+|  7876 | ADAMS   | CLERK     | 7788 | 1983-01-12 |  1100.00 |    NULL |     20 |
+|  7900 | JAMES   | CLERK     | 7698 | 1981-12-03 |   950.00 |    NULL |     30 |
+|  7902 | FORD    | ANALYST   | 7566 | 1981-12-03 |  3000.00 |    NULL |     20 |
+|  7934 | MILLER  | CLERK     | 7782 | 1982-01-23 |  1300.00 |    NULL |     10 |
+|   111 | Kishori | Manager   | 7902 | 1981-02-12 | 34567.00 |  345.00 |     10 |
+|   200 | Rajan   | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
+|   201 | Revati  | Designer  | 7902 | 2011-02-27 | 34567.00 | 2345.00 |     10 |
++-------+---------+-----------+------+------------+----------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where job='SALESMAN';
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
++-------+--------+----------+------+------------+---------+---------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select *
+    -> from emp
+    -> where job='SALESMAN'
+    -> group by mgr
+    -> ;
++-------+-------+----------+------+------------+---------+--------+--------+
+| EMPNO | ENAME | JOB      | MGR  | HIREDATE   | SAL     | COMM   | DEPTNO |
++-------+-------+----------+------+------------+---------+--------+--------+
+|  7499 | ALLEN | SALESMAN | 7698 | 1981-02-20 | 1600.00 | 300.00 |     30 |
++-------+-------+----------+------+------------+---------+--------+--------+
+1 row in set (0.00 sec)
+
+mysql> select mgr,count(*),min(sal),sum(sal)
+    -> from emp
+    -> where job='SALESMAN'
+    -> group by mgr;
++------+----------+----------+----------+
+| mgr  | count(*) | min(sal) | sum(sal) |
++------+----------+----------+----------+
+| 7698 |        4 |  1250.00 |  5600.00 |
++------+----------+----------+----------+
+1 row in set (0.00 sec)
+
+mysql> select empno,ename,deptno,sum(sal) over (partition by deptno)
+    -> from emp;
++-------+---------+--------+-------------------------------------+
+| empno | ename   | deptno | sum(sal) over (partition by deptno) |
++-------+---------+--------+-------------------------------------+
+|  7782 | CLARK   |     10 |                           112451.00 |
+|  7839 | KING    |     10 |                           112451.00 |
+|  7934 | MILLER  |     10 |                           112451.00 |
+|   111 | Kishori |     10 |                           112451.00 |
+|   200 | Rajan   |     10 |                           112451.00 |
+|   201 | Revati  |     10 |                           112451.00 |
+|  7369 | SMITH   |     20 |                            10875.00 |
+|  7566 | JONES   |     20 |                            10875.00 |
+|  7788 | SCOTT   |     20 |                            10875.00 |
+|  7876 | ADAMS   |     20 |                            10875.00 |
+|  7902 | FORD    |     20 |                            10875.00 |
+|  7499 | ALLEN   |     30 |                             9400.00 |
+|  7521 | WARD    |     30 |                             9400.00 |
+|  7654 | MARTIN  |     30 |                             9400.00 |
+|  7698 | BLAKE   |     30 |                             9400.00 |
+|  7844 | TURNER  |     30 |                             9400.00 |
+|  7900 | JAMES   |     30 |                             9400.00 |
++-------+---------+--------+-------------------------------------+
+17 rows in set (0.00 sec)
+
+mysql> select empno,ename,deptno,sum(sal) over (partition by deptno),count(*) over (partition by deptno)
+    -> from emp;
++-------+---------+--------+-------------------------------------+-------------------------------------+
+| empno | ename   | deptno | sum(sal) over (partition by deptno) | count(*) over (partition by deptno) |
++-------+---------+--------+-------------------------------------+-------------------------------------+
+|  7782 | CLARK   |     10 |                           112451.00 |                                   6 |
+|  7839 | KING    |     10 |                           112451.00 |                                   6 |
+|  7934 | MILLER  |     10 |                           112451.00 |                                   6 |
+|   111 | Kishori |     10 |                           112451.00 |                                   6 |
+|   200 | Rajan   |     10 |                           112451.00 |                                   6 |
+|   201 | Revati  |     10 |                           112451.00 |                                   6 |
+|  7369 | SMITH   |     20 |                            10875.00 |                                   5 |
+|  7566 | JONES   |     20 |                            10875.00 |                                   5 |
+|  7788 | SCOTT   |     20 |                            10875.00 |                                   5 |
+|  7876 | ADAMS   |     20 |                            10875.00 |                                   5 |
+|  7902 | FORD    |     20 |                            10875.00 |                                   5 |
+|  7499 | ALLEN   |     30 |                             9400.00 |                                   6 |
+|  7521 | WARD    |     30 |                             9400.00 |                                   6 |
+|  7654 | MARTIN  |     30 |                             9400.00 |                                   6 |
+|  7698 | BLAKE   |     30 |                             9400.00 |                                   6 |
+|  7844 | TURNER  |     30 |                             9400.00 |                                   6 |
+|  7900 | JAMES   |     30 |                             9400.00 |                                   6 |
++-------+---------+--------+-------------------------------------+-------------------------------------+
+17 rows in set (0.00 sec)
+
+mysql> select empno,ename,deptno,sum(sal) over (partition by deptno),count(*) over (partition by deptno)
+    -> from emp
+    -> where deptno in (20,30);
++-------+--------+--------+-------------------------------------+-------------------------------------+
+| empno | ename  | deptno | sum(sal) over (partition by deptno) | count(*) over (partition by deptno) |
++-------+--------+--------+-------------------------------------+-------------------------------------+
+|  7369 | SMITH  |     20 |                            10875.00 |                                   5 |
+|  7566 | JONES  |     20 |                            10875.00 |                                   5 |
+|  7788 | SCOTT  |     20 |                            10875.00 |                                   5 |
+|  7876 | ADAMS  |     20 |                            10875.00 |                                   5 |
+|  7902 | FORD   |     20 |                            10875.00 |                                   5 |
+|  7499 | ALLEN  |     30 |                             9400.00 |                                   6 |
+|  7521 | WARD   |     30 |                             9400.00 |                                   6 |
+|  7654 | MARTIN |     30 |                             9400.00 |                                   6 |
+|  7698 | BLAKE  |     30 |                             9400.00 |                                   6 |
+|  7844 | TURNER |     30 |                             9400.00 |                                   6 |
+|  7900 | JAMES  |     30 |                             9400.00 |                                   6 |
++-------+--------+--------+-------------------------------------+-------------------------------------+
+11 rows in set (0.00 sec)
+
+mysql> select empno,ename,deptno
+    -> from emp;
++-------+---------+--------+
+| empno | ename   | deptno |
++-------+---------+--------+
+|  7369 | SMITH   |     20 |
+|  7499 | ALLEN   |     30 |
+|  7521 | WARD    |     30 |
+|  7566 | JONES   |     20 |
+|  7654 | MARTIN  |     30 |
+|  7698 | BLAKE   |     30 |
+|  7782 | CLARK   |     10 |
+|  7788 | SCOTT   |     20 |
+|  7839 | KING    |     10 |
+|  7844 | TURNER  |     30 |
+|  7876 | ADAMS   |     20 |
+|  7900 | JAMES   |     30 |
+|  7902 | FORD    |     20 |
+|  7934 | MILLER  |     10 |
+|   111 | Kishori |     10 |
+|   200 | Rajan   |     10 |
+|   201 | Revati  |     10 |
++-------+---------+--------+
+17 rows in set (0.00 sec)
+
+mysql> select empno,ename,deptno,sum(sal) over (partition by dept)
+    -> from emp;
+ERROR 1054 (42S22): Unknown column 'dept' in 'window partition by'
+mysql> select empno,ename,deptno,sum(sal) over (partition by deptno)
+    -> from emp;
++-------+---------+--------+-------------------------------------+
+| empno | ename   | deptno | sum(sal) over (partition by deptno) |
++-------+---------+--------+-------------------------------------+
+|  7782 | CLARK   |     10 |                           112451.00 |
+|  7839 | KING    |     10 |                           112451.00 |
+|  7934 | MILLER  |     10 |                           112451.00 |
+|   111 | Kishori |     10 |                           112451.00 |
+|   200 | Rajan   |     10 |                           112451.00 |
+|   201 | Revati  |     10 |                           112451.00 |
+|  7369 | SMITH   |     20 |                            10875.00 |
+|  7566 | JONES   |     20 |                            10875.00 |
+|  7788 | SCOTT   |     20 |                            10875.00 |
+|  7876 | ADAMS   |     20 |                            10875.00 |
+|  7902 | FORD    |     20 |                            10875.00 |
+|  7499 | ALLEN   |     30 |                             9400.00 |
+|  7521 | WARD    |     30 |                             9400.00 |
+|  7654 | MARTIN  |     30 |                             9400.00 |
+|  7698 | BLAKE   |     30 |                             9400.00 |
+|  7844 | TURNER  |     30 |                             9400.00 |
+|  7900 | JAMES   |     30 |                             9400.00 |
++-------+---------+--------+-------------------------------------+
+17 rows in set (0.00 sec)
+
+mysql> select deptno,sum(sal)
+    -> from emp
+    -> group by deptno;
++--------+-----------+
+| deptno | sum(sal)  |
++--------+-----------+
+|     20 |  10875.00 |
+|     30 |   9400.00 |
+|     10 | 112451.00 |
++--------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select deptno,ename,sum(sal)
+    -> from emp
+    -> group by deptno;
++--------+-------+-----------+
+| deptno | ename | sum(sal)  |
++--------+-------+-----------+
+|     20 | SMITH |  10875.00 |
+|     30 | ALLEN |   9400.00 |
+|     10 | CLARK | 112451.00 |
++--------+-------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select empno,ename,mgr
+    -> from emp;
++-------+---------+------+
+| empno | ename   | mgr  |
++-------+---------+------+
+|  7369 | SMITH   | 7902 |
+|  7499 | ALLEN   | 7698 |
+|  7521 | WARD    | 7698 |
+|  7566 | JONES   | 7839 |
+|  7654 | MARTIN  | 7698 |
+|  7698 | BLAKE   | 7839 |
+|  7782 | CLARK   | 7839 |
+|  7788 | SCOTT   | 7566 |
+|  7839 | KING    | NULL |
+|  7844 | TURNER  | 7698 |
+|  7876 | ADAMS   | 7788 |
+|  7900 | JAMES   | 7698 |
+|  7902 | FORD    | 7566 |
+|  7934 | MILLER  | 7782 |
+|   111 | Kishori | 7902 |
+|   200 | Rajan   | 7902 |
+|   201 | Revati  | 7902 |
++-------+---------+------+
+17 rows in set (0.00 sec)
+
+mysql> select empno,ename,mgr,count(*) over (partition by mgr)
+    -> from emp;
++-------+---------+------+----------------------------------+
+| empno | ename   | mgr  | count(*) over (partition by mgr) |
++-------+---------+------+----------------------------------+
+|  7839 | KING    | NULL |                                1 |
+|  7788 | SCOTT   | 7566 |                                2 |
+|  7902 | FORD    | 7566 |                                2 |
+|  7499 | ALLEN   | 7698 |                                5 |
+|  7521 | WARD    | 7698 |                                5 |
+|  7654 | MARTIN  | 7698 |                                5 |
+|  7844 | TURNER  | 7698 |                                5 |
+|  7900 | JAMES   | 7698 |                                5 |
+|  7934 | MILLER  | 7782 |                                1 |
+|  7876 | ADAMS   | 7788 |                                1 |
+|  7566 | JONES   | 7839 |                                3 |
+|  7698 | BLAKE   | 7839 |                                3 |
+|  7782 | CLARK   | 7839 |                                3 |
+|  7369 | SMITH   | 7902 |                                4 |
+|   111 | Kishori | 7902 |                                4 |
+|   200 | Rajan   | 7902 |                                4 |
+|   201 | Revati  | 7902 |                                4 |
++-------+---------+------+----------------------------------+
+17 rows in set (0.00 sec)
+
+mysql> create table product(
+    -> pid int,
+    -> pname varchar(20),
+    -> company varchar(20),
+    -> sales int,
+    -> amount decimal(12,2));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc product;
++---------+---------------+------+-----+---------+-------+
+| Field   | Type          | Null | Key | Default | Extra |
++---------+---------------+------+-----+---------+-------+
+| pid     | int           | YES  |     | NULL    |       |
+| pname   | varchar(20)   | YES  |     | NULL    |       |
+| company | varchar(20)   | YES  |     | NULL    |       |
+| sales   | int           | YES  |     | NULL    |       |
+| amount  | decimal(12,2) | YES  |     | NULL    |       |
++---------+---------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> insert into product values(1,'handbag','vip',20,20000.00);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into product values(2,'sack','vip',10,15000.00);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into product values(3,'sack','Nike',5,12000.00);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into product values(4,'handbag','Nike',20,50000.00);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into product values(4,'cabin bag','Nike',10,100000.00);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from product;
++------+-----------+---------+-------+-----------+
+| pid  | pname     | company | sales | amount    |
++------+-----------+---------+-------+-----------+
+|    1 | handbag   | vip     |    20 |  20000.00 |
+|    2 | sack      | vip     |    10 |  15000.00 |
+|    3 | sack      | Nike    |     5 |  12000.00 |
+|    4 | handbag   | Nike    |    20 |  50000.00 |
+|    4 | cabin bag | Nike    |    10 | 100000.00 |
++------+-----------+---------+-------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> update product
+    -> set pid=5
+    -> where pname like 'c%';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from product;
++------+-----------+---------+-------+-----------+
+| pid  | pname     | company | sales | amount    |
++------+-----------+---------+-------+-----------+
+|    1 | handbag   | vip     |    20 |  20000.00 |
+|    2 | sack      | vip     |    10 |  15000.00 |
+|    3 | sack      | Nike    |     5 |  12000.00 |
+|    4 | handbag   | Nike    |    20 |  50000.00 |
+|    5 | cabin bag | Nike    |    10 | 100000.00 |
++------+-----------+---------+-------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select sum(amount)
+    -> from product
+    -> where pname='handbag'
+    -> ;
++-------------+
+| sum(amount) |
++-------------+
+|    70000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select pname,sum(sal)
+    -> from product
+    -> group by pname;
+ERROR 1054 (42S22): Unknown column 'sal' in 'field list'
+mysql> select pname,sum(amount)
+    -> from product
+    -> group by pname;
++-----------+-------------+
+| pname     | sum(amount) |
++-----------+-------------+
+| handbag   |    70000.00 |
+| sack      |    27000.00 |
+| cabin bag |   100000.00 |
++-----------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select *
+    -> from product;
++------+-----------+---------+-------+-----------+
+| pid  | pname     | company | sales | amount    |
++------+-----------+---------+-------+-----------+
+|    1 | handbag   | vip     |    20 |  20000.00 |
+|    2 | sack      | vip     |    10 |  15000.00 |
+|    3 | sack      | Nike    |     5 |  12000.00 |
+|    4 | handbag   | Nike    |    20 |  50000.00 |
+|    5 | cabin bag | Nike    |    10 | 100000.00 |
++------+-----------+---------+-------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select company,sum(amount)
+    -> from product
+    -> group by company;
++---------+-------------+
+| company | sum(amount) |
++---------+-------------+
+| vip     |    35000.00 |
+| Nike    |   162000.00 |
++---------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> create table student(
+    -> sid int primary key,
+    -> sname varchar(30),
+    -> course varchar(20),
+    -> fees decimal(12,2));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into student values(1,'Rajas','DAC',100000)
+    -> ;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student values(2,'Deven','DAC',95000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student values(3,'Rujuta','DAC',95000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into student values(4,'Rujuta','DBDA',95000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student values(5,'Gauri','DBDA',85000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into student values(6,'Ashish','DBDA',95000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from student;
++-----+--------+--------+-----------+
+| sid | sname  | course | fees      |
++-----+--------+--------+-----------+
+|   1 | Rajas  | DAC    | 100000.00 |
+|   2 | Deven  | DAC    |  95000.00 |
+|   3 | Rujuta | DAC    |  95000.00 |
+|   4 | Rujuta | DBDA   |  95000.00 |
+|   5 | Gauri  | DBDA   |  85000.00 |
+|   6 | Ashish | DBDA   |  95000.00 |
++-----+--------+--------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> selct course,count(*)
+    -> from student
+    -> group by course;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct course,count(*)
+from student
+group by course' at line 1
+mysql> select course,count(*)
+    -> from student
+    -> group by course;
++--------+----------+
+| course | count(*) |
++--------+----------+
+| DAC    |        3 |
+| DBDA   |        3 |
++--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select sname,count(*)
+    -> from student
+    -> group sname;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sname' at line 3
+mysql> select sname,count(*)
+    -> from student
+    -> group by sname;
++--------+----------+
+| sname  | count(*) |
++--------+----------+
+| Rajas  |        1 |
+| Deven  |        1 |
+| Rujuta |        2 |
+| Gauri  |        1 |
+| Ashish |        1 |
++--------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select course,max(fees)
+    -> from student
+    -> group by course;
++--------+-----------+
+| course | max(fees) |
++--------+-----------+
+| DAC    | 100000.00 |
+| DBDA   |  95000.00 |
++--------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> select course,max(fees),min(fees),avg(fees)
+    -> from student
+    -> group by course;
++--------+-----------+-----------+--------------+
+| course | max(fees) | min(fees) | avg(fees)    |
++--------+-----------+-----------+--------------+
+| DAC    | 100000.00 |  95000.00 | 96666.666667 |
+| DBDA   |  95000.00 |  85000.00 | 91666.666667 |
++--------+-----------+-----------+--------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into student values(5,'xxxx','DBDA',85000);
+ERROR 1062 (23000): Duplicate entry '5' for key 'student.PRIMARY'
+mysql> select sname,course,max(fees)
+    -> over (partition by course)
+    -> from student
+    -> ;
++--------+--------+--------------------------------------+
+| sname  | course | max(fees)
+over (partition by course) |
++--------+--------+--------------------------------------+
+| Rajas  | DAC    |                            100000.00 |
+| Deven  | DAC    |                            100000.00 |
+| Rujuta | DAC    |                            100000.00 |
+| Rujuta | DBDA   |                             95000.00 |
+| Gauri  | DBDA   |                             95000.00 |
+| Ashish | DBDA   |                             95000.00 |
++--------+--------+--------------------------------------+
+6 rows in set (0.01 sec)
+
+mysql> select *
+    -> from product;
++------+-----------+---------+-------+-----------+
+| pid  | pname     | company | sales | amount    |
++------+-----------+---------+-------+-----------+
+|    1 | handbag   | vip     |    20 |  20000.00 |
+|    2 | sack      | vip     |    10 |  15000.00 |
+|    3 | sack      | Nike    |     5 |  12000.00 |
+|    4 | handbag   | Nike    |    20 |  50000.00 |
+|    5 | cabin bag | Nike    |    10 | 100000.00 |
++------+-----------+---------+-------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select company,sum(amount),count(*)
+    -> from product
+    -> group by company;
++---------+-------------+----------+
+| company | sum(amount) | count(*) |
++---------+-------------+----------+
+| vip     |    35000.00 |        2 |
+| Nike    |   162000.00 |        3 |
++---------+-------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select pid,pname,company,sum(amount) over (partition by company)
+    -> from product;
++------+-----------+---------+-----------------------------------------+
+| pid  | pname     | company | sum(amount) over (partition by company) |
++------+-----------+---------+-----------------------------------------+
+|    3 | sack      | Nike    |                               162000.00 |
+|    4 | handbag   | Nike    |                               162000.00 |
+|    5 | cabin bag | Nike    |                               162000.00 |
+|    1 | handbag   | vip     |                                35000.00 |
+|    2 | sack      | vip     |                                35000.00 |
++------+-----------+---------+-----------------------------------------+
+5 rows in set (0.00 sec)
+
+mysql>
